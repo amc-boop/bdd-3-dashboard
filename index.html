@@ -9,166 +9,150 @@
 <style>
 :root{
   --bg:#EEECEA;
-  --card:rgba(30,30,30,.72);
-  --card-border:rgba(255,255,255,.08);
-  --card-blur:blur(20px);
-  --card-r:16px;
+  --card:rgba(90,87,84,.62);
+  --card2:rgba(24,24,24,.82);
+  --glass-border:rgba(255,255,255,.08);
+  --blur:blur(20px);
+  --r:16px;
   --accent:#D93636;
   --green:#3CB371;
-  --red:#D93636;
-  --wh70:rgba(255,255,255,.7);
-  --wh40:rgba(255,255,255,.4);
-  --wh20:rgba(255,255,255,.2);
-  --wh08:rgba(255,255,255,.08);
-  --gap:8px;
+  --gap:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:#1a1a1a;display:flex;height:100vh}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:flex;height:100vh}
 
-/* ── SIDEBAR ── */
-.side{width:56px;background:#fff;border-right:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:2px;flex-shrink:0;z-index:10}
-.s-logo{width:30px;height:30px;margin-bottom:16px}
-.s-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.22);cursor:pointer;transition:all .15s}
+/* ─── SIDEBAR ─── */
+.side{width:56px;background:#fff;border-right:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;flex-shrink:0;z-index:10}
+.s-logo{width:30px;height:30px;margin-bottom:20px}
+.s-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.22);cursor:pointer;transition:.15s}
 .s-ico:hover{background:rgba(0,0,0,.04);color:rgba(0,0,0,.45)}
 .s-ico.on{background:rgba(0,0,0,.06);color:rgba(0,0,0,.55)}
 .s-gap{flex:1}
 
-/* ── MAIN ── */
+/* ─── MAIN ─── */
 .main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
-/* ── NAV ── */
-.nav{height:48px;min-height:48px;background:#fff;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;padding:0 20px;gap:5px;flex-shrink:0}
-.nav-logo{margin-right:10px;width:28px;height:28px;flex-shrink:0}
-.tab{padding:6px 16px;border-radius:20px;font-size:13px;font-weight:500;color:rgba(0,0,0,.45);cursor:pointer;white-space:nowrap;transition:all .15s;user-select:none}
+/* ─── NAV ─── */
+.nav{height:54px;min-height:54px;background:#fff;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;padding:0 22px;gap:6px;flex-shrink:0}
+.nav-logo{margin-right:12px;width:32px;height:32px;flex-shrink:0}
+.tab{padding:8px 18px;border-radius:20px;font-size:14px;font-weight:500;color:rgba(0,0,0,.45);cursor:pointer;white-space:nowrap;transition:.15s;border:none;background:none}
 .tab:hover{color:#000;background:rgba(0,0,0,.03)}
 .tab.on{background:var(--accent);color:#fff;font-weight:600}
 .nav-r{margin-left:auto;display:flex;align-items:center;gap:6px}
-.nav-ico{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(0,0,0,.3);position:relative;transition:all .15s}
-.nav-ico:hover{background:rgba(0,0,0,.07)}
+.nav-toggle{display:flex;gap:3px;padding:5px 8px;border-radius:18px;background:rgba(0,0,0,.04);cursor:pointer;align-items:center}
+.nav-bell{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(0,0,0,.3);position:relative}
 .nav-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--accent);border-radius:50%;border:2px solid #fff}
-.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(145deg,#7B5B3A,#4A2E15);display:flex;align-items:center;justify-content:center;border:3px solid rgba(0,0,0,.06);cursor:pointer;overflow:hidden}
+.avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(145deg,#7B5B3A,#4A2E15);border:3px solid rgba(0,0,0,.06);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center}
 
-/* ── CONTENT ── */
-.ct{flex:1;display:flex;flex-direction:column;padding:10px 16px 8px;overflow:hidden;gap:var(--gap)}
+/* ─── CONTENT ─── */
+.ct{flex:1;display:flex;flex-direction:column;padding:14px 24px 10px;overflow:hidden;gap:var(--gap)}
 
-/* ── HEADER ── */
-.hdr{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.hdr-search{width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
-.hdr-title{font-size:clamp(26px,3.2vw,38px);font-weight:800;letter-spacing:-.03em;flex:1;line-height:1.1;color:#111}
+/* ─── HEADER ─── */
+.hdr{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.hdr-search{width:48px;height:48px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.hdr-title{font-size:clamp(34px,3.8vw,48px);font-weight:800;letter-spacing:-.03em;flex:1;line-height:1.1;color:#111}
 .hdr-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
-.btn-refresh{display:flex;align-items:center;gap:5px;padding:8px 18px;border-radius:20px;background:#fff;border:1px solid rgba(0,0,0,.1);color:#111;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.04);font-family:'Inter',sans-serif;transition:all .15s}
-.btn-refresh:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.hdr-ico{width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(0,0,0,.35);box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .15s}
-.hdr-ico:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.btn-refresh{display:flex;align-items:center;gap:5px;padding:8px 18px;border-radius:20px;background:#fff;border:1px solid rgba(0,0,0,.1);color:#111;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.04);font-family:inherit}
+.hdr-ico{width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(0,0,0,.35);box-shadow:0 1px 4px rgba(0,0,0,.04)}
 
-/* ── DARK GLASS CARD ── */
-.gc{background:var(--card);backdrop-filter:var(--card-blur);-webkit-backdrop-filter:var(--card-blur);border-radius:var(--card-r);padding:14px 16px;color:#fff;border:1px solid var(--card-border);box-shadow:0 8px 32px rgba(0,0,0,.12)}
-.gc-sm{padding:10px 12px}
+/* ─── GLASS ─── */
+.gc{background:var(--card);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--r);padding:18px 20px;color:#fff;border:1px solid var(--glass-border);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.gc2{background:var(--card2);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--r);padding:18px 20px;color:#fff;border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 32px rgba(0,0,0,.12)}
 
-/* ── HERO ZONE ── */
-.hero{position:relative;flex-shrink:0;height:clamp(220px,40vh,310px)}
+/* ─── HERO ─── */
+.hero{position:relative;flex-shrink:0;height:clamp(230px,40vh,340px)}
 
-/* Map BG */
-.euromap{position:absolute;top:-5%;left:18%;width:62%;height:120%;z-index:0;opacity:.58;pointer-events:none}
-.euromap path{fill:#8A8580;stroke:#7A756F;stroke-width:.5;stroke-linejoin:round}
-.heat{position:absolute;top:0;left:18%;width:62%;height:100%;z-index:1;background:radial-gradient(ellipse 38% 45% at 50% 46%,rgba(200,40,40,.42) 0%,rgba(200,40,40,.12) 45%,transparent 65%);pointer-events:none}
-.pins{position:absolute;top:0;left:18%;width:62%;height:100%;z-index:2;pointer-events:none}
-.pin{position:absolute;width:10px;height:10px;background:#1a0808;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.euromap{position:absolute;top:-5%;left:18%;width:60%;height:125%;z-index:0;opacity:.65;pointer-events:none}
+.euromap path{fill:#847F78;stroke:#747069;stroke-width:.5;stroke-linejoin:round}
+.heat{position:absolute;top:0;left:18%;width:60%;height:100%;z-index:1;background:radial-gradient(ellipse 40% 48% at 48% 44%,rgba(195,35,35,.45) 0%,rgba(195,35,35,.12) 45%,transparent 65%);pointer-events:none}
+.pins{position:absolute;top:0;left:18%;width:60%;height:100%;z-index:2;pointer-events:none}
+.pin{position:absolute;width:11px;height:11px;background:#1a0808;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.5)}
 
-/* Floating labels */
 .fl{position:absolute;z-index:3;pointer-events:none}
-.fl-n{font-size:13px;font-weight:700;color:rgba(50,45,40,.88);text-shadow:0 1px 4px rgba(255,255,255,.7);letter-spacing:-.01em}
-.fl-c{font-size:10px;color:rgba(50,45,40,.5);font-weight:500}
+.fl b{font-size:13px;font-weight:700;color:rgba(50,45,40,.85);display:block;text-shadow:0 1px 3px rgba(255,255,255,.6)}
+.fl span{font-size:10px;color:rgba(50,45,40,.5);font-weight:500}
 
-/* Hero grid */
-.hgrid{position:relative;z-index:4;display:grid;grid-template-columns:34% 1fr minmax(0,18%);gap:var(--gap);height:100%;overflow:hidden}
+.hgrid{position:relative;z-index:4;display:grid;grid-template-columns:36% 1fr minmax(0,20%);gap:var(--gap);height:100%;overflow:hidden}
 
-/* Left col */
-.hero-l{display:flex;flex-direction:column;gap:var(--gap)}
-.hero-l-top{flex:1;display:flex;flex-direction:column;justify-content:center}
-.hero-l-bot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gap)}
+/* Hero Left */
+.hl{display:flex;flex-direction:column;gap:var(--gap)}
+.hl-top{flex:1;display:flex;flex-direction:column;justify-content:center}
+.hl-bot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gap)}
 
-.kpi-row{display:flex;gap:clamp(12px,2vw,24px);margin-top:10px}
-.kpi-label{font-size:11px;color:var(--wh40);font-weight:500;margin-bottom:5px}
-.kpi-val{font-size:clamp(24px,2.5vw,34px);font-weight:800;letter-spacing:-.04em;line-height:1;display:flex;align-items:baseline;gap:4px}
-.kpi-val small{font-size:.4em;font-weight:400;color:var(--wh40)}
-.kpi-arrow{display:inline-flex;margin-left:2px}
+.ov-title{font-size:16px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:10px}
+.kpi-row{display:flex;gap:clamp(14px,2.2vw,30px)}
+.kpi-label{font-size:12px;color:rgba(255,255,255,.4);font-weight:500;margin-bottom:6px}
+.kpi-val{font-size:clamp(32px,3.4vw,46px);font-weight:800;letter-spacing:-.04em;line-height:1;display:flex;align-items:baseline;gap:3px}
+.kpi-val small{font-size:.4em;font-weight:400;color:rgba(255,255,255,.4)}
+.kpi-arr{display:inline-flex;margin-left:2px}
+.arr-svg{stroke:#3CB371;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-.sm-label{font-size:8.5px;color:var(--wh40);font-weight:500;margin-bottom:3px}
-.sm-val{font-size:clamp(16px,1.5vw,22px);font-weight:800;line-height:1;letter-spacing:-.02em}
-.sm-sub{font-size:7.5px;color:var(--wh20);margin-top:2px;font-weight:500}
-
-.slider-track{width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:99px;margin-top:6px;position:relative;overflow:hidden}
+/* Small cards */
+.sc{position:relative}
+.sc-label{font-size:10px;color:rgba(255,255,255,.4);font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em;line-height:1.3}
+.sc-val{font-size:clamp(20px,2vw,30px);font-weight:800;line-height:1;letter-spacing:-.02em}
+.sc-sub{font-size:8px;color:rgba(255,255,255,.2);margin-top:3px}
+.sc-arrow{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:6px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
+.slider-track{width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:99px;margin-top:6px;position:relative}
 .slider-fill{height:100%;width:55%;background:linear-gradient(90deg,var(--green),#E5A820);border-radius:99px}
-.slider-thumb{position:absolute;top:50%;right:43%;transform:translate(50%,-50%);width:10px;height:10px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.slider-thumb{position:absolute;top:50%;right:43%;transform:translate(50%,-50%);width:9px;height:9px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.3)}
 
-/* Key Competitors */
-.comp-list{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px;margin-top:6px}
-.comp-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+/* Competitors */
+.comp-list{flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px;margin-top:8px}
+.comp-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)}
 .comp-row:last-child{border-bottom:none}
-.comp-name{font-size:12.5px;font-weight:500;color:var(--wh70)}
-.comp-pct{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.comp-n{font-size:14px;font-weight:500;color:rgba(255,255,255,.65)}
+.comp-p{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.card-title{font-size:16px;font-weight:700;color:rgba(255,255,255,.8)}
+.card-arrow{width:22px;height:22px;border-radius:7px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 
-/* ── BOTTOM ── */
+/* ─── BOTTOM ─── */
 .bottom{display:grid;grid-template-columns:1.15fr 1fr;gap:var(--gap);flex:1;min-height:0}
 
-/* Themes */
-.sec-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.sec-title{font-size:18px;font-weight:700;margin-bottom:6px}
 .tbl{width:100%;border-collapse:collapse;table-layout:fixed}
-.tbl th{font-size:10px;font-weight:600;color:var(--wh20);text-transform:uppercase;letter-spacing:.07em;padding:0 0 6px;text-align:left;cursor:pointer;user-select:none}
-.tbl th:nth-child(1){width:40%}.tbl th:nth-child(2){width:32%}.tbl th:nth-child(3){width:28%}
-.tbl td{padding:6px 0;border-top:1px solid rgba(255,255,255,.04);font-size:12px;vertical-align:middle}
-.tbl td:first-child{font-weight:500;color:var(--wh70)}
-.tbl td:last-child{color:var(--wh40)}
-
-.pill{display:inline-block;padding:4px 14px;border-radius:999px;font-size:11px;font-weight:600;color:#fff;line-height:1.4}
-.pill-pos{background:#2B8C5A}
-.pill-neg{background:#C93030}
-.pill-mix{background:rgba(255,255,255,.15);color:var(--wh70)}
+.tbl th{font-size:11px;font-weight:600;color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.06em;padding:0 0 6px;text-align:left}
+.tbl th:nth-child(1){width:38%}.tbl th:nth-child(2){width:34%}.tbl th:nth-child(3){width:28%}
+.tbl td{padding:7px 0;border-top:1px solid rgba(255,255,255,.04);font-size:14px;vertical-align:middle}
+.tbl td:first-child{font-weight:500;color:rgba(255,255,255,.7)}
+.tbl td:last-child{color:rgba(255,255,255,.4)}
+.pill{display:inline-block;padding:5px 18px;border-radius:999px;font-size:12px;font-weight:600;color:#fff;line-height:1.4}
+.pill-pos{background:#2B8C5A}.pill-neg{background:#C93030}.pill-mix{background:rgba(255,255,255,.14);color:rgba(255,255,255,.65)}
 
 /* Evolution */
-.evo-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-shrink:0}
-.evo-title{font-size:16px;font-weight:700}
-.evo-tabs{display:flex;gap:2px}
-.evo-tab{font-size:10px;font-weight:500;padding:4px 10px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:var(--wh20);font-family:'Inter',sans-serif;transition:all .15s}
+.evo-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-shrink:0}
+.evo-title{font-size:18px;font-weight:700}
+.evo-tabs{display:flex;gap:3px}
+.evo-tab{font-size:12px;font-weight:500;padding:5px 12px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,.2);font-family:inherit}
 .evo-tab.on{color:#fff;font-weight:700;background:rgba(255,255,255,.08)}
 .evo-chart{flex:1;min-height:0}
 
-/* ── BANNER ── */
-.banner{flex-shrink:0;background:var(--card);backdrop-filter:var(--card-blur);border-radius:12px;padding:9px 16px;display:flex;align-items:center;gap:10px;border:1px solid var(--card-border);box-shadow:0 4px 20px rgba(0,0,0,.1)}
-.banner p{font-size:11px;font-weight:500;color:var(--wh70);flex:1}
-.banner a{color:#fff;font-weight:700;text-decoration:none;white-space:nowrap}
-.banner a:hover{text-decoration:underline}
-
-/* Helpers */
-.arrow-up{display:inline-flex;align-items:center}
-.card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.card-title{font-size:12px;font-weight:700;color:var(--wh70)}
-.card-sub{font-size:9px;color:var(--wh20);font-weight:500}
-.card-arrow{width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s}
-.card-arrow:hover{background:rgba(255,255,255,.14)}
+/* ─── BANNER ─── */
+.banner{flex-shrink:0;background:var(--card2);backdrop-filter:var(--blur);border-radius:12px;padding:10px 24px;display:flex;align-items:center;border:1px solid rgba(255,255,255,.06);box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.banner p{font-size:13px;font-weight:500;color:rgba(255,255,255,.65);flex:1}
+.banner a{color:#fff;font-weight:700;text-decoration:none}
 </style>
 </head>
 <body>
 
-<!-- ── SIDEBAR ── -->
+<!-- ─── SIDEBAR ─── -->
 <aside class="side">
-  <div class="s-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M3 22L9 6h4L7 22H3z" fill="#222"/><path d="M11 22L17 6h4L15 22h-4z" fill="#222"/></svg></div>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="4" height="3.5" rx=".8"/><rect x="3" y="9.5" width="4" height="3.5" rx=".8"/><rect x="9" y="3" width="4" height="3.5" rx=".8"/><rect x="9" y="9.5" width="4" height="3.5" rx=".8"/></svg></div>
-  <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="4" height="4" rx="1.2"/><rect x="9" y="3" width="4" height="4" rx="1.2"/><rect x="3" y="9" width="4" height="4" rx="1.2"/><rect x="9" y="9" width="4" height="4" rx="1.2"/></svg></div>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="4.5" cy="8" r="2"/><circle cx="11.5" cy="4" r="2"/><circle cx="11.5" cy="12" r="2"/><path d="M6.5 7.3L9.5 4.7M6.5 8.7L9.5 11.3"/></svg></div>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0 2 2.5 3 5 3s5-1 5-3V6.5c0-.8-.4-1.5-1.2-2L8 2.5 4.2 4.5C3.4 5 3 5.7 3 6.5V12z"/><path d="M8 5.5V9"/></svg></div>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2.5"/><path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7"/></svg></div>
+  <div class="s-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M4 24L10 4h4L8 24H4z" fill="#D93636"/><path d="M12 24L18 4h4L16 24h-4z" fill="#222"/></svg></div>
+  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3.5" width="10" height="8" rx="1.5"/><path d="M5.5 8v4.5h7.5v-2"/></svg></div>
+  <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg></div>
+  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="4.5" cy="8" r="2"/><circle cx="11.5" cy="4" r="2"/><circle cx="11.5" cy="12" r="2"/><path d="M6.5 7.3L9.5 4.7M6.5 8.7L9.5 11.3"/></svg></div>
+  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0 2 2.5 3 5 3s5-1 5-3V6.5c0-.8-.4-1.5-1.2-2L8 2.5 4.2 4.5C3.4 5 3 5.7 3 6.5V12z"/><path d="M8 5.5V9"/></svg></div>
+  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7"/></svg></div>
   <div class="s-gap"></div>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 2v1.2M8 12.8V14M2 8h1.2M12.8 8H14M4 4l.85.85M11.15 11.15L12 12M4 12l.85-.85M11.15 4.85L12 4"/></svg></div>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l4-4-4-4"/><path d="M14 9H6.5a3 3 0 110-6H7"/></svg></div>
+  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l4-4-4-4"/><path d="M14 9H6.5a3 3 0 110-6H7"/></svg></div>
 </aside>
 
 <main class="main">
   <!-- NAV -->
   <nav class="nav">
-    <div class="nav-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M3 22L9 6h4L7 22H3z" fill="#D93636"/><path d="M11 22L17 6h4L15 22h-4z" fill="#D93636"/></svg></div>
+    <div class="nav-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M4 24L10 4h4L8 24H4z" fill="#D93636"/><path d="M12 24L18 4h4L16 24h-4z" fill="#D93636"/></svg></div>
     <div class="tab on">Dashboard</div>
     <div class="tab">Sentiment</div>
     <div class="tab">Share of Voice</div>
@@ -176,146 +160,102 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:#1a1a1a
     <div class="tab">Crisis Alert</div>
     <div class="tab">Reports</div>
     <div class="nav-r">
-      <div class="nav-ico" style="gap:4px;width:auto;padding:0 4px;border-radius:20px;background:rgba(0,0,0,.05)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="2.5"/><path d="M7 1.5v1M7 11.5v1M1.5 7h1M11.5 7h1M3.3 3.3l.7.7M10 10l.7.7M3.3 10.7l.7-.7M10 3.3l.7.7"/></svg><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 7.5a5.5 5.5 0 01-7.3 5.2A5.5 5.5 0 009.5 2a5.5 5.5 0 002.5 5.5z"/></svg></div>
-      <div class="nav-ico"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10.5 4a4 4 0 10-6 3.5c.3.4.5 1 .5 1.5h5c0-.5.2-1.1.5-1.5a4 4 0 00-2-3.5z"/><path d="M5.5 12h4"/></svg><div class="nav-dot"></div></div>
-      <div class="avatar"><svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.4"><circle cx="9" cy="6.5" r="2.8"/><path d="M3.5 15.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg></div>
+      <div class="nav-toggle"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6.5" cy="6.5" r="2.5"/><path d="M6.5 1.5v1M6.5 11v1M1.5 6.5h1M11 6.5h1M3.5 3.5l.6.6M9.4 9.4l.6.6M3.5 9.5l.6-.6M9.4 3.6l.6-.6"/></svg><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M11 6.5a5 5 0 01-6.6 4.7A5 5 0 008.6 1.7 5 5 0 0011 6.5z"/></svg></div>
+      <div class="nav-bell"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10.5 4a4 4 0 10-6 3.5c.3.4.5 1 .5 1.5h5c0-.5.2-1.1.5-1.5a4 4 0 00-2-3.5z"/><path d="M5.5 12h4"/></svg><div class="nav-dot"></div></div>
+      <div class="avatar"><svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><circle cx="9" cy="6.5" r="2.8"/><path d="M3.5 15.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg></div>
     </div>
   </nav>
 
   <div class="ct">
     <!-- HEADER -->
     <div class="hdr">
-      <div class="hdr-search"><svg width="16" height="16" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3.5 3.5"/></svg></div>
+      <div class="hdr-search"><svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M12 12l3.5 3.5"/></svg></div>
       <div class="hdr-title">Brand Intelligence Dashboard</div>
       <div class="hdr-actions">
-        <button class="btn-refresh"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6a5.5 5.5 0 019-3M11 6a5.5 5.5 0 01-9 3"/><path d="M10 1v2.5h2.5M2 11v-2.5H-.5"/></svg> Refresh</button>
-        <div class="hdr-ico"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 2v6M3.5 5.5L6.5 9l3-3.5"/><path d="M2 11h9"/></svg></div>
+        <button class="btn-refresh">Refresh <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 5.5a5 5 0 018-2.5M10 5.5a5 5 0 01-8 2.5"/><path d="M9 1v2h2M2 9.5v-2H0"/></svg></button>
+        <div class="hdr-ico"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 2v6M3.5 5.5L6.5 9 9.5 5.5"/><path d="M2 11h9"/></svg></div>
         <div class="hdr-ico"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9L9 4M9 4H6M9 4v3"/></svg></div>
       </div>
     </div>
 
-    <!-- ── HERO ── -->
+    <!-- ─── HERO ─── -->
     <div class="hero">
-      <!-- Europe map background -->
-      <svg class="euromap" viewBox="50 450 700 450" preserveAspectRatio="xMidYMid slice">
-        <g>
-          <path d="M593.7,653.1L592.6,657.4L584.8,657.4L587.5,659.7L582.9,666.5L580.2,668.3L568.1,668.6L561.1,670.9L549.6,670.1L529.8,667.4L526.7,663.8L512.9,665.6L511.3,667.6L502.9,666.1L495.8,665.8L489.5,663.9L491.7,661.3L491.1,659.4L495.3,658.9L502.3,661.8L504.3,659.0L516.6,659.5L526.5,657.6L533.2,657.9L537.5,660.1L538.8,658.2L536.8,651.3L541.8,649.9L546.7,644.9L557.0,648.4L564.8,644.0L569.7,643.2L580.5,646.5L587.0,645.9L593.4,648.0L592.3,649.3Z"/>
-          <path d="M403.9,617.4L414.1,618.3L426.9,615.9L435.7,620.9L443.4,623.5L441.8,631.1L438.2,631.6L436.7,637.8L424.5,632.7L417.4,633.6L407.7,628.3L401.2,623.8L394.8,623.6L392.8,619.6Z"/>
-          <path d="M672.5,693.3L676.5,697.4L681.9,696.6L692.6,698.2L713.0,698.7L719.9,696.2L736.2,693.9L746.3,697.5L754.5,698.5L747.3,702.6L742.2,709.6L746.7,715.1L734.7,713.8L720.6,716.9L720.4,721.6L707.8,722.5L698.0,719.2L686.9,721.8L676.6,721.5L675.7,715.2L668.7,712.1L671.0,710.7L669.5,709.6L671.8,706.5L677.1,703.4L670.4,699.2L669.1,695.5Z"/>
-          <path d="M684.0,587.1L697.5,587.2L712.5,582.6L715.8,575.6L727.1,571.6L725.8,566.0L734.3,563.8L749.2,558.9L763.8,562.1L765.8,565.3L773.1,563.8L786.7,566.8L788.0,572.7L785.0,576.0L793.8,584.1L799.4,586.3L798.6,588.5L807.9,590.7L811.9,593.9L806.5,596.5L795.3,596.1L792.7,597.2L795.9,601.1L799.3,608.6L787.4,609.3L783.1,611.9L782.2,617.7L776.7,616.6L764.2,617.1L760.5,614.4L755.3,616.4L750.1,614.8L739.2,614.5L723.7,611.8L709.6,610.9L698.9,611.1L691.3,614.2L684.6,614.7L684.4,609.5L680.1,604.1L688.4,601.7L688.5,597.0L684.6,592.4Z"/>
-          <path d="M534.1,566.0L525.8,576.2L511.2,569.1L509.3,563.9L529.7,559.6Z M509.4,555.2L506.0,560.0L501.9,558.6L491.9,567.8L495.7,573.9L486.8,575.8L476.3,574.2L470.6,567.2L470.2,554.1L472.5,550.6L476.5,546.6L488.8,545.8L493.6,542.2L504.8,538.4L504.3,545.3L500.2,549.5L501.9,553.2Z"/>
-          <path d="M232.4,716.3L233.1,709.5L227.4,705.2L247.1,698.1L264.1,699.9L282.7,699.8L297.5,701.5L309.0,701.0L331.5,701.3L337.0,705.2L362.6,709.6L367.6,707.5L383.2,711.9L399.3,710.6L400.1,716.2L386.9,722.6L369.1,724.6L367.9,727.8L359.3,733.0L354.0,740.6L359.4,745.8L351.4,749.9L348.4,755.8L337.9,757.6L328.1,764.5L310.4,764.7L297.2,764.5L288.5,767.6L283.2,771.0L276.4,770.2L271.2,767.2L267.3,762.1L254.3,760.7L253.2,757.8L258.3,754.4L260.2,751.9L255.4,749.2L259.3,743.2L253.7,737.6L259.7,736.9L260.3,732.4L262.5,731.1L262.7,723.7L269.1,721.1L265.2,716.3L257.2,716.0L254.8,717.2L246.6,717.2L243.1,712.5L237.4,713.9Z"/>
-          <path d="M695.5,537.6L697.2,529.6L692.0,531.3L683.2,526.4L682.0,518.5L699.6,514.6L717.1,512.5L732.2,514.8L746.5,514.4L748.6,516.9L738.7,524.9L742.8,537.6L736.9,541.8L725.4,541.8L713.5,536.8L707.4,535.2Z"/>
-          <path d="M407.7,628.3L417.4,633.6L424.5,632.7L436.7,637.8L439.8,638.7L443.8,638.5L450.3,641.4L470.4,643.4L463.3,650.8L461.6,658.4L457.8,660.2L451.4,659.3L451.9,662.0L441.7,667.9L441.5,672.6L448.1,670.9L452.9,675.5L452.3,678.4L456.4,682.2L451.6,685.3L455.2,693.1L462.7,694.3L461.1,698.7L448.5,704.2L421.2,701.6L400.9,704.8L399.3,710.6L383.2,711.9L367.6,707.5L362.6,709.6L337.0,705.2L331.5,701.3L338.6,695.4L341.3,675.2L327.0,664.3L316.7,659.0L295.5,654.9L294.1,647.0L312.1,644.7L335.4,647.5L331.0,635.0L344.1,639.8L376.5,631.1L380.6,621.9L392.8,619.6L394.8,623.6L401.2,623.8Z"/>
-          <path d="M316.1,526.1L301.3,540.8L315.4,538.9L330.7,539.0L327.0,549.8L314.5,561.4L328.9,562.2L330.0,563.6L342.4,578.4L351.9,580.3L360.4,594.2L364.4,598.9L381.2,601.1L379.5,608.7L372.5,612.1L378.0,618.0L365.5,624.0L346.9,623.9L323.3,627.0L316.8,624.7L307.6,630.0L294.8,628.7L285.0,633.0L277.6,630.8L298.0,618.9L310.4,616.4L288.6,614.5L284.7,609.9L299.2,606.3L291.6,600.0L294.3,592.1L314.9,593.2L317.0,586.2L307.7,578.7L290.6,576.3L287.3,572.9L292.3,567.3L287.8,563.8L280.3,569.8L279.5,557.5L272.4,550.9L277.5,537.2L288.3,526.2L299.4,527.3Z M279.2,579.2L271.8,587.6L261.3,585.1L252.7,585.3L255.6,578.7L252.7,572.1L264.3,571.5Z"/>
-          <path d="M727.4,719.4L723.1,725.4L719.8,726.4L711.3,726.1L704.1,725.3L687.2,727.7L696.9,733.0L689.8,734.5L682.1,734.5L674.7,729.7L672.1,731.8L675.2,737.3L682.2,741.7L676.9,743.7L684.7,747.9L691.5,750.6L691.8,755.7L678.9,753.3L683.0,757.9L674.2,758.9L679.4,766.8L670.2,766.9L658.8,763.0L653.6,755.8L651.2,749.8L645.8,745.6L638.7,740.3L637.7,737.7L644.2,733.1L645.0,730.1L649.5,728.7L649.8,726.2L658.9,725.4L664.2,723.3L671.7,723.5L674.0,721.9L676.6,721.5L686.9,721.8L698.0,719.2L707.8,722.5L720.4,721.6L720.6,716.9Z"/>
-          <path d="M529.8,667.4L549.6,670.1L548.1,675.2L551.4,679.6L540.4,678.1L529.1,681.7L529.9,686.7L528.2,689.6L532.7,694.7L545.7,699.7L552.7,707.8L568.2,715.6L579.1,715.6L582.4,717.7L578.5,719.6L591.0,723.0L601.2,725.9L613.1,730.8L614.5,732.6L611.9,735.9L604.2,731.6L592.2,730.0L586.3,736.1L596.4,739.5L594.7,744.3L588.9,744.9L581.5,752.7L575.7,753.4L575.8,750.6L578.6,745.7L581.6,743.8L576.2,738.4L571.9,733.7L566.2,732.5L562.1,728.5L553.1,726.8L547.1,723.0L536.9,722.3L526.0,718.0L513.3,711.8L503.9,706.2L499.5,696.4L492.6,695.3L481.3,692.0L474.9,693.3L466.9,697.9L461.1,698.7L462.7,694.3L455.2,693.1L451.6,685.3L456.4,682.2L452.3,678.4L452.9,675.5L458.9,677.7L465.6,677.2L473.4,673.7L475.8,675.3L482.4,675.0L485.4,670.8L495.7,672.1L501.8,670.4L502.9,666.1L511.3,667.6L512.9,665.6L526.7,663.8Z"/>
-          <path d="M566.4,620.1L560.7,612.8L561.8,608.8L558.4,602.5L553.3,598.3L557.2,595.1L554.0,589.0L563.5,585.4L585.1,579.7L602.6,575.5L616.5,577.6L617.5,580.7L630.9,580.8L648.0,582.2L673.6,582.0L680.7,583.3L684.0,587.1L684.6,592.4L688.5,597.0L688.4,601.7L680.1,604.1L684.4,609.5L684.6,614.7L691.6,624.7L690.1,627.8L683.2,629.1L670.6,638.4L674.2,643.3L671.2,642.6L658.0,638.4L648.0,640.0L641.4,638.9L633.2,641.2L626.2,637.3L620.5,638.8L619.7,638.1L613.3,632.7L603.0,632.0L601.7,628.5L592.2,627.3L590.1,630.2L582.5,627.8L583.4,624.7L573.0,623.8Z"/>
-          <path d="M673.3,655.6L679.3,653.4L687.9,654.5L696.8,654.6L703.2,657.2L708.0,655.6L718.2,654.5L721.7,652.0L727.6,652.0L731.8,653.1L736.1,656.2L740.5,660.7L748.5,667.0L749.0,671.5L747.5,675.9L750.0,680.6L756.2,682.5L762.7,680.9L769.0,682.6L769.3,685.2L762.6,687.4L758.4,686.5L754.5,698.5L746.3,697.5L736.2,693.9L719.9,696.2L713.0,698.7L692.6,698.2L681.9,696.6L676.5,697.4L672.5,693.3L670.0,691.5L673.2,689.8L669.8,688.6L665.4,690.8L657.3,687.9L656.2,683.8L647.8,681.4L646.2,678.1L638.7,674.1L649.8,672.1L658.2,665.0L664.8,657.9Z"/>
-          <path d="M442.2,592.0L453.8,592.3L456.4,596.3L452.9,607.2L449.4,611.5L441.0,611.5L443.4,623.5L435.7,620.9L426.9,615.9L414.1,618.3L403.9,617.4L411.1,614.2L423.2,597.0Z"/>
-          <path d="M799.3,608.6L804.5,609.1L808.0,606.4L812.2,607.0L826.6,605.9L835.5,612.5L832.1,614.8L833.2,618.4L844.3,618.9L849.2,623.9L848.9,626.1L866.6,630.0L877.2,628.3L885.8,633.5L893.9,633.4L914.4,637.0L914.5,640.2L908.9,645.9L912.0,651.9L909.8,655.5L896.3,656.2L889.2,659.2L888.7,663.9L877.7,664.7L868.4,668.1L855.4,668.7L843.4,672.6L844.3,679.0L851.1,681.4L865.2,680.8L862.5,684.4L847.3,686.2L828.5,692.0L820.7,690.0L823.8,685.2L808.6,682.3L811.1,680.3L824.4,676.9L820.3,674.5L798.8,671.9L797.8,668.1L784.9,669.3L779.8,675.0L769.0,682.6L762.7,680.9L756.2,682.5L750.0,680.6L753.5,679.5L755.9,676.0L759.7,672.7L758.7,670.8L761.6,670.0L763.0,671.5L771.2,671.8L774.9,671.0L772.3,669.9L773.3,668.4L768.4,665.7L766.4,661.3L761.3,659.6L762.3,656.0L756.1,653.1L750.4,652.7L740.1,649.4L730.9,650.4L727.6,652.0L721.7,652.0L718.2,654.5L708.0,655.6L703.2,657.2L696.8,654.6L687.9,654.5L679.3,653.4L673.3,655.6L672.3,652.8L664.6,649.9L667.3,645.5L671.2,642.6L674.2,643.3L670.6,638.4L683.2,629.1L690.1,627.8L691.6,624.7L684.6,614.7L691.3,614.2L698.9,611.1L709.6,610.9L723.7,611.8L739.2,614.5L750.1,614.8L755.3,616.4L760.5,614.4L764.2,617.1L776.7,616.6L782.2,617.7L783.1,611.9L787.4,609.3Z"/>
-          <path d="M491.1,659.4L491.7,661.3L489.5,663.9L495.8,665.8L502.9,666.1L501.8,670.4L495.7,672.1L485.4,670.8L482.4,675.0L475.8,675.3L473.4,673.7L465.6,677.2L458.9,677.7L452.9,675.5L448.1,670.9L441.5,672.6L441.7,667.9L451.9,662.0L451.4,659.3L457.8,660.2L461.6,658.4L473.4,658.5L476.2,656.2Z"/>
-          <path d="M619.4,676.3L622.8,680.3L627.2,683.2L621.8,687.0L615.5,684.8L605.9,684.9L594.0,683.2L587.5,683.4L584.5,685.5L579.5,683.2L576.6,687.4L583.4,692.1L586.4,695.2L592.8,698.9L598.1,701.1L603.3,705.2L615.6,708.9L614.1,710.6L601.1,707.0L593.0,703.4L580.3,700.5L568.6,693.2L571.4,692.5L565.1,688.2L564.8,684.8L555.9,683.2L551.6,687.6L547.5,684.2L547.9,680.7L558.0,680.9L560.6,679.1L565.3,680.8L570.7,681.0L570.7,678.1L575.5,677.1L576.9,672.9L587.9,670.2L592.3,671.4L602.7,675.9L614.2,677.9Z"/>
-          <path d="M643.8,716.6L642.1,719.8L644.0,723.9L649.8,726.2L649.5,728.7L645.0,730.1L644.2,733.1L637.7,737.7L635.4,737.0L635.1,735.0L627.4,731.8L626.2,727.3L627.4,720.9L629.3,717.9L626.9,716.4L626.0,713.3L632.0,708.5L632.9,710.4L636.6,709.5L639.6,712.1L642.9,713.1Z"/>
-          <path d="M582.9,666.5L587.5,659.7L584.8,657.4L592.6,657.4L593.7,653.1L600.8,655.8L605.9,657.0L617.5,655.7L618.7,653.5L624.2,653.2L630.9,651.5L632.4,652.2L639.0,650.9L642.2,648.3L646.8,647.7L661.6,651.0L664.6,649.9L672.3,652.8L673.3,655.6L664.8,657.9L658.2,665.0L649.8,672.1L638.7,674.1L630.0,673.6L619.4,676.3L614.2,677.9L602.7,675.9L592.3,671.4L587.9,670.2L585.2,666.6Z"/>
-          <path d="M549.6,670.1L561.1,670.9L568.1,668.6L580.2,668.3L582.9,666.5L585.2,666.6L587.9,670.2L576.9,672.9L575.5,677.1L570.7,678.1L570.7,681.0L565.3,680.8L560.6,679.1L558.0,680.9L548.3,680.5L551.4,679.6L548.1,675.2Z"/>
-          <path d="M441.8,631.1L444.6,633.7L443.8,638.5L439.8,638.7L436.7,637.8L438.2,631.6Z"/>
-          <path d="M650.3,560.7L650.8,550.9L657.6,542.7L670.7,538.1L681.7,548.0L692.9,547.8L695.5,537.6L707.4,535.2L713.5,536.8L725.4,541.8L736.9,541.8L743.6,544.9L744.7,551.2L749.2,558.9L734.3,563.8L725.8,566.0L712.5,559.8L705.1,559.0L703.1,556.3L689.5,557.5L666.2,556.7Z"/>
-          <path d="M673.6,582.0L672.5,578.9L673.9,575.5L667.8,573.5L653.3,571.3L650.3,560.7L666.2,556.7L689.5,557.5L703.1,556.3L705.1,559.0L712.5,559.8L725.8,566.0L727.1,571.6L715.8,575.6L712.5,582.6L697.5,587.2L684.0,587.1L680.7,583.3Z"/>
-          <path d="M619.7,638.1L620.5,638.8L626.2,637.3L633.2,641.2L641.4,638.9L648.0,640.0L658.0,638.4L671.2,642.6L667.3,645.5L664.6,649.9L661.6,651.0L646.8,647.7L642.2,648.3L639.0,650.9L632.4,652.2L630.9,651.5L624.2,653.2L618.7,653.5L617.5,655.7L605.9,657.0L600.8,655.8L593.7,653.1L592.3,649.3L593.4,648.0L595.4,645.6L601.5,645.8L606.3,644.6L606.7,643.6L609.3,643.1L610.2,640.6L613.4,640.1L615.6,638.2Z"/>
-          <path d="M647.8,681.4L656.2,683.8L657.3,687.9L665.4,690.8L669.8,688.6L673.2,689.8L670.0,691.5L672.5,693.3L669.1,695.5L670.4,699.2L677.1,703.4L671.8,706.5L669.5,709.6L671.0,710.7L668.7,712.1L662.3,712.3L657.5,712.8L657.1,712.1L658.7,711.0L660.3,708.6L658.3,708.6L655.6,706.8L653.3,706.4L651.5,704.8L648.9,704.2L647.0,702.8L644.5,703.4L642.5,706.6L639.2,707.3L640.4,706.5L635.1,704.5L630.5,703.4L628.5,702.0L624.8,700.3L628.1,699.9L630.1,695.2L623.4,691.4L626.9,687.0L621.8,687.0L627.2,683.2L622.8,680.3L619.4,676.3L630.0,673.6L638.7,674.1L646.2,678.1Z"/>
-        </g>
-      </svg>
+      <svg class="euromap" viewBox="50 450 700 450" preserveAspectRatio="xMidYMid slice"><g>
+        <path d="M593.7,653.1L592.6,657.4L584.8,657.4L587.5,659.7L582.9,666.5L580.2,668.3L568.1,668.6L561.1,670.9L549.6,670.1L529.8,667.4L526.7,663.8L512.9,665.6L511.3,667.6L502.9,666.1L495.8,665.8L489.5,663.9L491.7,661.3L491.1,659.4L495.3,658.9L502.3,661.8L504.3,659.0L516.6,659.5L526.5,657.6L533.2,657.9L537.5,660.1L538.8,658.2L536.8,651.3L541.8,649.9L546.7,644.9L557.0,648.4L564.8,644.0L569.7,643.2L580.5,646.5L587.0,645.9L593.4,648.0L592.3,649.3Z"/>
+        <path d="M403.9,617.4L414.1,618.3L426.9,615.9L435.7,620.9L443.4,623.5L441.8,631.1L438.2,631.6L436.7,637.8L424.5,632.7L417.4,633.6L407.7,628.3L401.2,623.8L394.8,623.6L392.8,619.6Z"/>
+        <path d="M672.5,693.3L676.5,697.4L681.9,696.6L692.6,698.2L713.0,698.7L719.9,696.2L736.2,693.9L746.3,697.5L754.5,698.5L747.3,702.6L742.2,709.6L746.7,715.1L734.7,713.8L720.6,716.9L720.4,721.6L707.8,722.5L698.0,719.2L686.9,721.8L676.6,721.5L675.7,715.2L668.7,712.1L671.0,710.7L669.5,709.6L671.8,706.5L677.1,703.4L670.4,699.2L669.1,695.5Z"/>
+        <path d="M684.0,587.1L697.5,587.2L712.5,582.6L715.8,575.6L727.1,571.6L725.8,566.0L734.3,563.8L749.2,558.9L763.8,562.1L765.8,565.3L773.1,563.8L786.7,566.8L788.0,572.7L785.0,576.0L793.8,584.1L799.4,586.3L798.6,588.5L807.9,590.7L811.9,593.9L806.5,596.5L795.3,596.1L792.7,597.2L795.9,601.1L799.3,608.6L787.4,609.3L783.1,611.9L782.2,617.7L776.7,616.6L764.2,617.1L760.5,614.4L755.3,616.4L750.1,614.8L739.2,614.5L723.7,611.8L709.6,610.9L698.9,611.1L691.3,614.2L684.6,614.7L684.4,609.5L680.1,604.1L688.4,601.7L688.5,597.0L684.6,592.4Z"/>
+        <path d="M534.1,566.0L525.8,576.2L511.2,569.1L509.3,563.9L529.7,559.6Z M509.4,555.2L506.0,560.0L501.9,558.6L491.9,567.8L495.7,573.9L486.8,575.8L476.3,574.2L470.6,567.2L470.2,554.1L472.5,550.6L476.5,546.6L488.8,545.8L493.6,542.2L504.8,538.4L504.3,545.3L500.2,549.5L501.9,553.2Z"/>
+        <path d="M232.4,716.3L233.1,709.5L227.4,705.2L247.1,698.1L264.1,699.9L282.7,699.8L297.5,701.5L309.0,701.0L331.5,701.3L337.0,705.2L362.6,709.6L367.6,707.5L383.2,711.9L399.3,710.6L400.1,716.2L386.9,722.6L369.1,724.6L367.9,727.8L359.3,733.0L354.0,740.6L359.4,745.8L351.4,749.9L348.4,755.8L337.9,757.6L328.1,764.5L310.4,764.7L297.2,764.5L288.5,767.6L283.2,771.0L276.4,770.2L271.2,767.2L267.3,762.1L254.3,760.7L253.2,757.8L258.3,754.4L260.2,751.9L255.4,749.2L259.3,743.2L253.7,737.6L259.7,736.9L260.3,732.4L262.5,731.1L262.7,723.7L269.1,721.1L265.2,716.3L257.2,716.0L254.8,717.2L246.6,717.2L243.1,712.5L237.4,713.9Z"/>
+        <path d="M695.5,537.6L697.2,529.6L692.0,531.3L683.2,526.4L682.0,518.5L699.6,514.6L717.1,512.5L732.2,514.8L746.5,514.4L748.6,516.9L738.7,524.9L742.8,537.6L736.9,541.8L725.4,541.8L713.5,536.8L707.4,535.2Z"/>
+        <path d="M407.7,628.3L417.4,633.6L424.5,632.7L436.7,637.8L439.8,638.7L443.8,638.5L450.3,641.4L470.4,643.4L463.3,650.8L461.6,658.4L457.8,660.2L451.4,659.3L451.9,662.0L441.7,667.9L441.5,672.6L448.1,670.9L452.9,675.5L452.3,678.4L456.4,682.2L451.6,685.3L455.2,693.1L462.7,694.3L461.1,698.7L448.5,704.2L421.2,701.6L400.9,704.8L399.3,710.6L383.2,711.9L367.6,707.5L362.6,709.6L337.0,705.2L331.5,701.3L338.6,695.4L341.3,675.2L327.0,664.3L316.7,659.0L295.5,654.9L294.1,647.0L312.1,644.7L335.4,647.5L331.0,635.0L344.1,639.8L376.5,631.1L380.6,621.9L392.8,619.6L394.8,623.6L401.2,623.8Z"/>
+        <path d="M316.1,526.1L301.3,540.8L315.4,538.9L330.7,539.0L327.0,549.8L314.5,561.4L328.9,562.2L330.0,563.6L342.4,578.4L351.9,580.3L360.4,594.2L364.4,598.9L381.2,601.1L379.5,608.7L372.5,612.1L378.0,618.0L365.5,624.0L346.9,623.9L323.3,627.0L316.8,624.7L307.6,630.0L294.8,628.7L285.0,633.0L277.6,630.8L298.0,618.9L310.4,616.4L288.6,614.5L284.7,609.9L299.2,606.3L291.6,600.0L294.3,592.1L314.9,593.2L317.0,586.2L307.7,578.7L290.6,576.3L287.3,572.9L292.3,567.3L287.8,563.8L280.3,569.8L279.5,557.5L272.4,550.9L277.5,537.2L288.3,526.2L299.4,527.3Z M279.2,579.2L271.8,587.6L261.3,585.1L252.7,585.3L255.6,578.7L252.7,572.1L264.3,571.5Z"/>
+        <path d="M727.4,719.4L723.1,725.4L719.8,726.4L711.3,726.1L704.1,725.3L687.2,727.7L696.9,733.0L689.8,734.5L682.1,734.5L674.7,729.7L672.1,731.8L675.2,737.3L682.2,741.7L676.9,743.7L684.7,747.9L691.5,750.6L691.8,755.7L678.9,753.3L683.0,757.9L674.2,758.9L679.4,766.8L670.2,766.9L658.8,763.0L653.6,755.8L651.2,749.8L645.8,745.6L638.7,740.3L637.7,737.7L644.2,733.1L645.0,730.1L649.5,728.7L649.8,726.2L658.9,725.4L664.2,723.3L671.7,723.5L674.0,721.9L676.6,721.5L686.9,721.8L698.0,719.2L707.8,722.5L720.4,721.6L720.6,716.9Z"/>
+        <path d="M529.8,667.4L549.6,670.1L548.1,675.2L551.4,679.6L540.4,678.1L529.1,681.7L529.9,686.7L528.2,689.6L532.7,694.7L545.7,699.7L552.7,707.8L568.2,715.6L579.1,715.6L582.4,717.7L578.5,719.6L591.0,723.0L601.2,725.9L613.1,730.8L614.5,732.6L611.9,735.9L604.2,731.6L592.2,730.0L586.3,736.1L596.4,739.5L594.7,744.3L588.9,744.9L581.5,752.7L575.7,753.4L575.8,750.6L578.6,745.7L581.6,743.8L576.2,738.4L571.9,733.7L566.2,732.5L562.1,728.5L553.1,726.8L547.1,723.0L536.9,722.3L526.0,718.0L513.3,711.8L503.9,706.2L499.5,696.4L492.6,695.3L481.3,692.0L474.9,693.3L466.9,697.9L461.1,698.7L462.7,694.3L455.2,693.1L451.6,685.3L456.4,682.2L452.3,678.4L452.9,675.5L458.9,677.7L465.6,677.2L473.4,673.7L475.8,675.3L482.4,675.0L485.4,670.8L495.7,672.1L501.8,670.4L502.9,666.1L511.3,667.6L512.9,665.6L526.7,663.8Z"/>
+        <path d="M566.4,620.1L560.7,612.8L561.8,608.8L558.4,602.5L553.3,598.3L557.2,595.1L554.0,589.0L563.5,585.4L585.1,579.7L602.6,575.5L616.5,577.6L617.5,580.7L630.9,580.8L648.0,582.2L673.6,582.0L680.7,583.3L684.0,587.1L684.6,592.4L688.5,597.0L688.4,601.7L680.1,604.1L684.4,609.5L684.6,614.7L691.6,624.7L690.1,627.8L683.2,629.1L670.6,638.4L674.2,643.3L671.2,642.6L658.0,638.4L648.0,640.0L641.4,638.9L633.2,641.2L626.2,637.3L620.5,638.8L619.7,638.1L613.3,632.7L603.0,632.0L601.7,628.5L592.2,627.3L590.1,630.2L582.5,627.8L583.4,624.7L573.0,623.8Z"/>
+        <path d="M673.3,655.6L679.3,653.4L687.9,654.5L696.8,654.6L703.2,657.2L708.0,655.6L718.2,654.5L721.7,652.0L727.6,652.0L731.8,653.1L736.1,656.2L740.5,660.7L748.5,667.0L749.0,671.5L747.5,675.9L750.0,680.6L756.2,682.5L762.7,680.9L769.0,682.6L769.3,685.2L762.6,687.4L758.4,686.5L754.5,698.5L746.3,697.5L736.2,693.9L719.9,696.2L713.0,698.7L692.6,698.2L681.9,696.6L676.5,697.4L672.5,693.3L670.0,691.5L673.2,689.8L669.8,688.6L665.4,690.8L657.3,687.9L656.2,683.8L647.8,681.4L646.2,678.1L638.7,674.1L649.8,672.1L658.2,665.0L664.8,657.9Z"/>
+        <path d="M442.2,592.0L453.8,592.3L456.4,596.3L452.9,607.2L449.4,611.5L441.0,611.5L443.4,623.5L435.7,620.9L426.9,615.9L414.1,618.3L403.9,617.4L411.1,614.2L423.2,597.0Z"/>
+        <path d="M799.3,608.6L804.5,609.1L808.0,606.4L812.2,607.0L826.6,605.9L835.5,612.5L832.1,614.8L833.2,618.4L844.3,618.9L849.2,623.9L848.9,626.1L866.6,630.0L877.2,628.3L885.8,633.5L893.9,633.4L914.4,637.0L914.5,640.2L908.9,645.9L912.0,651.9L909.8,655.5L896.3,656.2L889.2,659.2L888.7,663.9L877.7,664.7L868.4,668.1L855.4,668.7L843.4,672.6L844.3,679.0L851.1,681.4L865.2,680.8L862.5,684.4L847.3,686.2L828.5,692.0L820.7,690.0L823.8,685.2L808.6,682.3L811.1,680.3L824.4,676.9L820.3,674.5L798.8,671.9L797.8,668.1L784.9,669.3L779.8,675.0L769.0,682.6L762.7,680.9L756.2,682.5L750.0,680.6L753.5,679.5L755.9,676.0L759.7,672.7L758.7,670.8L761.6,670.0L763.0,671.5L771.2,671.8L774.9,671.0L772.3,669.9L773.3,668.4L768.4,665.7L766.4,661.3L761.3,659.6L762.3,656.0L756.1,653.1L750.4,652.7L740.1,649.4L730.9,650.4L727.6,652.0L721.7,652.0L718.2,654.5L708.0,655.6L703.2,657.2L696.8,654.6L687.9,654.5L679.3,653.4L673.3,655.6L672.3,652.8L664.6,649.9L667.3,645.5L671.2,642.6L674.2,643.3L670.6,638.4L683.2,629.1L690.1,627.8L691.6,624.7L684.6,614.7L691.3,614.2L698.9,611.1L709.6,610.9L723.7,611.8L739.2,614.5L750.1,614.8L755.3,616.4L760.5,614.4L764.2,617.1L776.7,616.6L782.2,617.7L783.1,611.9L787.4,609.3Z"/>
+        <path d="M491.1,659.4L491.7,661.3L489.5,663.9L495.8,665.8L502.9,666.1L501.8,670.4L495.7,672.1L485.4,670.8L482.4,675.0L475.8,675.3L473.4,673.7L465.6,677.2L458.9,677.7L452.9,675.5L448.1,670.9L441.5,672.6L441.7,667.9L451.9,662.0L451.4,659.3L457.8,660.2L461.6,658.4L473.4,658.5L476.2,656.2Z"/>
+        <path d="M619.4,676.3L622.8,680.3L627.2,683.2L621.8,687.0L615.5,684.8L605.9,684.9L594.0,683.2L587.5,683.4L584.5,685.5L579.5,683.2L576.6,687.4L583.4,692.1L586.4,695.2L592.8,698.9L598.1,701.1L603.3,705.2L615.6,708.9L614.1,710.6L601.1,707.0L593.0,703.4L580.3,700.5L568.6,693.2L571.4,692.5L565.1,688.2L564.8,684.8L555.9,683.2L551.6,687.6L547.5,684.2L547.9,680.7L558.0,680.9L560.6,679.1L565.3,680.8L570.7,681.0L570.7,678.1L575.5,677.1L576.9,672.9L587.9,670.2L592.3,671.4L602.7,675.9L614.2,677.9Z"/>
+        <path d="M643.8,716.6L642.1,719.8L644.0,723.9L649.8,726.2L649.5,728.7L645.0,730.1L644.2,733.1L637.7,737.7L635.4,737.0L635.1,735.0L627.4,731.8L626.2,727.3L627.4,720.9L629.3,717.9L626.9,716.4L626.0,713.3L632.0,708.5L632.9,710.4L636.6,709.5L639.6,712.1L642.9,713.1Z"/>
+        <path d="M582.9,666.5L587.5,659.7L584.8,657.4L592.6,657.4L593.7,653.1L600.8,655.8L605.9,657.0L617.5,655.7L618.7,653.5L624.2,653.2L630.9,651.5L632.4,652.2L639.0,650.9L642.2,648.3L646.8,647.7L661.6,651.0L664.6,649.9L672.3,652.8L673.3,655.6L664.8,657.9L658.2,665.0L649.8,672.1L638.7,674.1L630.0,673.6L619.4,676.3L614.2,677.9L602.7,675.9L592.3,671.4L587.9,670.2L585.2,666.6Z"/>
+        <path d="M549.6,670.1L561.1,670.9L568.1,668.6L580.2,668.3L582.9,666.5L585.2,666.6L587.9,670.2L576.9,672.9L575.5,677.1L570.7,678.1L570.7,681.0L565.3,680.8L560.6,679.1L558.0,680.9L548.3,680.5L551.4,679.6L548.1,675.2Z"/>
+        <path d="M441.8,631.1L444.6,633.7L443.8,638.5L439.8,638.7L436.7,637.8L438.2,631.6Z"/>
+        <path d="M650.3,560.7L650.8,550.9L657.6,542.7L670.7,538.1L681.7,548.0L692.9,547.8L695.5,537.6L707.4,535.2L713.5,536.8L725.4,541.8L736.9,541.8L743.6,544.9L744.7,551.2L749.2,558.9L734.3,563.8L725.8,566.0L712.5,559.8L705.1,559.0L703.1,556.3L689.5,557.5L666.2,556.7Z"/>
+        <path d="M673.6,582.0L672.5,578.9L673.9,575.5L667.8,573.5L653.3,571.3L650.3,560.7L666.2,556.7L689.5,557.5L703.1,556.3L705.1,559.0L712.5,559.8L725.8,566.0L727.1,571.6L715.8,575.6L712.5,582.6L697.5,587.2L684.0,587.1L680.7,583.3Z"/>
+        <path d="M619.7,638.1L620.5,638.8L626.2,637.3L633.2,641.2L641.4,638.9L648.0,640.0L658.0,638.4L671.2,642.6L667.3,645.5L664.6,649.9L661.6,651.0L646.8,647.7L642.2,648.3L639.0,650.9L632.4,652.2L630.9,651.5L624.2,653.2L618.7,653.5L617.5,655.7L605.9,657.0L600.8,655.8L593.7,653.1L592.3,649.3L593.4,648.0L595.4,645.6L601.5,645.8L606.3,644.6L606.7,643.6L609.3,643.1L610.2,640.6L613.4,640.1L615.6,638.2Z"/>
+        <path d="M647.8,681.4L656.2,683.8L657.3,687.9L665.4,690.8L669.8,688.6L673.2,689.8L670.0,691.5L672.5,693.3L669.1,695.5L670.4,699.2L677.1,703.4L671.8,706.5L669.5,709.6L671.0,710.7L668.7,712.1L662.3,712.3L657.5,712.8L657.1,712.1L658.7,711.0L660.3,708.6L658.3,708.6L655.6,706.8L653.3,706.4L651.5,704.8L648.9,704.2L647.0,702.8L644.5,703.4L642.5,706.6L639.2,707.3L640.4,706.5L635.1,704.5L630.5,703.4L628.5,702.0L624.8,700.3L628.1,699.9L630.1,695.2L623.4,691.4L626.9,687.0L621.8,687.0L627.2,683.2L622.8,680.3L619.4,676.3L630.0,673.6L638.7,674.1L646.2,678.1Z"/>
+      </g></svg>
       <div class="heat"></div>
       <div class="pins">
-        <div class="pin" style="left:45%;top:42%"></div>
-        <div class="pin" style="left:47%;top:45%"></div>
-        <div class="pin" style="left:49%;top:43%"></div>
-        <div class="pin" style="left:46%;top:47%"></div>
-        <div class="pin" style="left:50%;top:45%"></div>
-        <div class="pin" style="left:44%;top:45%"></div>
-        <div class="pin" style="left:48%;top:48%"></div>
-        <div class="pin" style="left:51%;top:44%"></div>
-        <div class="pin" style="left:45%;top:40%"></div>
-        <div class="pin" style="left:49%;top:49%"></div>
-        <div class="pin" style="left:46%;top:43%"></div>
-        <div class="pin" style="left:48%;top:45%"></div>
-        <div class="pin" style="left:43%;top:44%"></div>
-        <div class="pin" style="left:51%;top:47%"></div>
-        <div class="pin" style="left:47%;top:41%"></div>
+        <div class="pin" style="left:46%;top:40%"></div><div class="pin" style="left:48%;top:43%"></div>
+        <div class="pin" style="left:50%;top:41%"></div><div class="pin" style="left:47%;top:45%"></div>
+        <div class="pin" style="left:51%;top:43%"></div><div class="pin" style="left:45%;top:43%"></div>
+        <div class="pin" style="left:49%;top:46%"></div><div class="pin" style="left:52%;top:42%"></div>
+        <div class="pin" style="left:46%;top:38%"></div><div class="pin" style="left:50%;top:45%"></div>
+        <div class="pin" style="left:47%;top:41%"></div><div class="pin" style="left:49%;top:43%"></div>
       </div>
 
       <!-- Floating labels -->
-      <div class="fl" style="left:55%;top:6%"><div class="fl-n">21.7k Conversations</div><div class="fl-c">Germany</div></div>
-      <div class="fl" style="left:38%;top:26%"><div class="fl-n">18.5k Conversations</div><div class="fl-c">France</div></div>
-      <div class="fl" style="left:65%;bottom:22%"><div class="fl-n">20.8k Conversations</div><div class="fl-c">China</div></div>
-      <div class="fl" style="left:54%;bottom:4%"><div class="fl-n">18.7k Conversations</div><div class="fl-c">Others</div></div>
+      <div class="fl" style="left:52%;top:6%"><b>21.7k Conversations</b><span>Germany</span></div>
+      <div class="fl" style="left:38%;top:28%"><b>18.5k Conversations</b><span>France</span></div>
+      <div class="fl" style="left:60%;bottom:24%"><b>20.8k Conversations</b><span>China</span></div>
+      <div class="fl" style="left:52%;bottom:4%"><b>18.7k Conversations</b><span>Others</span></div>
 
-      <!-- Card grid -->
+      <!-- Hero grid -->
       <div class="hgrid">
-        <!-- LEFT -->
-        <div class="hero-l">
-          <div class="gc hero-l-top">
-            <div class="card-title" style="font-size:15px;margin-bottom:8px">Brand Health Overview</div>
+        <div class="hl">
+          <div class="gc hl-top">
+            <div class="ov-title">Brand Health Overview</div>
             <div class="kpi-row">
-              <div>
-                <div class="kpi-label">Brand Health Score</div>
-                <div class="kpi-val">78<small>/100</small> <span class="arrow-up"><svg width="11" height="11" fill="none" stroke="#3CB371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8L8 3M8 3H4.5M8 3v3.5"/></svg></span></div>
-              </div>
-              <div>
-                <div class="kpi-label">Total Mentions</div>
-                <div class="kpi-val">23.4k <span class="arrow-up"><svg width="11" height="11" fill="none" stroke="#3CB371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8L8 3M8 3H4.5M8 3v3.5"/></svg></span></div>
-              </div>
-              <div>
-                <div class="kpi-label">Positive Sentiment</div>
-                <div class="kpi-val">68% <span class="arrow-up"><svg width="11" height="11" fill="none" stroke="#3CB371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8L8 3M8 3H4.5M8 3v3.5"/></svg></span></div>
-              </div>
+              <div><div class="kpi-label">Brand Health Score</div><div class="kpi-val">78<small>/100</small> <span class="kpi-arr"><svg width="11" height="11" class="arr-svg"><path d="M3 8L8 3M8 3H4.5M8 3v3.5"/></svg></span></div></div>
+              <div><div class="kpi-label">Total Mentions</div><div class="kpi-val">23.4k <span class="kpi-arr"><svg width="11" height="11" class="arr-svg"><path d="M3 8L8 3M8 3H4.5M8 3v3.5"/></svg></span></div></div>
+              <div><div class="kpi-label">Positive Sentiment</div><div class="kpi-val">68% <span class="kpi-arr"><svg width="11" height="11" class="arr-svg"><path d="M3 8L8 3M8 3H4.5M8 3v3.5"/></svg></span></div></div>
             </div>
           </div>
-          <div class="hero-l-bot">
-            <div class="gc gc-sm" style="position:relative">
-              <div class="card-arrow" style="position:absolute;top:8px;right:8px;width:20px;height:20px"><svg width="8" height="8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5L6.5 1.5M6.5 1.5H3.5M6.5 1.5v3"/></svg></div>
-              <div class="sm-label">Share of<br>Voice</div>
-              <div class="sm-val">41.2% <span class="arrow-up"><svg width="9" height="9" fill="none" stroke="#3CB371" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7L7 2M7 2H4M7 2v3"/></svg></span></div>
-            </div>
-            <div class="gc gc-sm" style="position:relative">
-              <div class="card-arrow" style="position:absolute;top:8px;right:8px;width:20px;height:20px"><svg width="8" height="8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5L6.5 1.5M6.5 1.5H3.5M6.5 1.5v3"/></svg></div>
-              <div class="sm-label">Competitor<br>Pressure</div>
-              <div class="sm-val" style="font-size:clamp(14px,1.2vw,18px)">Moderate</div>
-              <div class="sm-sub">score</div>
-              <div class="slider-track"><div class="slider-fill"></div><div class="slider-thumb"></div></div>
-            </div>
-            <div class="gc gc-sm" style="position:relative">
-              <div class="card-arrow" style="position:absolute;top:8px;right:8px;width:20px;height:20px"><svg width="8" height="8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5L6.5 1.5M6.5 1.5H3.5M6.5 1.5v3"/></svg></div>
-              <div class="sm-label">Conversation<br>Growth</div>
-              <div class="sm-val" style="color:#3CB371">+15.8% <span class="arrow-up"><svg width="9" height="9" fill="none" stroke="#3CB371" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7L7 2M7 2H4M7 2v3"/></svg></span></div>
-            </div>
+          <div class="hl-bot">
+            <div class="gc sc"><div class="sc-arrow"><svg width="8" height="8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5L6.5 1.5M6.5 1.5H3.5M6.5 1.5v3"/></svg></div><div class="sc-label">Share of<br>Voice</div><div class="sc-val">41.2% <span class="kpi-arr"><svg width="9" height="9" class="arr-svg" stroke-width="1.8"><path d="M2 7L7 2M7 2H4M7 2v3"/></svg></span></div></div>
+            <div class="gc sc"><div class="sc-arrow"><svg width="8" height="8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5L6.5 1.5M6.5 1.5H3.5M6.5 1.5v3"/></svg></div><div class="sc-label">Competitor<br>Pressure</div><div class="sc-val" style="font-size:clamp(13px,1.1vw,17px)">Moderate</div><div class="sc-sub">score</div><div class="slider-track"><div class="slider-fill"></div><div class="slider-thumb"></div></div></div>
+            <div class="gc sc"><div class="sc-arrow"><svg width="8" height="8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5L6.5 1.5M6.5 1.5H3.5M6.5 1.5v3"/></svg></div><div class="sc-label">Conversation<br>Growth</div><div class="sc-val" style="color:#3CB371">+15.8% <span class="kpi-arr"><svg width="9" height="9" class="arr-svg" stroke-width="1.8"><path d="M2 7L7 2M7 2H4M7 2v3"/></svg></span></div></div>
           </div>
         </div>
-
-        <!-- CENTER (empty, map shows through) -->
         <div></div>
-
-        <!-- RIGHT -->
-        <div class="gc" style="display:flex;flex-direction:column">
-          <div class="card-hdr">
-            <div class="card-title">Key Competitors</div>
-            <div class="card-arrow"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8L8 2M8 2H5M8 2v3"/></svg></div>
-          </div>
+        <div class="gc2" style="display:flex;flex-direction:column">
+          <div class="card-hdr"><div class="card-title">Key Competitors</div><div class="card-arrow"><svg width="9" height="9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7L7 2M7 2H4M7 2v3"/></svg></div></div>
           <div class="comp-list">
-            <div class="comp-row"><span class="comp-name">Competitor A</span><span class="comp-pct">35%</span></div>
-            <div class="comp-row"><span class="comp-name">Competitor B</span><span class="comp-pct">25%</span></div>
-            <div class="comp-row"><span class="comp-name">Competitor C</span><span class="comp-pct">20%</span></div>
-            <div class="comp-row"><span class="comp-name">Competitor D</span><span class="comp-pct">20%</span></div>
+            <div class="comp-row"><span class="comp-n">Competitor A</span><span class="comp-p">35%</span></div>
+            <div class="comp-row"><span class="comp-n">Competitor B</span><span class="comp-p">25%</span></div>
+            <div class="comp-row"><span class="comp-n">Competitor C</span><span class="comp-p">20%</span></div>
+            <div class="comp-row"><span class="comp-n">Competitor D</span><span class="comp-p">20%</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ── BOTTOM ── -->
+    <!-- ─── BOTTOM ─── -->
     <div class="bottom">
-      <!-- Top Themes -->
-      <div class="gc" style="display:flex;flex-direction:column;overflow:hidden">
+      <div class="gc2" style="display:flex;flex-direction:column;overflow:hidden">
         <div class="sec-title">Top Themes</div>
         <div style="flex:1;overflow-y:auto">
           <table class="tbl">
@@ -330,97 +270,31 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:#1a1a1a
           </table>
         </div>
       </div>
-
-      <!-- Sentiment Evolution -->
-      <div class="gc" style="display:flex;flex-direction:column;overflow:hidden">
+      <div class="gc2" style="display:flex;flex-direction:column;overflow:hidden">
         <div class="evo-h">
           <div class="evo-title">Sentiment Evolution</div>
-          <div class="evo-tabs">
-            <button class="evo-tab">All</button>
-            <button class="evo-tab">Weekly</button>
-            <button class="evo-tab">Monthly</button>
-            <button class="evo-tab on">Yearly</button>
-          </div>
+          <div class="evo-tabs"><button class="evo-tab">All</button><button class="evo-tab">Weekly</button><button class="evo-tab">Monthly</button><button class="evo-tab on">Yearly</button></div>
         </div>
         <div class="evo-chart"><canvas id="evoChart"></canvas></div>
       </div>
     </div>
 
-    <!-- ── BANNER ── -->
-    <div class="banner">
-      <p>Deepen research on 'Product Quality' to address key competitor threats. <a href="#">Action Plan.</a></p>
-    </div>
+    <!-- BANNER -->
+    <div class="banner"><p>Deepen research on 'Product Quality' to address key competitor threats. <a href="#">Action Plan.</a></p></div>
   </div>
 </main>
 
 <script>
 Chart.defaults.font.family="'Inter',sans-serif";
 Chart.defaults.font.size=10;
-
 new Chart(document.getElementById('evoChart'),{
   type:'line',
-  data:{
-    labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],
-    datasets:[{
-      data:[-30,-15,0,5,10,18,25,32],
-      borderColor:'rgba(255,255,255,.65)',
-      backgroundColor:function(ctx){
-        var g=ctx.chart.ctx.createLinearGradient(0,0,0,ctx.chart.height);
-        g.addColorStop(0,'rgba(255,255,255,.08)');
-        g.addColorStop(1,'rgba(255,255,255,.01)');
-        return g;
-      },
-      borderWidth:2.5,
-      fill:true,
-      tension:.4,
-      pointRadius:0,
-      pointHoverRadius:5,
-      pointHoverBackgroundColor:'#fff'
-    }]
-  },
-  options:{
-    responsive:true,
-    maintainAspectRatio:false,
-    layout:{padding:{top:10,right:30}},
-    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
-    scales:{
-      x:{grid:{color:'rgba(255,255,255,.04)'},border:{display:false},ticks:{color:'rgba(255,255,255,.28)',font:{size:9}}},
-      y:{
-        grid:{color:'rgba(255,255,255,.04)'},
-        border:{display:false},
-        min:-100,max:100,
-        ticks:{stepSize:50,color:'rgba(255,255,255,.28)',font:{size:9},callback:function(v){return v>0?'+'+v:v===0?'+0':''+v}},
-        title:{display:true,text:'Net Sentiment',color:'rgba(255,255,255,.2)',font:{size:9,weight:500}}
-      }
-    }
-  },
-  plugins:[{
-    afterDatasetsDraw:function(chart){
-      var meta=chart.getDatasetMeta(0);
-      var last=meta.data[meta.data.length-1];
-      if(!last)return;
-      var ctx=chart.ctx;
-      ctx.save();
-      var txt='+32 (Aug)';
-      ctx.font='600 10px Inter';
-      var tw=ctx.measureText(txt).width;
-      var bw=tw+14,bh=20,bx=last.x-bw/2,by=last.y-28;
-      ctx.fillStyle='rgba(30,30,30,.88)';
-      ctx.beginPath();ctx.roundRect(bx,by,bw,bh,8);ctx.fill();
-      ctx.fillStyle='#3CB371';
-      ctx.textAlign='center';ctx.textBaseline='middle';
-      ctx.fillText(txt,last.x,by+bh/2);
-      // small dot
-      ctx.beginPath();ctx.arc(last.x,last.y,4,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
-      ctx.beginPath();ctx.arc(last.x,last.y,2,0,Math.PI*2);ctx.fillStyle='rgba(30,30,30,.7)';ctx.fill();
-      ctx.restore();
-    }
-  }]
+  data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],datasets:[{data:[-30,-15,0,5,10,18,25,32],borderColor:'rgba(255,255,255,.65)',backgroundColor:function(c){var g=c.chart.ctx.createLinearGradient(0,0,0,c.chart.height);g.addColorStop(0,'rgba(255,255,255,.08)');g.addColorStop(1,'rgba(255,255,255,.01)');return g},borderWidth:2.5,fill:true,tension:.4,pointRadius:0,pointHoverRadius:5,pointHoverBackgroundColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:10,right:30}},plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},border:{display:false},ticks:{color:'rgba(255,255,255,.28)',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},border:{display:false},min:-100,max:100,ticks:{stepSize:50,color:'rgba(255,255,255,.28)',font:{size:9},callback:function(v){return v>0?'+'+v:v===0?'+0':''+v}},title:{display:true,text:'Net Sentiment',color:'rgba(255,255,255,.2)',font:{size:8,weight:500}}}}},
+  plugins:[{afterDatasetsDraw:function(chart){var m=chart.getDatasetMeta(0),p=m.data[m.data.length-1];if(!p)return;var x=chart.ctx;x.save();var t='+32 (Aug)';x.font='600 10px Inter';var w=x.measureText(t).width,bw=w+14,bh=20,bx=p.x-bw/2,by=p.y-28;x.fillStyle='rgba(30,30,30,.88)';x.beginPath();x.roundRect(bx,by,bw,bh,8);x.fill();x.fillStyle='#3CB371';x.textAlign='center';x.textBaseline='middle';x.fillText(t,p.x,by+bh/2);x.beginPath();x.arc(p.x,p.y,4,0,Math.PI*2);x.fillStyle='#fff';x.fill();x.beginPath();x.arc(p.x,p.y,2,0,Math.PI*2);x.fillStyle='rgba(30,30,30,.7)';x.fill();x.restore()}}]
 });
-
-// Tab interactions
-document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});t.classList.add('on')})});
-document.querySelectorAll('.evo-tab').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.evo-tab').forEach(function(x){x.classList.remove('on')});b.classList.add('on')})});
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on')});
+document.querySelectorAll('.evo-tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.evo-tab').forEach(x=>x.classList.remove('on'));b.classList.add('on')});
 </script>
 </body>
 </html>
