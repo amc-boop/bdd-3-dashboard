@@ -68,27 +68,31 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:f
 .k-arr{font-size:14px;display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,0.08)}
 .k-arr.up{color:var(--green)}
 .k-arr.down{color:var(--accent)}
-.k-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;font-weight:500}
 
 .f-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
 .f-full{grid-column:1/-1}
-.card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.card-title{font-size:15px;font-weight:700;color:rgba(255,255,255,.9)}
-.insight{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);font-size:12px;color:rgba(255,255,255,.5);line-height:1.4}
-.insight b{color:#fff}
-
-.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;line-height:1.4}
-.pill-pos{background:rgba(60,179,113,.15);color:var(--green)}
-.pill-neg{background:rgba(217,54,54,.15);color:var(--accent)}
-.pill-neu{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
-.pill-warn{background:rgba(229,168,32,.15);color:var(--orange)}
-.pill-danger{background:rgba(217,54,54,.2);color:var(--accent);font-weight:800;animation:pulse-danger 1.5s infinite}
-@keyframes pulse-danger{0%,100%{opacity:1}50%{opacity:.7}}
 
 .skeleton{animation:skel 1.5s infinite;background:linear-gradient(90deg,rgba(255,255,255,0.02) 25%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.02) 75%);background-size:200% 100%;border-radius:6px}
 @keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* Trends table */
+/* ─── EXPANDABLE BLOC SYSTEM ─── */
+.xblock{border-radius:var(--r);overflow:hidden;transition:all .3s ease}
+.xblock .xblock-header{display:flex;align-items:center;gap:12px;padding:18px 20px;cursor:pointer;user-select:none;min-height:80px;max-height:80px}
+.xblock .xblock-header:hover{background:rgba(255,255,255,.02)}
+.xblock .xblock-info{flex:1;min-width:0}
+.xblock .xblock-title{font-size:15px;font-weight:700;color:rgba(255,255,255,.9)}
+.xblock .xblock-summary{font-size:12px;color:rgba(255,255,255,.35);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xblock .xblock-chevron{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s ease}
+.xblock .xblock-chevron svg{stroke:rgba(255,255,255,.35);transition:stroke .2s}
+.xblock:hover .xblock-chevron svg{stroke:rgba(255,255,255,.6)}
+.xblock.open .xblock-chevron{transform:rotate(180deg)}
+.xblock .xblock-body{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s ease;padding:0 20px}
+.xblock.open .xblock-body{max-height:2000px;padding:0 20px 20px}
+.xblock .xblock-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;flex-shrink:0}
+.xblock .xblock-badge.urgent{background:rgba(217,54,54,.15);color:var(--accent);animation:pulse-d 1.5s infinite}
+@keyframes pulse-d{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* ─── TABLE ─── */
 .tr-table{width:100%;border-collapse:collapse}
 .tr-table th{text-align:left;font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;padding:8px 6px;cursor:pointer;user-select:none;white-space:nowrap}
 .tr-table th:hover{color:rgba(255,255,255,.5)}
@@ -96,76 +100,73 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:f
 .tr-table th.sorted.asc::after{content:' ▲'}
 .tr-table td{padding:10px 6px;font-size:12px;border-top:1px solid rgba(255,255,255,.04);vertical-align:middle}
 .tr-table tr:hover{background:rgba(255,255,255,.02)}
-.tr-table tr.active-row{background:rgba(217,54,54,.08)}
-.tr-hash{font-weight:700;color:#fff;cursor:pointer}
-.tr-hash:hover{color:var(--accent)}
+.tr-hash{font-weight:700;color:#fff}
 .tr-spark{width:80px;height:24px}
 .plat-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.08);text-transform:uppercase}
-
-.search-box{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.search-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 12px;font-size:12px;color:#fff;font-family:'Inter',sans-serif;outline:none;flex:1;max-width:260px}
+.search-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 12px;font-size:12px;color:#fff;font-family:'Inter',sans-serif;outline:none;width:100%;max-width:260px;margin-bottom:10px}
 .search-input::placeholder{color:rgba(255,255,255,.25)}
 .search-input:focus{border-color:rgba(255,255,255,.2)}
 
-/* Viral subjects */
-.viral-item{padding:12px;border-radius:10px;background:rgba(255,255,255,.03);margin-bottom:8px;border-left:3px solid rgba(255,255,255,.1)}
-.viral-item:hover{background:rgba(255,255,255,.05)}
-.viral-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px}
-.viral-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.viral-meta span{font-size:10px;color:rgba(255,255,255,.35)}
-.viral-list{max-height:420px;overflow-y:auto}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;line-height:1.4}
+.pill-pos{background:rgba(60,179,113,.15);color:var(--green)}
+.pill-neg{background:rgba(217,54,54,.15);color:var(--accent)}
+.pill-neu{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+.pill-warn{background:rgba(229,168,32,.15);color:var(--orange)}
 
-/* Surf columns */
-.surf-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* ─── VIRAL ─── */
+.viral-item{padding:10px;border-radius:8px;background:rgba(255,255,255,.03);margin-bottom:6px;border-left:3px solid rgba(255,255,255,.1)}
+.viral-name{font-size:12px;font-weight:700;color:#fff;margin-bottom:3px}
+.viral-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:10px;color:rgba(255,255,255,.35)}
+
+/* ─── SURF COLUMNS ─── */
+.surf-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .surf-col{border-radius:10px;padding:10px}
 .surf-col.present{background:rgba(60,179,113,.04);border:1px solid rgba(60,179,113,.1)}
 .surf-col.absent{background:rgba(229,168,32,.04);border:1px solid rgba(229,168,32,.1)}
-.surf-col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.06)}
+.surf-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.06)}
 .surf-col.present .surf-col-title{color:var(--green)}
 .surf-col.absent .surf-col-title{color:var(--orange)}
-.surf-item{padding:8px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,.02);font-size:11px}
-.surf-item-name{font-weight:700;color:#fff;margin-bottom:2px}
-.surf-item-meta{color:rgba(255,255,255,.35);font-size:10px}
-.surf-gauge{height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:10px;overflow:hidden}
-.surf-fill{height:100%;border-radius:3px;background:var(--green);transition:width .5s}
-.surf-score{font-size:12px;font-weight:700;color:#fff;margin-top:6px;text-align:center}
+.surf-item{padding:6px;border-radius:6px;margin-bottom:4px;background:rgba(255,255,255,.02);font-size:11px}
+.surf-item-name{font-weight:700;color:#fff}
+.surf-item-meta{color:rgba(255,255,255,.3);font-size:10px;margin-top:1px}
+.surf-gauge{height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:12px;overflow:hidden}
+.surf-fill{height:100%;border-radius:3px;transition:width .5s}
+.surf-score{font-size:12px;font-weight:700;color:rgba(255,255,255,.5);margin-top:6px;text-align:center}
 
-/* Trend matcher cards */
-.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.match-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px;transition:border-color .2s}
-.match-card:hover{border-color:rgba(255,255,255,.12)}
-.match-name{font-size:13px;font-weight:800;color:#fff;margin-bottom:8px}
-.match-score-total{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--green);margin-bottom:6px}
-.match-dims{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+/* ─── MATCHER ─── */
+.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.match-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px}
+.match-name{font-size:13px;font-weight:800;color:#fff;margin-bottom:6px}
+.match-total{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.match-dims{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
 .match-dim{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.4)}
 .match-dim-bar{flex:1;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
 .match-dim-fill{height:100%;border-radius:2px;background:var(--green)}
-.match-dim-val{width:20px;text-align:right;font-weight:700;color:rgba(255,255,255,.6)}
-.match-suggestion{font-size:11px;color:rgba(255,255,255,.45);line-height:1.4;margin-bottom:10px;font-style:italic}
+.match-dim-val{width:18px;text-align:right;font-weight:700;color:rgba(255,255,255,.6)}
+.match-sug{font-size:11px;color:rgba(255,255,255,.4);line-height:1.35;margin-bottom:10px;font-style:italic}
 .match-btn{font-size:10px;padding:5px 12px;border-radius:6px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.5);font-weight:700;font-family:'Inter',sans-serif;transition:.15s}
 .match-btn:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.2)}
-.match-btn.added{background:var(--green);color:#fff;border-color:transparent}
+.match-btn.added{background:var(--green);color:#fff;border-color:transparent;cursor:default}
 
-/* Opportunity window */
-.opp-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.opp-name{font-size:11px;font-weight:700;color:#fff;width:120px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.opp-bar-wrap{flex:1;display:flex;align-items:center;gap:8px}
-.opp-bar{flex:1;height:16px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;position:relative}
+/* ─── OPPORTUNITY ─── */
+.opp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.opp-name{font-size:11px;font-weight:700;color:#fff;width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.opp-bar{flex:1;height:14px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
 .opp-fill{height:100%;border-radius:4px;transition:width .4s}
-.opp-label{font-size:10px;color:rgba(255,255,255,.4);width:100px;flex-shrink:0;text-align:right}
-.opp-spark{width:60px;height:20px;flex-shrink:0}
+.opp-label{font-size:10px;color:rgba(255,255,255,.35);width:110px;flex-shrink:0;text-align:right}
+.opp-spark{width:50px;height:18px;flex-shrink:0}
 
-/* Brief */
-.brief-item{display:flex;align-items:center;gap:12px;padding:10px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:6px}
+/* ─── BRIEF ─── */
+.brief-item{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:6px}
 .brief-item-info{flex:1}
 .brief-item-name{font-size:12px;font-weight:700;color:#fff}
-.brief-item-sug{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
-.brief-item-meta{display:flex;gap:8px;margin-top:4px}
+.brief-item-sug{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+.brief-item-meta{display:flex;gap:8px;margin-top:3px}
 .brief-remove{font-size:10px;padding:4px 8px;border-radius:5px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.3);font-weight:700;font-family:'Inter',sans-serif}
 .brief-remove:hover{color:var(--accent);border-color:var(--accent)}
 .brief-export{padding:8px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:var(--accent);color:#fff;font-family:'Inter',sans-serif;margin-top:10px;transition:.15s}
 .brief-export:hover{opacity:.85}
-.brief-empty{font-size:12px;color:rgba(255,255,255,.25);text-align:center;padding:20px}
+.brief-empty{font-size:12px;color:rgba(255,255,255,.2);padding:12px 0}
 .brief-copied{font-size:11px;color:var(--green);margin-left:12px;display:none}
 </style>
 </head>
@@ -176,7 +177,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:f
   <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3.5" width="10" height="8" rx="1.5"/><path d="M5.5 8v4.5h7.5v-2"/></svg></a>
   <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg></a>
   <a href="sentiment.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7"/></svg></a>
-  <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l3-8h4l3 8"/><path d="M4.5 8h7"/><circle cx="8" cy="4" r="1.5"/></svg></div>
+  <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 4 11 9 15 2"/></svg></div>
   <div class="s-gap"></div>
   <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l4-4-4-4"/><path d="M14 9H6.5a3 3 0 110-6H7"/></svg></div>
 </aside>
@@ -188,6 +189,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:f
     <a href="sentiment.html" class="tab">Sentiment</a>
     <div class="tab">Share of Voice</div>
     <div class="tab on">Trends</div>
+    <div class="tab">Competitors</div>
     <div class="tab">Crisis Alert</div>
     <div class="tab">Reports</div>
     <div class="nav-r">
@@ -198,11 +200,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:f
   </nav>
 
   <div class="ct">
+    <!-- HEADER -->
     <div class="hdr">
       <div class="hdr-search"><svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M12 12l3.5 3.5"/></svg></div>
       <div class="hdr-info">
         <h1 class="hdr-title">Trends</h1>
-        <p class="hdr-sub">Tendances émergentes et opportunités — Secteur Luxe</p>
+        <p class="hdr-sub">Tendances émergentes — Secteur Luxe</p>
       </div>
       <div class="hdr-actions">
         <div class="f-group" id="periodFilters">
@@ -220,206 +223,237 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:f
       </div>
     </div>
 
-    <!-- KPIs -->
-    <div class="kpi-row" id="kpiRow">
+    <!-- KPIs — always visible -->
+    <div class="kpi-row">
       <div class="gc" id="kpi-active"><div class="k-label">Trends actifs</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
-      <div class="gc" id="kpi-top"><div class="k-label">Trend le plus fort</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:100px;height:32px"></span></div></div>
-      <div class="gc" id="kpi-opps"><div class="k-label">Opportunités détectées</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
-      <div class="gc" id="kpi-expired"><div class="k-label">Trends expirés</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
+      <div class="gc" id="kpi-top"><div class="k-label">Trend #1</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:100px;height:32px"></span></div></div>
+      <div class="gc" id="kpi-opps"><div class="k-label">Opportunités</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
+      <div class="gc" id="kpi-expired"><div class="k-label">Expirés</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
     </div>
 
+    <!-- EXPANDABLE BLOCS -->
     <div class="f-row">
-      <!-- FEATURE 1 — Hashtags en croissance -->
-      <div class="gc2 f-full" id="hashBlock">
-        <div class="card-hdr"><div class="card-title">Hashtags en croissance — Cette semaine</div></div>
-        <div class="search-box">
+
+      <!-- BLOC 1 — Hashtags -->
+      <div class="gc2 f-full xblock" id="bloc-hash">
+        <div class="xblock-header" onclick="toggleBloc('bloc-hash')">
+          <div class="xblock-info">
+            <div class="xblock-title">Hashtags en croissance</div>
+            <div class="xblock-summary" id="hash-summary">Chargement...</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
           <input type="text" class="search-input" id="hashSearch" placeholder="Rechercher un hashtag...">
-        </div>
-        <div style="max-height:360px;overflow-y:auto">
-          <table class="tr-table" id="hashTable">
-            <thead><tr>
-              <th data-col="hashtag" class="sorted">Hashtag</th>
-              <th data-col="platform">Plateforme</th>
-              <th data-col="volume">Volume</th>
-              <th data-col="growth_rate">Croissance</th>
-              <th>Sparkline</th>
-              <th data-col="status">Statut</th>
-            </tr></thead>
-            <tbody id="hashBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- FEATURE 2 — Sujets viraux -->
-      <div class="gc2" id="viralBlock">
-        <div class="card-hdr"><div class="card-title">Sujets viraux — Secteur Luxe</div></div>
-        <div class="viral-list" id="viralList"></div>
-      </div>
-
-      <!-- FEATURE 3 — Hermès surfe ou ignore -->
-      <div class="gc2" id="surfBlock">
-        <div class="card-hdr"><div class="card-title">Hermès — Surfe ou ignore ?</div></div>
-        <div class="surf-cols" id="surfCols"></div>
-        <div class="surf-gauge"><div class="surf-fill" id="surfFill" style="width:0%"></div></div>
-        <div class="surf-score" id="surfScore"></div>
-      </div>
-
-      <!-- FEATURE 4 — Trend Matcher -->
-      <div class="gc2 f-full" id="matchBlock">
-        <div class="card-hdr"><div class="card-title">Trend Matcher — Opportunités pour Hermès</div></div>
-        <div class="match-grid" id="matchGrid"></div>
-      </div>
-
-      <!-- FEATURE 5 — Fenêtre d'opportunité -->
-      <div class="gc2 f-full" id="oppBlock">
-        <div class="card-hdr"><div class="card-title">Fenêtre d'opportunité — Combien de temps reste-t-il ?</div></div>
-        <div id="oppRows"></div>
-      </div>
-
-      <!-- BRIEF DE LA SEMAINE -->
-      <div class="gc2 f-full" id="briefBlock">
-        <div class="card-hdr"><div class="card-title">Brief de la semaine — Trends à activer</div></div>
-        <div id="briefList"></div>
-        <div style="display:flex;align-items:center">
-          <button class="brief-export" id="briefExport">Exporter le brief</button>
-          <span class="brief-copied" id="briefCopied">Copié dans le presse-papier !</span>
+          <div style="max-height:340px;overflow-y:auto">
+            <table class="tr-table" id="hashTable">
+              <thead><tr>
+                <th data-col="hashtag" class="sorted">Hashtag</th>
+                <th data-col="platform">Plateforme</th>
+                <th data-col="volume">Volume</th>
+                <th data-col="growth_rate">Croissance</th>
+                <th>Sparkline</th>
+                <th data-col="status">Statut</th>
+              </tr></thead>
+              <tbody id="hashBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
+
+      <!-- BLOC 2 — Sujets viraux -->
+      <div class="gc2 xblock" id="bloc-viral">
+        <div class="xblock-header" onclick="toggleBloc('bloc-viral')">
+          <div class="xblock-info">
+            <div class="xblock-title">Sujets viraux — Luxe</div>
+            <div class="xblock-summary" id="viral-summary">Chargement...</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div id="viralList"></div>
+        </div>
+      </div>
+
+      <!-- BLOC 3 — Surfe ou ignore -->
+      <div class="gc2 xblock" id="bloc-surf">
+        <div class="xblock-header" onclick="toggleBloc('bloc-surf')">
+          <div class="xblock-info">
+            <div class="xblock-title">Hermès — Surfe ou ignore ?</div>
+            <div class="xblock-summary" id="surf-summary">Chargement...</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div class="surf-cols" id="surfCols"></div>
+          <div class="surf-gauge"><div class="surf-fill" id="surfFill" style="width:0%"></div></div>
+          <div class="surf-score" id="surfScoreLabel"></div>
+        </div>
+      </div>
+
+      <!-- BLOC 4 — Trend Matcher -->
+      <div class="gc2 f-full xblock" id="bloc-match">
+        <div class="xblock-header" onclick="toggleBloc('bloc-match')">
+          <div class="xblock-info">
+            <div class="xblock-title">Trend Matcher</div>
+            <div class="xblock-summary" id="match-summary">Chargement...</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div class="match-grid" id="matchGrid"></div>
+        </div>
+      </div>
+
+      <!-- BLOC 5 — Fenêtre d'opportunité -->
+      <div class="gc2 f-full xblock" id="bloc-opp">
+        <div class="xblock-header" onclick="toggleBloc('bloc-opp')">
+          <div class="xblock-info">
+            <div class="xblock-title">Fenêtre d'opportunité</div>
+            <div class="xblock-summary" id="opp-summary">Chargement...</div>
+          </div>
+          <span class="xblock-badge urgent" id="opp-urgent" style="display:none">Agir maintenant</span>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div id="oppRows"></div>
+        </div>
+      </div>
+
+      <!-- BLOC 6 — Brief -->
+      <div class="gc2 f-full xblock" id="bloc-brief">
+        <div class="xblock-header" onclick="toggleBloc('bloc-brief')">
+          <div class="xblock-info">
+            <div class="xblock-title">Brief de la semaine</div>
+            <div class="xblock-summary" id="brief-summary">0 trends ajoutés au brief</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div id="briefList"></div>
+          <div style="display:flex;align-items:center">
+            <button class="brief-export" id="briefExport">Exporter le brief</button>
+            <span class="brief-copied" id="briefCopied">Copié !</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </main>
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   TRENDS PAGE — FULL LOGIC
+   TRENDS — EXPANDABLE MINIMALIST DESIGN
    ═══════════════════════════════════════════════════════════ */
 
 let trendsData = [];
-let mentionsData = [];
 let periodVal = 30;
 let platformVal = 'all';
-let activeHashtag = null;
 let sortCol = 'growth_rate';
 let sortAsc = false;
 let briefItems = JSON.parse(localStorage.getItem('trends_brief') || '[]');
 
-// ─── EXTENDED FALLBACK TRENDS ─────────────────────────────
-const EXTENDED_TRENDS = [
-    { id:'t-1', hashtag:'#Hermès', platform:'instagram', volume:284000, growth_rate:12.4, date:'2026-03-28T00:00:00Z', related_brand:'hermes' },
-    { id:'t-2', hashtag:'#Chanel', platform:'instagram', volume:312000, growth_rate:8.1, date:'2026-03-28T00:00:00Z', related_brand:'chanel' },
-    { id:'t-3', hashtag:'#Birkin', platform:'tiktok', volume:198000, growth_rate:24.6, date:'2026-03-28T00:00:00Z', related_brand:'hermes' },
-    { id:'t-4', hashtag:'#QuietLuxury', platform:'tiktok', volume:156000, growth_rate:31.2, date:'2026-03-28T00:00:00Z', related_brand:null },
-    { id:'t-5', hashtag:'#ChanelClassicFlap', platform:'instagram', volume:89000, growth_rate:-3.2, date:'2026-03-28T00:00:00Z', related_brand:'chanel' },
-    { id:'t-6', hashtag:'#LuxuryUnboxing', platform:'tiktok', volume:245000, growth_rate:18.7, date:'2026-03-28T00:00:00Z', related_brand:null },
-    { id:'t-7', hashtag:'#SlowFashion', platform:'instagram', volume:178000, growth_rate:22.3, date:'2026-03-27T00:00:00Z', related_brand:null },
-    { id:'t-8', hashtag:'#ParisianStyle', platform:'tiktok', volume:210000, growth_rate:15.8, date:'2026-03-27T00:00:00Z', related_brand:null },
-    { id:'t-9', hashtag:'#LuxuryResale', platform:'twitter', volume:134000, growth_rate:28.4, date:'2026-03-26T00:00:00Z', related_brand:null },
-    { id:'t-10', hashtag:'#Artisanat', platform:'instagram', volume:67000, growth_rate:35.1, date:'2026-03-26T00:00:00Z', related_brand:'hermes' },
-    { id:'t-11', hashtag:'#SavoirFaire', platform:'instagram', volume:52000, growth_rate:19.5, date:'2026-03-25T00:00:00Z', related_brand:'hermes' },
-    { id:'t-12', hashtag:'#DesignerBags', platform:'tiktok', volume:320000, growth_rate:9.4, date:'2026-03-25T00:00:00Z', related_brand:null },
-    { id:'t-13', hashtag:'#LuxuryTravel', platform:'instagram', volume:142000, growth_rate:11.2, date:'2026-03-24T00:00:00Z', related_brand:null },
-    { id:'t-14', hashtag:'#VintageLuxury', platform:'twitter', volume:88000, growth_rate:42.0, date:'2026-03-24T00:00:00Z', related_brand:null },
-    { id:'t-15', hashtag:'#FrenchLuxury', platform:'instagram', volume:96000, growth_rate:16.7, date:'2026-03-23T00:00:00Z', related_brand:'hermes' },
-    { id:'t-16', hashtag:'#OldMoney', platform:'tiktok', volume:410000, growth_rate:7.3, date:'2026-03-23T00:00:00Z', related_brand:null },
-    { id:'t-17', hashtag:'#Sustainability', platform:'twitter', volume:195000, growth_rate:13.9, date:'2026-03-22T00:00:00Z', related_brand:null },
-    { id:'t-18', hashtag:'#CraftsmanshipMatters', platform:'instagram', volume:48000, growth_rate:38.2, date:'2026-03-22T00:00:00Z', related_brand:'hermes' },
-    { id:'t-19', hashtag:'#StreetLuxury', platform:'tiktok', volume:275000, growth_rate:-1.5, date:'2026-03-21T00:00:00Z', related_brand:null },
-    { id:'t-20', hashtag:'#MinimalistFashion', platform:'instagram', volume:165000, growth_rate:20.1, date:'2026-03-21T00:00:00Z', related_brand:null }
+// ─── TOGGLE BLOC ──────────────────────────────────────────
+function toggleBloc(id) {
+    document.getElementById(id).classList.toggle('open');
+}
+
+// ─── EXTENDED FALLBACK ────────────────────────────────────
+const EXT_TRENDS = [
+    { id:'t-1',  hashtag:'#Hermès',           platform:'instagram', volume:284000, growth_rate:12.4, date:'2026-03-28', related_brand:'hermes' },
+    { id:'t-2',  hashtag:'#Chanel',            platform:'instagram', volume:312000, growth_rate:8.1,  date:'2026-03-28', related_brand:'chanel' },
+    { id:'t-3',  hashtag:'#Birkin',            platform:'tiktok',    volume:198000, growth_rate:24.6, date:'2026-03-28', related_brand:'hermes' },
+    { id:'t-4',  hashtag:'#QuietLuxury',       platform:'tiktok',    volume:156000, growth_rate:31.2, date:'2026-03-28', related_brand:null },
+    { id:'t-5',  hashtag:'#ChanelClassicFlap', platform:'instagram', volume:89000,  growth_rate:-3.2, date:'2026-03-28', related_brand:'chanel' },
+    { id:'t-6',  hashtag:'#LuxuryUnboxing',    platform:'tiktok',    volume:245000, growth_rate:18.7, date:'2026-03-28', related_brand:null },
+    { id:'t-7',  hashtag:'#SlowFashion',       platform:'instagram', volume:178000, growth_rate:22.3, date:'2026-03-27', related_brand:null },
+    { id:'t-8',  hashtag:'#ParisianStyle',     platform:'tiktok',    volume:210000, growth_rate:15.8, date:'2026-03-27', related_brand:null },
+    { id:'t-9',  hashtag:'#LuxuryResale',      platform:'twitter',   volume:134000, growth_rate:28.4, date:'2026-03-26', related_brand:null },
+    { id:'t-10', hashtag:'#Artisanat',         platform:'instagram', volume:67000,  growth_rate:35.1, date:'2026-03-26', related_brand:'hermes' },
+    { id:'t-11', hashtag:'#SavoirFaire',       platform:'instagram', volume:52000,  growth_rate:19.5, date:'2026-03-25', related_brand:'hermes' },
+    { id:'t-12', hashtag:'#DesignerBags',      platform:'tiktok',    volume:320000, growth_rate:9.4,  date:'2026-03-25', related_brand:null },
+    { id:'t-13', hashtag:'#LuxuryTravel',      platform:'instagram', volume:142000, growth_rate:11.2, date:'2026-03-24', related_brand:null },
+    { id:'t-14', hashtag:'#VintageLuxury',     platform:'twitter',   volume:88000,  growth_rate:42.0, date:'2026-03-24', related_brand:null },
+    { id:'t-15', hashtag:'#FrenchLuxury',      platform:'instagram', volume:96000,  growth_rate:16.7, date:'2026-03-23', related_brand:'hermes' },
+    { id:'t-16', hashtag:'#OldMoney',          platform:'tiktok',    volume:410000, growth_rate:7.3,  date:'2026-03-23', related_brand:null },
+    { id:'t-17', hashtag:'#Sustainability',    platform:'twitter',   volume:195000, growth_rate:13.9, date:'2026-03-22', related_brand:null },
+    { id:'t-18', hashtag:'#CraftsmanshipMatters',platform:'instagram',volume:48000, growth_rate:38.2, date:'2026-03-22', related_brand:'hermes' },
+    { id:'t-19', hashtag:'#StreetLuxury',      platform:'tiktok',    volume:275000, growth_rate:-1.5, date:'2026-03-21', related_brand:null },
+    { id:'t-20', hashtag:'#MinimalistFashion', platform:'instagram', volume:165000, growth_rate:20.1, date:'2026-03-21', related_brand:null }
 ];
 
 const VIRAL_SUBJECTS = [
-    { name:'Artisanat français', volume:12400, sentiment:'positive', trend:18.5, hermesPresent:true },
-    { name:'Durabilité luxe', volume:9800, sentiment:'positive', trend:24.2, hermesPresent:false },
-    { name:'Accessibilité prix', volume:15200, sentiment:'negative', trend:31.0, hermesPresent:true },
-    { name:'Collaborations streetwear', volume:8600, sentiment:'neutral', trend:12.8, hermesPresent:false },
-    { name:'Seconde main luxe', volume:11300, sentiment:'positive', trend:35.6, hermesPresent:false },
-    { name:'Patrimoine & héritage', volume:7200, sentiment:'positive', trend:9.3, hermesPresent:true },
-    { name:'Expérience client luxe', volume:6800, sentiment:'negative', trend:15.7, hermesPresent:true },
-    { name:'Luxe digital & NFT', volume:4500, sentiment:'neutral', trend:-8.4, hermesPresent:false }
+    { name:'Artisanat français',       volume:12400, sentiment:'positive', trend:18.5, hermesPresent:true },
+    { name:'Durabilité luxe',          volume:9800,  sentiment:'positive', trend:24.2, hermesPresent:false },
+    { name:'Accessibilité prix',       volume:15200, sentiment:'negative', trend:31.0, hermesPresent:true },
+    { name:'Collaborations streetwear', volume:8600, sentiment:'neutral',  trend:12.8, hermesPresent:false },
+    { name:'Seconde main luxe',        volume:11300, sentiment:'positive', trend:35.6, hermesPresent:false },
+    { name:'Patrimoine & héritage',    volume:7200,  sentiment:'positive', trend:9.3,  hermesPresent:true },
+    { name:'Expérience client luxe',   volume:6800,  sentiment:'negative', trend:15.7, hermesPresent:true },
+    { name:'Luxe digital & métavers',  volume:4500,  sentiment:'neutral',  trend:-8.4, hermesPresent:false }
 ];
 
-const BRAND_KEYWORDS = {
-    positive: ['artisanat','patrimoine','savoir-faire','savoirfaire','exclusif','élégance','elegance','paris','parisian','french','luxury','heritage','craftsmanship','leather','silk','timeless','iconic','atelier','handmade','bespoke','couture','maison'],
-    negative: ['fast fashion','discount','promo','accessible','low cost','lowcost','cheap','mass','outlet','sale','solde']
-};
+const BRAND_KW_POS = ['artisanat','patrimoine','savoir','exclusif','élégance','elegance','paris','parisian','french','luxury','heritage','craftsmanship','leather','silk','timeless','iconic','atelier','handmade','bespoke','couture','maison','vintage','slow','minimal'];
+const BRAND_KW_NEG = ['fast fashion','discount','promo','accessible','low cost','cheap','mass','outlet','street'];
 
 const SUGGESTIONS = {
-    '#SlowFashion': 'Mettre en avant la durabilité des matières et le processus artisanal — angle storytelling',
-    '#LuxuryResale': "Communiquer sur l'authenticité et la valeur patrimoniale des pièces Hermès",
-    '#ParisianStyle': 'Contenu lifestyle autour du savoir-faire parisien et des ateliers',
-    '#QuietLuxury': "Capitaliser sur l'ADN discret et intemporel d'Hermès — anti-logo, matières nobles",
-    '#Artisanat': 'Série documentaire sur les artisans Hermès — Sellier, Cristalleries, Soieries',
-    '#SavoirFaire': 'Mettre en avant les 180 heures nécessaires pour un Kelly — format Reel/TikTok',
-    '#VintageLuxury': "Valoriser l'aspect patrimonial : un Birkin se transmet, ne se jette pas",
-    '#Sustainability': "Angle durabilité naturel : cuir tannage végétal, réparation à vie, zéro obsolescence",
-    '#CraftsmanshipMatters': "Contenu behind-the-scenes des ateliers de Pantin — artisan POV",
-    '#FrenchLuxury': "Renforcer le positionnement French luxury originel vs concurrents italiens/américains",
-    '#MinimalistFashion': "Pousser la gamme Hermès épurée : carrés unis, bracelets cuir, montres Arceau",
-    '#OldMoney': "Hermès EST le old money — réutiliser les contenus patrimoine existants",
-    '#LuxuryTravel': "Partenariats avec hôtels Palace, contenus voyage avec accessoires Hermès",
-    '#DesignerBags': "Comparatifs naturels — laisser le produit parler via UGC authentique",
-    '#LuxuryUnboxing': "Encourager les unboxings organiques via gifting ciblé auprès de micro-influenceurs",
-    '#Birkin': "Amplifier le contenu existant — la demande est organique, nourrir la conversation",
-    '#Hermès': "Maintenir le share of voice — contenu régulier sur toutes les plateformes"
+    '#SlowFashion':'Mettre en avant la durabilité des matières et le processus artisanal — angle storytelling',
+    '#LuxuryResale':"Communiquer sur l'authenticité et la valeur patrimoniale des pièces Hermès",
+    '#ParisianStyle':'Contenu lifestyle autour du savoir-faire parisien et des ateliers',
+    '#QuietLuxury':"Capitaliser sur l'ADN discret et intemporel d'Hermès — anti-logo, matières nobles",
+    '#Artisanat':'Série documentaire sur les artisans Hermès — Sellier, Cristalleries, Soieries',
+    '#SavoirFaire':'Mettre en avant les 180h nécessaires pour un Kelly — format Reel/TikTok',
+    '#VintageLuxury':"Valoriser l'aspect patrimonial : un Birkin se transmet, ne se jette pas",
+    '#Sustainability':'Angle durabilité naturel : cuir tannage végétal, réparation à vie',
+    '#CraftsmanshipMatters':'Contenu behind-the-scenes des ateliers de Pantin — artisan POV',
+    '#FrenchLuxury':'Renforcer le positionnement French luxury originel vs concurrents',
+    '#MinimalistFashion':'Pousser la gamme épurée : carrés unis, bracelets cuir, montres Arceau',
+    '#OldMoney':'Hermès EST le old money — réutiliser les contenus patrimoine existants',
+    '#LuxuryTravel':'Partenariats avec hôtels Palace, contenus voyage avec accessoires Hermès',
+    '#DesignerBags':'Comparatifs naturels — laisser le produit parler via UGC authentique',
+    '#LuxuryUnboxing':'Encourager les unboxings organiques via gifting ciblé micro-influenceurs',
+    '#Birkin':'Amplifier le contenu existant — la demande est organique',
+    '#Hermès':'Maintenir le share of voice — contenu régulier toutes plateformes'
 };
 
 // ─── DATA LOADING ─────────────────────────────────────────
 async function loadData() {
     const start = new Date(Date.now() - periodVal * 864e5).toISOString();
     const end = new Date().toISOString();
-    const fetchTrends = typeof getTrends === 'function' ? getTrends : async () => EXTENDED_TRENDS;
-    const fetchMentions = typeof getMentions === 'function' ? getMentions : async () => (window.FALLBACK?.mentions || []);
+    const fetchTrends = typeof getTrends === 'function' ? getTrends : async () => EXT_TRENDS;
 
     try {
-        const [tr, mH] = await Promise.all([
-            fetchTrends({ platform: platformVal === 'all' ? null : platformVal, startDate: start, endDate: end }),
-            fetchMentions({ brand: 'hermes', platform: platformVal === 'all' ? null : platformVal, startDate: start, endDate: end })
-        ]);
-
-        trendsData = (tr && tr.length > 0) ? tr : EXTENDED_TRENDS;
-        if (platformVal !== 'all') {
-            const extra = EXTENDED_TRENDS.filter(t => t.platform === platformVal && !trendsData.find(x => x.id === t.id));
-            trendsData = [...trendsData, ...extra];
-        }
-        if (trendsData.length < 8) trendsData = EXTENDED_TRENDS;
-
-        mentionsData = mH || [];
-
-        // Enrich trends with computed fields
-        trendsData.forEach(t => {
-            if (!t.status) {
-                if (t.growth_rate > 10) t.status = 'rising';
-                else if (t.growth_rate >= -2 && t.growth_rate <= 10) t.status = 'peak';
-                else t.status = 'declining';
-            }
-            if (t.related_brand === undefined) t.related_brand = null;
-            // Simulate sparkline data
-            if (!t.sparkline) {
-                const base = t.volume * 0.7;
-                t.sparkline = Array.from({length:7}, (_, i) => {
-                    const progress = i / 6;
-                    if (t.status === 'rising') return base + (t.volume - base) * progress + Math.random() * base * 0.1;
-                    if (t.status === 'peak') return t.volume * (0.9 + Math.random() * 0.2);
-                    return t.volume * (1 - progress * 0.4) + Math.random() * base * 0.1;
-                });
-            }
-            // Compute window
-            if (!t.window) {
-                if (t.status === 'rising') t.window = 7 + Math.floor(Math.random() * 8);
-                else if (t.status === 'peak') t.window = 2 + Math.floor(Math.random() * 4);
-                else t.window = Math.floor(Math.random() * 2);
-            }
-        });
-
-        render();
+        const tr = await fetchTrends({ platform: platformVal === 'all' ? null : platformVal, startDate: start, endDate: end });
+        trendsData = (tr && tr.length >= 6) ? tr : EXT_TRENDS;
+        if (trendsData.length < 8) trendsData = EXT_TRENDS;
     } catch (e) {
-        console.error('Data error:', e);
-        trendsData = EXTENDED_TRENDS;
-        render();
+        trendsData = EXT_TRENDS;
     }
+
+    // Enrich
+    trendsData.forEach(t => {
+        if (!t.status) t.status = t.growth_rate > 10 ? 'rising' : (t.growth_rate >= -2 ? 'peak' : 'declining');
+        if (!t.sparkline) {
+            const b = t.volume * 0.7;
+            t.sparkline = Array.from({length:7}, (_, i) => {
+                const p = i / 6;
+                if (t.status === 'rising') return b + (t.volume - b) * p + Math.random() * b * 0.1;
+                if (t.status === 'peak') return t.volume * (0.9 + Math.random() * 0.2);
+                return t.volume * (1 - p * 0.4) + Math.random() * b * 0.1;
+            });
+        }
+        if (t.window === undefined) {
+            if (t.status === 'rising') t.window = 7 + Math.floor(Math.random() * 8);
+            else if (t.status === 'peak') t.window = 2 + Math.floor(Math.random() * 4);
+            else t.window = Math.floor(Math.random() * 2);
+        }
+    });
+
+    render();
 }
 
-// ─── RENDER ALL ───────────────────────────────────────────
+// ─── RENDER ───────────────────────────────────────────────
 function render() {
     renderKPIs();
     renderHashTable();
@@ -435,257 +469,194 @@ function renderKPIs() {
     const rising = trendsData.filter(t => t.growth_rate > 0);
     const declining = trendsData.filter(t => t.growth_rate < -2);
     const top = [...trendsData].sort((a, b) => b.volume - a.volume)[0];
-    const matchScores = trendsData.map(t => computeMatchScore(t));
-    const opps = matchScores.filter(s => s.total > 15).length;
+    const opps = trendsData.filter(t => t.growth_rate > 0).map(t => matchScore(t)).filter(s => s.total > 15).length;
 
     document.querySelector('#kpi-active .k-val').innerHTML = `<span class="v">${rising.length}</span> <span class="k-arr up">↑</span>`;
     document.querySelector('#kpi-top .k-val').innerHTML = top
-        ? `<span class="v" style="font-size:clamp(16px,1.8vw,24px)">${top.hashtag}</span> <span class="k-arr up">+${top.growth_rate}%</span>`
+        ? `<span class="v" style="font-size:clamp(14px,1.6vw,20px)">${top.hashtag}</span> <span class="k-arr up">+${top.growth_rate}%</span>`
         : '<span class="v">—</span>';
     document.querySelector('#kpi-opps .k-val').innerHTML = `<span class="v">${opps}</span>`;
     document.querySelector('#kpi-expired .k-val').innerHTML = `<span class="v">${declining.length}</span> <span class="k-arr down">↓</span>`;
 }
 
-// ─── FEATURE 1: HASH TABLE ───────────────────────────────
+// ─── BLOC 1: HASHTAG TABLE ────────────────────────────────
 function renderHashTable() {
     const search = document.getElementById('hashSearch').value.toLowerCase();
     let filtered = trendsData.filter(t => t.hashtag.toLowerCase().includes(search));
-
-    // Sort
     filtered.sort((a, b) => {
         let va = a[sortCol], vb = b[sortCol];
         if (typeof va === 'string') { va = va.toLowerCase(); vb = (vb||'').toLowerCase(); }
-        if (va < vb) return sortAsc ? -1 : 1;
-        if (va > vb) return sortAsc ? 1 : -1;
-        return 0;
+        return sortAsc ? (va < vb ? -1 : 1) : (va > vb ? -1 : 1);
     });
 
     const top20 = filtered.slice(0, 20);
-    const body = document.getElementById('hashBody');
 
-    body.innerHTML = top20.map(t => {
-        const growthColor = t.growth_rate >= 0 ? 'var(--green)' : 'var(--accent)';
-        const growthArrow = t.growth_rate >= 0 ? '↑' : '↓';
-        const statusPill = t.status === 'rising'
-            ? '<span class="pill pill-pos">En hausse</span>'
-            : t.status === 'peak'
-            ? '<span class="pill pill-warn">Pic atteint</span>'
+    // Summary
+    const topGrowth = [...trendsData].sort((a, b) => b.growth_rate - a.growth_rate)[0];
+    document.getElementById('hash-summary').textContent =
+        `${trendsData.filter(t=>t.growth_rate>0).length} hashtags détectés — Top : ${topGrowth?.hashtag || '—'} +${topGrowth?.growth_rate || 0}%`;
+
+    document.getElementById('hashBody').innerHTML = top20.map(t => {
+        const gc = t.growth_rate >= 0 ? 'var(--green)' : 'var(--accent)';
+        const ga = t.growth_rate >= 0 ? '↑' : '↓';
+        const sp = t.status === 'rising' ? '<span class="pill pill-pos">En hausse</span>'
+            : t.status === 'peak' ? '<span class="pill pill-warn">Pic atteint</span>'
             : '<span class="pill pill-neg">En déclin</span>';
-        const activeClass = activeHashtag === t.hashtag ? 'active-row' : '';
-
-        return `<tr class="${activeClass}" onclick="filterByHashtag('${t.hashtag}')">
+        return `<tr>
             <td><span class="tr-hash">${t.hashtag}</span></td>
             <td><span class="plat-badge">${t.platform}</span></td>
-            <td>${formatNum(t.volume)}</td>
-            <td style="color:${growthColor};font-weight:700">${growthArrow} ${Math.abs(t.growth_rate).toFixed(1)}%</td>
-            <td><canvas class="tr-spark" id="spark-${t.id}"></canvas></td>
-            <td>${statusPill}</td>
+            <td>${fmtN(t.volume)}</td>
+            <td style="color:${gc};font-weight:700">${ga} ${Math.abs(t.growth_rate).toFixed(1)}%</td>
+            <td><canvas class="tr-spark" id="sp-${t.id}"></canvas></td>
+            <td>${sp}</td>
         </tr>`;
     }).join('');
 
-    // Draw sparklines
-    top20.forEach(t => {
-        const canvas = document.getElementById(`spark-${t.id}`);
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const w = 80, h = 24;
-        canvas.width = w * 2; canvas.height = h * 2;
-        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-        ctx.scale(2, 2);
+    // Sparklines
+    top20.forEach(t => drawSpark(`sp-${t.id}`, t.sparkline, 80, 24, t.growth_rate >= 0 ? '#3CB371' : '#D93636'));
 
-        const data = t.sparkline || [0,0,0,0,0,0,0];
-        const max = Math.max(...data);
-        const min = Math.min(...data);
-        const range = max - min || 1;
-
-        ctx.beginPath();
-        ctx.strokeStyle = t.growth_rate >= 0 ? '#3CB371' : '#D93636';
-        ctx.lineWidth = 1.5;
-        data.forEach((v, i) => {
-            const x = (i / (data.length - 1)) * w;
-            const y = h - ((v - min) / range) * (h - 4) - 2;
-            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        });
-        ctx.stroke();
-    });
-
-    // Update column headers
+    // Column headers
     document.querySelectorAll('.tr-table th').forEach(th => {
         th.classList.remove('sorted', 'asc');
-        if (th.dataset.col === sortCol) {
-            th.classList.add('sorted');
-            if (sortAsc) th.classList.add('asc');
-        }
+        if (th.dataset.col === sortCol) { th.classList.add('sorted'); if (sortAsc) th.classList.add('asc'); }
     });
 }
 
-// ─── FEATURE 2: VIRAL SUBJECTS ────────────────────────────
+// ─── BLOC 2: VIRAL SUBJECTS ──────────────────────────────
 function renderViralSubjects() {
-    const list = document.getElementById('viralList');
-    list.innerHTML = VIRAL_SUBJECTS.map(s => {
-        const sentPill = s.sentiment === 'positive'
-            ? '<span class="pill pill-pos">Positif</span>'
-            : s.sentiment === 'negative'
-            ? '<span class="pill pill-neg">Négatif</span>'
+    const absent = VIRAL_SUBJECTS.filter(s => !s.hermesPresent).length;
+    document.getElementById('viral-summary').textContent =
+        `${VIRAL_SUBJECTS.length} sujets actifs — Hermès absent sur ${absent} d'entre eux`;
+
+    document.getElementById('viralList').innerHTML = VIRAL_SUBJECTS.map(s => {
+        const sent = s.sentiment === 'positive' ? '<span class="pill pill-pos">Positif</span>'
+            : s.sentiment === 'negative' ? '<span class="pill pill-neg">Négatif</span>'
             : '<span class="pill pill-neu">Neutre</span>';
-        const presencePill = s.hermesPresent
+        const pres = s.hermesPresent
             ? '<span class="pill pill-pos">Hermès présent</span>'
             : '<span class="pill pill-warn">Hermès absent</span>';
-        const trendArrow = s.trend >= 0
-            ? `<span style="color:var(--green)">↑ ${s.trend}%</span>`
-            : `<span style="color:var(--accent)">↓ ${Math.abs(s.trend)}%</span>`;
-        const borderColor = s.hermesPresent ? 'var(--green)' : 'var(--orange)';
-
-        return `<div class="viral-item" style="border-left-color:${borderColor}">
+        const ta = s.trend >= 0 ? `<span style="color:var(--green)">↑ ${s.trend}%</span>` : `<span style="color:var(--accent)">↓ ${Math.abs(s.trend)}%</span>`;
+        const bc = s.hermesPresent ? 'var(--green)' : 'var(--orange)';
+        return `<div class="viral-item" style="border-left-color:${bc}">
             <div class="viral-name">${s.name}</div>
-            <div class="viral-meta">
-                <span>${formatNum(s.volume)} mentions</span>
-                ${sentPill} ${presencePill}
-                <span>${trendArrow}</span>
-            </div>
+            <div class="viral-meta"><span>${fmtN(s.volume)} mentions</span>${sent}${pres}${ta}</div>
         </div>`;
     }).join('');
 }
 
-// ─── FEATURE 3: SURF OR IGNORE ────────────────────────────
+// ─── BLOC 3: SURF OR IGNORE ──────────────────────────────
 function renderSurfOrIgnore() {
-    const present = trendsData.filter(t => t.related_brand === 'hermes' && t.growth_rate > 0);
     const allRising = trendsData.filter(t => t.growth_rate > 0);
+    const present = allRising.filter(t => t.related_brand === 'hermes');
     const absent = allRising.filter(t => t.related_brand !== 'hermes');
+    const surfPct = allRising.length ? Math.round(present.length / allRising.length * 100) : 0;
     const avgVol = allRising.reduce((s, t) => s + t.volume, 0) / (allRising.length || 1);
 
-    const surfPct = allRising.length ? Math.round(present.length / allRising.length * 100) : 0;
+    document.getElementById('surf-summary').innerHTML =
+        `<span style="display:inline-block;width:60px;height:6px;background:rgba(255,255,255,.1);border-radius:3px;vertical-align:middle;overflow:hidden;margin-right:6px"><span style="display:block;height:100%;width:${surfPct}%;background:var(--green);border-radius:3px"></span></span>Hermès présent sur ${surfPct}% des trends actifs`;
 
     let html = '<div class="surf-col present"><div class="surf-col-title">Hermès présent</div>';
     present.slice(0, 6).forEach(t => {
         const sov = Math.round(30 + Math.random() * 40);
-        html += `<div class="surf-item"><div class="surf-item-name">${t.hashtag}</div><div class="surf-item-meta">${formatNum(t.volume)} · SOV ${sov}%</div></div>`;
+        html += `<div class="surf-item"><div class="surf-item-name">${t.hashtag}</div><div class="surf-item-meta">${fmtN(t.volume)} · SOV ${sov}%</div></div>`;
     });
     html += '</div><div class="surf-col absent"><div class="surf-col-title">Hermès absent</div>';
     absent.slice(0, 6).forEach(t => {
-        const isOpp = t.volume > avgVol;
-        html += `<div class="surf-item"><div class="surf-item-name">${t.hashtag} ${isOpp ? '<span class="pill pill-warn" style="margin-left:4px">Opportunité manquée</span>' : ''}</div><div class="surf-item-meta">${formatNum(t.volume)}</div></div>`;
+        const opp = t.volume > avgVol ? ' <span class="pill pill-warn">Opportunité manquée</span>' : '';
+        html += `<div class="surf-item"><div class="surf-item-name">${t.hashtag}${opp}</div><div class="surf-item-meta">${fmtN(t.volume)}</div></div>`;
     });
     html += '</div>';
 
     document.getElementById('surfCols').innerHTML = html;
-    document.getElementById('surfFill').style.width = surfPct + '%';
-    document.getElementById('surfFill').style.background = surfPct > 50 ? 'var(--green)' : (surfPct > 25 ? 'var(--orange)' : 'var(--accent)');
-    document.getElementById('surfScore').textContent = `Hermès surfe sur ${surfPct}% des trends actifs cette semaine`;
+    const fill = document.getElementById('surfFill');
+    fill.style.width = surfPct + '%';
+    fill.style.background = surfPct > 50 ? 'var(--green)' : (surfPct > 25 ? 'var(--orange)' : 'var(--accent)');
+    document.getElementById('surfScoreLabel').textContent = `Hermès surfe sur ${surfPct}% des trends actifs`;
 }
 
-// ─── FEATURE 4: TREND MATCHER ─────────────────────────────
-function computeMatchScore(trend) {
-    const tag = (trend.hashtag || '').toLowerCase();
-    // Brand alignment (0-10)
+// ─── SCORE COMPUTATION ────────────────────────────────────
+function matchScore(t) {
+    const tag = (t.hashtag || '').toLowerCase();
     let alignment = 3;
-    BRAND_KEYWORDS.positive.forEach(kw => { if (tag.includes(kw)) alignment += 2; });
-    BRAND_KEYWORDS.negative.forEach(kw => { if (tag.includes(kw)) alignment -= 3; });
-    if (trend.related_brand === 'hermes') alignment += 2;
+    BRAND_KW_POS.forEach(kw => { if (tag.includes(kw)) alignment += 2; });
+    BRAND_KW_NEG.forEach(kw => { if (tag.includes(kw)) alignment -= 3; });
+    if (t.related_brand === 'hermes') alignment += 2;
     alignment = Math.max(0, Math.min(10, alignment));
 
-    // Audience potential (0-10) — volume × growth
-    const maxVol = Math.max(...trendsData.map(t => t.volume)) || 1;
-    const volScore = (trend.volume / maxVol) * 5;
-    const growthScore = Math.min(Math.max(trend.growth_rate / 10, 0), 5);
-    const potential = Math.min(10, Math.round(volScore + growthScore));
-
-    // Urgency (0-10)
-    const urgency = trend.window >= 10 ? 8 : (trend.window >= 5 ? 6 : (trend.window >= 2 ? 4 : 2));
-
-    return { alignment, potential, urgency, total: alignment + potential + urgency, trend };
+    const maxVol = Math.max(...trendsData.map(x => x.volume)) || 1;
+    const potential = Math.min(10, Math.round((t.volume / maxVol) * 5 + Math.min(Math.max(t.growth_rate / 10, 0), 5)));
+    const urgency = t.window >= 10 ? 8 : (t.window >= 5 ? 6 : (t.window >= 2 ? 4 : 2));
+    return { alignment, potential, urgency, total: alignment + potential + urgency, trend: t };
 }
 
+// ─── BLOC 4: TREND MATCHER ────────────────────────────────
 function renderTrendMatcher() {
-    const scored = trendsData
-        .filter(t => t.growth_rate > 0)
-        .map(t => computeMatchScore(t))
-        .sort((a, b) => b.total - a.total)
-        .slice(0, 5);
+    const scored = trendsData.filter(t => t.growth_rate > 0).map(t => matchScore(t)).sort((a, b) => b.total - a.total).slice(0, 5);
+    const opps = scored.filter(s => s.total > 15).length;
+    document.getElementById('match-summary').textContent = `${opps} opportunités détectées pour Hermès cette semaine`;
 
-    const grid = document.getElementById('matchGrid');
-    grid.innerHTML = scored.map(s => {
+    document.getElementById('matchGrid').innerHTML = scored.map(s => {
         const t = s.trend;
-        const suggestion = SUGGESTIONS[t.hashtag] || `Explorer le potentiel de ${t.hashtag} pour la communication Hermès`;
-        const isInBrief = briefItems.some(b => b.hashtag === t.hashtag);
-        const scoreColor = s.total >= 22 ? 'var(--green)' : (s.total >= 15 ? 'var(--orange)' : 'rgba(255,255,255,.4)');
+        const sug = SUGGESTIONS[t.hashtag] || `Explorer le potentiel de ${t.hashtag} pour Hermès`;
+        const inBrief = briefItems.some(b => b.hashtag === t.hashtag);
+        const sc = s.total >= 22 ? 'var(--green)' : (s.total >= 15 ? 'var(--orange)' : 'rgba(255,255,255,.4)');
 
         return `<div class="match-card">
             <div class="match-name">${t.hashtag}</div>
-            <div class="match-score-total" style="color:${scoreColor}">${s.total}/30</div>
+            <div class="match-total" style="color:${sc}">${s.total}/30</div>
             <div class="match-dims">
-                <div class="match-dim"><span style="width:65px">Alignement</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.alignment*10}%"></div></div><div class="match-dim-val">${s.alignment}</div></div>
-                <div class="match-dim"><span style="width:65px">Potentiel</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.potential*10}%"></div></div><div class="match-dim-val">${s.potential}</div></div>
-                <div class="match-dim"><span style="width:65px">Urgence</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.urgency*10}%;background:${s.urgency>=6?'var(--green)':'var(--orange)'}"></div></div><div class="match-dim-val">${s.urgency}</div></div>
+                <div class="match-dim"><span style="width:60px">Alignement</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.alignment*10}%"></div></div><div class="match-dim-val">${s.alignment}</div></div>
+                <div class="match-dim"><span style="width:60px">Potentiel</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.potential*10}%"></div></div><div class="match-dim-val">${s.potential}</div></div>
+                <div class="match-dim"><span style="width:60px">Urgence</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.urgency*10}%;background:${s.urgency>=6?'var(--green)':'var(--orange)'}"></div></div><div class="match-dim-val">${s.urgency}</div></div>
             </div>
-            <div class="match-suggestion">${suggestion}</div>
-            <button class="match-btn ${isInBrief ? 'added' : ''}" onclick="addToBrief('${t.hashtag}',\`${suggestion.replace(/`/g,"'")}\`,'${t.platform}',${t.window})" ${isInBrief?'disabled':''}>${isInBrief ? 'Ajouté au brief' : 'Ajouter au brief'}</button>
+            <div class="match-sug">${sug}</div>
+            <button class="match-btn ${inBrief?'added':''}" onclick="addToBrief('${t.hashtag}',\`${sug.replace(/`/g,"'")}\`,'${t.platform}',${t.window})" ${inBrief?'disabled':''}>${inBrief?'Ajouté':'Ajouter au brief'}</button>
         </div>`;
     }).join('');
 }
 
-// ─── FEATURE 5: OPPORTUNITY WINDOW ────────────────────────
+// ─── BLOC 5: OPPORTUNITY WINDOW ───────────────────────────
 function renderOpportunityWindow() {
     const top8 = [...trendsData].sort((a, b) => b.volume - a.volume).slice(0, 8);
-    const container = document.getElementById('oppRows');
+    const urgent = top8.filter(t => t.window < 3 && matchScore(t).total > 20);
 
-    container.innerHTML = top8.map(t => {
-        const maxWindow = 14;
-        const pct = Math.min((t.window / maxWindow) * 100, 100);
+    document.getElementById('opp-summary').textContent =
+        `${top8.filter(t => t.window <= 3 && t.window > 0).length} trends à activer dans les 3 prochains jours`;
+
+    const badge = document.getElementById('opp-urgent');
+    badge.style.display = urgent.length > 0 ? 'inline-flex' : 'none';
+
+    document.getElementById('oppRows').innerHTML = top8.map(t => {
+        const pct = Math.min((t.window / 14) * 100, 100);
         const color = t.window >= 7 ? 'var(--green)' : (t.window >= 3 ? 'var(--orange)' : 'var(--accent)');
-        const label = t.window <= 0 ? 'Opportunité expirée' : `~${t.window} jours restants`;
-        const matchScore = computeMatchScore(t);
-        const alertBadge = (matchScore.total > 20 && t.window < 3)
-            ? ' <span class="pill pill-danger">Agir maintenant</span>'
-            : '';
+        const label = t.window <= 0 ? 'Expirée' : `~${t.window}j restants`;
+        const ms = matchScore(t);
+        const alert = (ms.total > 20 && t.window < 3) ? ' <span class="pill" style="background:rgba(217,54,54,.2);color:var(--accent);font-weight:800">Agir maintenant</span>' : '';
 
         return `<div class="opp-row">
             <div class="opp-name">${t.hashtag}</div>
-            <div class="opp-bar-wrap">
-                <div class="opp-bar"><div class="opp-fill" style="width:${pct}%;background:${color}"></div></div>
-                <canvas class="opp-spark" id="opp-spark-${t.id}"></canvas>
-            </div>
-            <div class="opp-label">${label}${alertBadge}</div>
+            <div class="opp-bar"><div class="opp-fill" style="width:${pct}%;background:${color}"></div></div>
+            <canvas class="opp-spark" id="os-${t.id}"></canvas>
+            <div class="opp-label">${label}${alert}</div>
         </div>`;
     }).join('');
 
-    // Draw mini sparklines
+    // 14-day sparklines
     top8.forEach(t => {
-        const canvas = document.getElementById(`opp-spark-${t.id}`);
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const w = 60, h = 20;
-        canvas.width = w * 2; canvas.height = h * 2;
-        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-        ctx.scale(2, 2);
-
-        // Simulate 14-day data
-        const data14 = [];
-        const base = t.volume * 0.5;
+        const d = [];
+        const b = t.volume * 0.5;
         for (let i = 0; i < 14; i++) {
-            const progress = i / 13;
-            if (t.status === 'rising') data14.push(base + (t.volume - base) * progress * 0.8 + Math.random() * base * 0.15);
-            else if (t.status === 'peak') data14.push(t.volume * (0.85 + Math.sin(i * 0.5) * 0.1 + Math.random() * 0.1));
-            else data14.push(t.volume * (1 - progress * 0.5) + Math.random() * base * 0.1);
+            const p = i / 13;
+            if (t.status === 'rising') d.push(b + (t.volume - b) * p * 0.8 + Math.random() * b * 0.12);
+            else if (t.status === 'peak') d.push(t.volume * (0.85 + Math.sin(i * 0.5) * 0.1 + Math.random() * 0.08));
+            else d.push(t.volume * (1 - p * 0.5) + Math.random() * b * 0.1);
         }
-
-        const max = Math.max(...data14);
-        const min = Math.min(...data14);
-        const range = max - min || 1;
-
-        ctx.beginPath();
-        ctx.strokeStyle = t.window >= 7 ? '#3CB371' : (t.window >= 3 ? '#E5A820' : '#D93636');
-        ctx.lineWidth = 1.2;
-        data14.forEach((v, i) => {
-            const x = (i / 13) * w;
-            const y = h - ((v - min) / range) * (h - 4) - 2;
-            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        });
-        ctx.stroke();
+        const c = t.window >= 7 ? '#3CB371' : (t.window >= 3 ? '#E5A820' : '#D93636');
+        drawSpark(`os-${t.id}`, d, 50, 18, c);
     });
 }
 
-// ─── BRIEF ────────────────────────────────────────────────
+// ─── BLOC 6: BRIEF ────────────────────────────────────────
 function addToBrief(hashtag, suggestion, platform, window) {
     if (briefItems.some(b => b.hashtag === hashtag)) return;
     briefItems.push({ hashtag, suggestion, platform, window });
@@ -706,22 +677,21 @@ function saveBrief() {
 }
 
 function renderBrief() {
+    document.getElementById('brief-summary').textContent = `${briefItems.length} trend${briefItems.length !== 1 ? 's' : ''} ajouté${briefItems.length !== 1 ? 's' : ''} au brief`;
+
     const list = document.getElementById('briefList');
-    if (briefItems.length === 0) {
-        list.innerHTML = '<div class="brief-empty">Aucun trend ajouté au brief. Utilisez le bouton "Ajouter au brief" dans le Trend Matcher.</div>';
+    if (!briefItems.length) {
+        list.innerHTML = '<div class="brief-empty">Aucun trend ajouté. Utilisez "Ajouter au brief" dans le Trend Matcher.</div>';
         return;
     }
 
     list.innerHTML = briefItems.map(b => {
-        const urgColor = b.window >= 7 ? 'var(--green)' : (b.window >= 3 ? 'var(--orange)' : 'var(--accent)');
+        const uc = b.window >= 7 ? 'var(--green)' : (b.window >= 3 ? 'var(--orange)' : 'var(--accent)');
         return `<div class="brief-item">
             <div class="brief-item-info">
                 <div class="brief-item-name">${b.hashtag}</div>
                 <div class="brief-item-sug">${b.suggestion}</div>
-                <div class="brief-item-meta">
-                    <span class="plat-badge">${b.platform}</span>
-                    <span style="font-size:10px;color:${urgColor};font-weight:700">~${b.window}j restants</span>
-                </div>
+                <div class="brief-item-meta"><span class="plat-badge">${b.platform}</span><span style="font-size:10px;color:${uc};font-weight:700">~${b.window}j</span></div>
             </div>
             <button class="brief-remove" onclick="removeFromBrief('${b.hashtag}')">Retirer</button>
         </div>`;
@@ -729,19 +699,13 @@ function renderBrief() {
 }
 
 function exportBrief() {
-    if (briefItems.length === 0) return;
+    if (!briefItems.length) return;
     const now = new Date().toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
-    let md = `# Brief Trends — Hermès\n**Date :** ${now}\n**Période :** ${periodVal} jours\n\n---\n\n`;
-
+    let md = `# Brief Trends — Hermès\n**Date :** ${now} | **Période :** ${periodVal}j\n\n---\n\n`;
     briefItems.forEach((b, i) => {
-        md += `## ${i + 1}. ${b.hashtag}\n`;
-        md += `- **Suggestion :** ${b.suggestion}\n`;
-        md += `- **Plateforme :** ${b.platform}\n`;
-        md += `- **Fenêtre :** ~${b.window} jours restants\n\n`;
+        md += `## ${i + 1}. ${b.hashtag}\n- **Suggestion :** ${b.suggestion}\n- **Plateforme :** ${b.platform}\n- **Fenêtre :** ~${b.window}j\n\n`;
     });
-
-    md += `---\n*Généré par Brand Intelligence Dashboard*\n`;
-
+    md += `---\n*Brand Intelligence Dashboard*\n`;
     navigator.clipboard.writeText(md).then(() => {
         const el = document.getElementById('briefCopied');
         el.style.display = 'inline';
@@ -750,15 +714,29 @@ function exportBrief() {
 }
 
 // ─── UTILITIES ────────────────────────────────────────────
-function formatNum(n) {
-    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-    if (n >= 1000) return (n / 1000).toFixed(n >= 10000 ? 0 : 1) + 'k';
+function fmtN(n) {
+    if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'k';
     return n.toString();
 }
 
-function filterByHashtag(tag) {
-    activeHashtag = activeHashtag === tag ? null : tag;
-    renderHashTable();
+function drawSpark(id, data, w, h, color) {
+    const canvas = document.getElementById(id);
+    if (!canvas || !data) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = w * 2; canvas.height = h * 2;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.scale(2, 2);
+    const max = Math.max(...data), min = Math.min(...data), range = max - min || 1;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    data.forEach((v, i) => {
+        const x = (i / (data.length - 1)) * w;
+        const y = h - ((v - min) / range) * (h - 4) - 2;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
 }
 
 // ─── CONTROLS ─────────────────────────────────────────────
@@ -766,7 +744,6 @@ document.querySelectorAll('#periodFilters .f-btn').forEach(b => b.onclick = () =
     b.parentElement.querySelectorAll('.f-btn').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
     periodVal = parseInt(b.dataset.val);
-    activeHashtag = null;
     loadData();
 });
 
@@ -774,14 +751,14 @@ document.querySelectorAll('#platformFilters .f-btn').forEach(b => b.onclick = ()
     b.parentElement.querySelectorAll('.f-btn').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
     platformVal = b.dataset.val;
-    activeHashtag = null;
     loadData();
 });
 
 document.getElementById('hashSearch').addEventListener('input', () => renderHashTable());
 
 document.querySelectorAll('.tr-table th[data-col]').forEach(th => {
-    th.onclick = () => {
+    th.onclick = (e) => {
+        e.stopPropagation();
         const col = th.dataset.col;
         if (sortCol === col) sortAsc = !sortAsc;
         else { sortCol = col; sortAsc = false; }
@@ -789,12 +766,10 @@ document.querySelectorAll('.tr-table th[data-col]').forEach(th => {
     };
 });
 
-document.getElementById('briefExport').onclick = exportBrief;
+document.getElementById('briefExport').onclick = (e) => { e.stopPropagation(); exportBrief(); };
 
 // ─── INIT ─────────────────────────────────────────────────
-(async function init() {
-    await loadData();
-})();
+(async function init() { await loadData(); })();
 </script>
 </body>
 </html>
