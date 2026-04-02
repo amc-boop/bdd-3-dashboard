@@ -7,11 +7,11 @@
 const SUPABASE_URL = 'https://esycprngyhprwevxzrlz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzeWNwcm5neWhwcndldnh6cmx6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzgyMjQyOCwiZXhwIjoyMDg5Mzk4NDI4fQ.afIN-L8LjjVYlvSnAVUxi3zG2zJ-eFQVEUcOWpULutg';
 
-const supabase = window.supabase
+const sb = window.supabase
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
   : null;
 
-if (!supabase) {
+if (!sb) {
   console.warn('[supabase-config] Supabase JS not loaded — all queries will return fallback data.');
 }
 
@@ -104,7 +104,7 @@ function normalizeRow(row, source) {
  */
 async function getMentions({ brand, platform, startDate, endDate } = {}) {
   try {
-    if (!supabase) throw new Error('no client');
+    if (!sb) throw new Error('no client');
     const dbBrand = brand ? BRAND_MAP[brand] || brand : null;
     const results = [];
 
@@ -113,7 +113,7 @@ async function getMentions({ brand, platform, startDate, endDate } = {}) {
 
     // Reputatio_crise — Hermès only reputation/crisis data
     if (!brand || brand === 'hermes') {
-      let q1 = supabase.from('Reputatio_crise').select('*');
+      let q1 = sb.from('Reputatio_crise').select('*');
       if (platform) q1 = q1.eq('platform', platform.charAt(0).toUpperCase() + platform.slice(1));
       q1 = applyDateRange(q1, startDate, endDate);
       q1 = q1.order('date', { ascending: false }).limit(500);
@@ -124,7 +124,7 @@ async function getMentions({ brand, platform, startDate, endDate } = {}) {
 
     // Voix_Client — Hermès customer voice data
     if (!brand || brand === 'hermes') {
-      let q2 = supabase.from('Voix_Client').select('*');
+      let q2 = sb.from('Voix_Client').select('*');
       if (platform) q2 = q2.eq('platform', platform.charAt(0).toUpperCase() + platform.slice(1));
       q2 = applyDateRange(q2, startDate, endDate);
       q2 = q2.order('date', { ascending: false }).limit(500);
@@ -135,7 +135,7 @@ async function getMentions({ brand, platform, startDate, endDate } = {}) {
 
     // Benchmark — Hermès + Chanel competitive data
     {
-      let q3 = supabase.from('Benchmark').select('*');
+      let q3 = sb.from('Benchmark').select('*');
       if (dbBrand) q3 = q3.eq('entity_analyzed', dbBrand);
       q3 = applyDateRange(q3, startDate, endDate);
       q3 = q3.order('date', { ascending: false }).limit(500);
@@ -204,8 +204,8 @@ async function getSentimentStats({ brand, platform, startDate, endDate } = {}) {
  */
 async function getShareOfVoice({ startDate, endDate } = {}) {
   try {
-    if (!supabase) throw new Error('no client');
-    let q = supabase.from('Benchmark').select('entity_analyzed,review_id');
+    if (!sb) throw new Error('no client');
+    let q = sb.from('Benchmark').select('entity_analyzed,review_id');
     q = applyDateRange(q, startDate, endDate);
     const { data, error } = await q;
     if (error) throw error;
@@ -238,8 +238,8 @@ async function getShareOfVoice({ startDate, endDate } = {}) {
  */
 async function getCompetitorPosts({ brand, platform, startDate, endDate } = {}) {
   try {
-    if (!supabase) throw new Error('no client');
-    let q = supabase.from('Benchmark').select('*');
+    if (!sb) throw new Error('no client');
+    let q = sb.from('Benchmark').select('*');
     if (brand) q = q.eq('entity_analyzed', BRAND_MAP[brand] || brand);
     q = applyDateRange(q, startDate, endDate);
     q = q.order('date', { ascending: false }).limit(200);
@@ -275,8 +275,8 @@ async function getCompetitorPosts({ brand, platform, startDate, endDate } = {}) 
  */
 async function getTrends({ platform, startDate, endDate } = {}) {
   try {
-    if (!supabase) throw new Error('no client');
-    let q = supabase.from('trends').select('*');
+    if (!sb) throw new Error('no client');
+    let q = sb.from('trends').select('*');
     if (platform) q = q.eq('platform', platform);
     q = applyDateRange(q, startDate, endDate);
     q = q.order('volume', { ascending: false }).limit(100);
@@ -296,8 +296,8 @@ async function getTrends({ platform, startDate, endDate } = {}) {
  */
 async function getAlerts({ brand, severity, resolved } = {}) {
   try {
-    if (!supabase) throw new Error('no client');
-    let q = supabase.from('alerts').select('*');
+    if (!sb) throw new Error('no client');
+    let q = sb.from('alerts').select('*');
     if (brand) q = q.eq('brand', brand);
     if (severity) q = q.eq('severity', severity);
     if (resolved !== undefined) q = q.eq('is_resolved', resolved);
@@ -397,7 +397,7 @@ async function testConnection() {
   console.log('  SUPABASE CONNECTION TEST');
   console.log('═══════════════════════════════════════');
 
-  if (!supabase) {
+  if (!sb) {
     console.error('❌ Supabase client not initialized');
     return;
   }
@@ -416,7 +416,7 @@ async function testConnection() {
 
   for (const t of tables) {
     try {
-      const { count, error } = await supabase.from(t.name).select('*', { count: 'exact', head: true });
+      const { count, error } = await sb.from(t.name).select('*', { count: 'exact', head: true });
       if (error) throw error;
       console.log(`✅ ${t.label} (${t.name}): ${count} lignes`);
     } catch (e) {
@@ -447,7 +447,7 @@ async function testConnection() {
 }
 
 // Auto-test on load
-if (supabase) testConnection();
+if (sb) testConnection();
 
 // ─── 6. Fallback Data ───────────────────────────────────────────
 const FALLBACK = {
