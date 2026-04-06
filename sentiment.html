@@ -1,628 +1,1171 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sentiment Analysis — Brand Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="supabase-config.js"></script>
-<style>
-/* ═══ Exact same tokens as index.html ═══ */
-:root{
-  --bg:#EEECEA;
-  --card:rgba(90,87,84,.62);
-  --card2:rgba(24,24,24,.82);
-  --glass-border:rgba(255,255,255,.08);
-  --blur:blur(20px);
-  --r:16px;
-  --accent:#D93636;
-  --green:#3CB371;
-  --gap:10px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:flex;height:100vh}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Sentiment — Brand Intelligence</title>
+    <meta name="description"
+        content="Head-to-Head competitive analysis: Hermès vs Chanel. Share of Voice, Sentiment, Radar and Platform Dominance.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* ══════════════════════════════════════════════════════════════════
+   GLOBAL SHELL — identical to index.html
+   ══════════════════════════════════════════════════════════════════ */
+        :root {
+            --bg: #EEECEA;
+            --accent: #D93636;
+            --green: #3CB371;
+            --gap: 10px;
+            /* Competitors page tokens */
+            --hermes: #F37021;
+            --chanel: #D1D5DB;
+            --dark-bg: #18181B;
+            --card-bg: #1F1F23;
+            --card-border: rgba(255, 255, 255, .06);
+            --r: 16px;
+        }
 
-/* ═══ SIDEBAR — copied from index ═══ */
-.side{width:56px;background:#fff;border-right:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;flex-shrink:0;z-index:10}
-.s-logo{width:30px;height:30px;margin-bottom:20px}
-.s-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.22);cursor:pointer;transition:.15s;text-decoration:none}
-.s-ico:hover{background:rgba(0,0,0,.04);color:rgba(0,0,0,.45)}
-.s-ico.on{background:rgba(0,0,0,.06);color:rgba(0,0,0,.55)}
-.s-gap{flex:1}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
 
-/* ═══ MAIN ═══ */
-.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+        html,
+        body {
+            height: 100%;
+            overflow: hidden
+        }
 
-/* ═══ NAV — copied from index ═══ */
-.nav{height:54px;min-height:54px;background:#fff;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;padding:0 22px;gap:6px;flex-shrink:0}
-.nav-logo{margin-right:12px;width:32px;height:32px;flex-shrink:0}
-.tab{padding:8px 18px;border-radius:20px;font-size:14px;font-weight:500;color:rgba(0,0,0,.45);cursor:pointer;white-space:nowrap;transition:.15s;border:none;background:none;text-decoration:none;font-family:inherit}
-.tab:hover{color:#000;background:rgba(0,0,0,.03)}
-.tab.on{background:var(--accent);color:#fff;font-weight:600}
-.nav-r{margin-left:auto;display:flex;align-items:center;gap:6px}
-.nav-toggle{display:flex;gap:3px;padding:5px 8px;border-radius:18px;background:rgba(0,0,0,.04);cursor:pointer;align-items:center}
-.nav-bell{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(0,0,0,.3);position:relative}
-.nav-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--accent);border-radius:50%;border:2px solid #fff}
-.avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(145deg,#7B5B3A,#4A2E15);border:3px solid rgba(0,0,0,.06);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center}
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #1a1a1a;
+            display: flex;
+            height: 100vh
+        }
 
-/* ═══ CONTENT ═══ */
-.ct{flex:1;display:flex;flex-direction:column;padding:14px 24px 10px;overflow-y:auto;overflow-x:hidden;gap:var(--gap)}
+        /* ─── SIDEBAR ─── */
+        .side {
+            width: 56px;
+            background: #fff;
+            border-right: 1px solid rgba(0, 0, 0, .06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            gap: 4px;
+            flex-shrink: 0;
+            z-index: 10
+        }
 
-/* ═══ HEADER — same .hdr pattern as index ═══ */
-.hdr{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.hdr-search{width:48px;height:48px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
-.hdr-left{display:flex;flex-direction:column;gap:2px;flex:1}
-.hdr-title{font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-.03em;line-height:1.1;color:#111}
-.hdr-sub{font-size:12px;color:rgba(0,0,0,.35);font-weight:400}
-.hdr-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+        .s-logo {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 20px
+        }
 
-/* Period selector — uses same evo-tab pattern */
-.period-sel{display:flex;gap:3px}
-.period-btn{font-size:12px;font-weight:500;padding:5px 12px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:rgba(0,0,0,.3);font-family:inherit;transition:.15s}
-.period-btn:hover{color:#000}
-.period-btn.on{color:#fff;font-weight:700;background:var(--accent)}
+        .s-ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(0, 0, 0, .22);
+            cursor: pointer;
+            transition: .15s
+        }
 
-/* Platform pills — same .pill sizing from index */
-.plat-pills{display:flex;gap:4px;flex-wrap:wrap}
-.plat-pill{display:inline-block;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:500;color:rgba(0,0,0,.35);cursor:pointer;border:none;background:rgba(0,0,0,.04);font-family:inherit;transition:.15s}
-.plat-pill:hover{color:#000;background:rgba(0,0,0,.08)}
-.plat-pill.on{background:var(--accent);color:#fff;font-weight:600}
+        .s-ico:hover {
+            background: rgba(0, 0, 0, .04);
+            color: rgba(0, 0, 0, .45)
+        }
 
-/* ═══ GLASS CARDS — exact copies from index ═══ */
-.gc{background:var(--card);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--r);padding:18px 20px;color:#fff;border:1px solid var(--glass-border);box-shadow:0 8px 32px rgba(0,0,0,.08)}
-.gc2{background:var(--card2);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--r);padding:18px 20px;color:#fff;border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 32px rgba(0,0,0,.12)}
+        .s-ico.on {
+            background: rgba(0, 0, 0, .06);
+            color: rgba(0, 0, 0, .55)
+        }
 
-/* ═══ KPI — exact copies from index ═══ */
-.kpi-label{font-size:12px;color:rgba(255,255,255,.4);font-weight:500;margin-bottom:6px}
-.kpi-val{font-size:clamp(32px,3.4vw,46px);font-weight:800;letter-spacing:-.04em;line-height:1;display:flex;align-items:baseline;gap:3px}
-.kpi-val small{font-size:.4em;font-weight:400;color:rgba(255,255,255,.4)}
-.kpi-arr{display:inline-flex;margin-left:2px}
-.arr-svg{stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.arr-svg.down{stroke:var(--accent)}
-.arr-svg.flat{stroke:rgba(255,255,255,.3)}
-.kpi-delta{font-size:10px;color:rgba(255,255,255,.35);font-weight:400;margin-top:4px}
+        .s-gap {
+            flex: 1
+        }
 
-/* KPI grid */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);flex-shrink:0}
+        /* ─── MAIN ─── */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden
+        }
 
-/* ═══ CARD HEADERS — exact copy from index ═══ */
-.card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.card-title{font-size:16px;font-weight:700;color:rgba(255,255,255,.8)}
-.card-arrow{width:22px;height:22px;border-radius:7px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+        /* ─── NAV ─── */
+        .nav {
+            height: 54px;
+            min-height: 54px;
+            background: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, .06);
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            gap: 6px;
+            flex-shrink: 0
+        }
 
-/* ═══ EVO CHART — exact copies from index ═══ */
-.evo-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-shrink:0}
-.evo-title{font-size:18px;font-weight:700}
-.evo-tabs{display:flex;gap:3px}
-.evo-tab{font-size:12px;font-weight:500;padding:5px 12px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,.2);font-family:inherit}
-.evo-tab.on{color:#fff;font-weight:700;background:rgba(255,255,255,.08)}
-.evo-chart{flex:1;min-height:0}
+        .nav-logo {
+            margin-right: 12px;
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0
+        }
 
-/* ═══ PILL badges — exact from index ═══ */
-.pill{display:inline-block;padding:5px 18px;border-radius:999px;font-size:12px;font-weight:600;color:#fff;line-height:1.4}
-.pill-pos{background:#2B8C5A}.pill-neg{background:#C93030}.pill-mix{background:rgba(255,255,255,.14);color:rgba(255,255,255,.65)}
-.pill-neu{background:rgba(255,255,255,.14);color:rgba(255,255,255,.5)}
+        .tab {
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, .45);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: .15s;
+            border: none;
+            background: none;
+            text-decoration: none
+        }
 
-/* ═══ TABLE — exact from index ═══ */
-.tbl{width:100%;border-collapse:collapse;table-layout:fixed}
-.tbl th{font-size:11px;font-weight:600;color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.06em;padding:0 0 6px;text-align:left}
-.tbl td{padding:7px 0;border-top:1px solid rgba(255,255,255,.04);font-size:14px;vertical-align:middle}
-.tbl td:first-child{font-weight:500;color:rgba(255,255,255,.7)}
-.tbl td:last-child{color:rgba(255,255,255,.4)}
+        .tab:hover {
+            color: #000;
+            background: rgba(0, 0, 0, .03)
+        }
 
-/* ═══ BANNER — exact from index ═══ */
-.banner{flex-shrink:0;background:var(--card2);backdrop-filter:var(--blur);border-radius:12px;padding:10px 24px;display:flex;align-items:center;border:1px solid rgba(255,255,255,.06);box-shadow:0 4px 20px rgba(0,0,0,.08)}
-.banner p{font-size:13px;font-weight:500;color:rgba(255,255,255,.65);flex:1}
-.banner strong{color:#fff;font-weight:700}
-.banner .momentum-pos{color:var(--green)}
-.banner .momentum-neg{color:var(--accent)}
+        .tab.on {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600
+        }
 
-/* ═══ LAYOUT GRIDS ═══ */
-.row-main{display:grid;grid-template-columns:1.5fr 1fr;gap:var(--gap);flex-shrink:0;min-height:clamp(200px,30vh,280px)}
-.row-sec{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);flex-shrink:0;min-height:0}
+        .nav-r {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
 
-/* ═══ PLATFORM BAR ═══ */
-.plat-bar-list{flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center;overflow:hidden}
-.plat-bar-item{cursor:pointer;transition:.15s}
-.plat-bar-item:hover{transform:translateX(2px)}
-.plat-bar-lbl{font-size:11px;font-weight:500;color:rgba(255,255,255,.45);margin-bottom:3px;display:flex;justify-content:space-between}
-.plat-bar-lbl span:last-child{font-size:10px;color:rgba(255,255,255,.25)}
-.plat-bar-track{height:20px;border-radius:4px;overflow:hidden;display:flex}
-.plat-bar-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:rgba(255,255,255,.85);min-width:24px;transition:width .4s ease}
-.plat-bar-seg.pos{background:#2B8C5A}
-.plat-bar-seg.neu{background:rgba(255,255,255,.12)}
-.plat-bar-seg.neg{background:#C93030}
+        .nav-toggle {
+            display: flex;
+            gap: 3px;
+            padding: 5px 8px;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, .04);
+            cursor: pointer;
+            align-items: center
+        }
 
-/* ═══ VERBATIM LIST ═══ */
-.verb-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0}
-.verb-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid rgba(255,255,255,.04)}
-.verb-row:first-child{border-top:none}
-.verb-plat{font-size:10px;font-weight:600;padding:3px 8px;border-radius:999px;white-space:nowrap;flex-shrink:0;margin-top:2px}
-.verb-plat.ig{background:linear-gradient(135deg,#833AB4,#E1306C,#F77737);color:#fff}
-.verb-plat.tt{background:#111;color:#fff;border:1px solid rgba(255,255,255,.1)}
-.verb-plat.tw{background:#1DA1F2;color:#fff}
-.verb-plat.tp{background:#00B67A;color:#fff}
-.verb-plat.rd{background:#FF4500;color:#fff}
-.verb-body{flex:1;min-width:0}
-.verb-txt{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.verb-meta{display:flex;align-items:center;gap:8px;margin-top:3px}
-.verb-date{font-size:10px;color:rgba(255,255,255,.2)}
-.verb-score{font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px}
-.verb-score.pos{background:rgba(43,140,90,.2);color:#3CB371}
-.verb-score.neg{background:rgba(201,48,48,.2);color:#EF4444}
+        .nav-bell {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(0, 0, 0, .3);
+            position: relative
+        }
 
-/* ═══ MOMENTUM GAUGE ═══ */
-.gauge-wrap{margin:8px 0 4px}
-.gauge-track{height:8px;background:rgba(255,255,255,.06);border-radius:99px;position:relative;overflow:visible}
-.gauge-fill{height:100%;border-radius:99px;transition:width .6s ease}
-.gauge-marker{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid rgba(24,24,24,.8);transform:translate(-50%,-50%);transition:left .6s ease;box-shadow:0 1px 6px rgba(0,0,0,.4)}
-.gauge-center{position:absolute;top:-3px;bottom:-3px;left:50%;width:1px;background:rgba(255,255,255,.12)}
-.gauge-labels{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.2);margin-top:4px}
-.momentum-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.6;margin-top:8px}
-.momentum-desc strong{color:rgba(255,255,255,.8)}
+        .nav-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 7px;
+            height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 2px solid #fff
+        }
 
-/* ═══ RESPONSIVE ═══ */
-@media(max-width:1000px){
-  .kpi-grid{grid-template-columns:repeat(2,1fr)}
-  .row-main,.row-sec{grid-template-columns:1fr}
-}
-@media(max-width:600px){
-  .side{display:none}
-  .kpi-grid{grid-template-columns:1fr 1fr}
-}
-</style>
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #7B5B3A, #4A2E15);
+            border: 3px solid rgba(0, 0, 0, .06);
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   COMPETITORS PAGE — DARK CONTENT AREA
+   ══════════════════════════════════════════════════════════════════ */
+        .ct {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+            background: var(--dark-bg);
+        }
+
+        .ct-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px 28px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* ── Page Header ── */
+        .pg-hdr {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0
+        }
+
+        .pg-hdr-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--hermes), #d45a10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(243, 112, 33, .35);
+        }
+
+        .pg-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -.02em;
+            line-height: 1.15
+        }
+
+        .pg-sub {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .4);
+            font-weight: 500;
+            letter-spacing: .02em
+        }
+
+        .pg-badge {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(243, 112, 33, .12);
+            border: 1px solid rgba(243, 112, 33, .25);
+            border-radius: 999px;
+            padding: 6px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--hermes);
+            letter-spacing: .04em;
+        }
+
+        .pg-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--hermes);
+            animation: pulse-dot 1.6s ease-in-out infinite
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: .4;
+                transform: scale(.7)
+            }
+        }
+
+        /* ── Shared card ── */
+        .crd {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--r);
+            padding: 20px 24px;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .18);
+            transition: border-color .25s, box-shadow .25s;
+        }
+
+        .crd:hover {
+            border-color: rgba(255, 255, 255, .12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .28)
+        }
+
+        .crd-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .4);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 16px
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   1. HEAD-TO-HEAD KPI ROW
+   ══════════════════════════════════════════════════════════════════ */
+        .h2h {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .h2h-card {
+            position: relative;
+            overflow: hidden
+        }
+
+        .h2h-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: var(--r) var(--r) 0 0;
+        }
+
+        .h2h-hermes::before {
+            background: linear-gradient(90deg, var(--hermes), #ff9d57)
+        }
+
+        .h2h-chanel::before {
+            background: linear-gradient(90deg, #9CA3AF, var(--chanel))
+        }
+
+        .h2h-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px
+        }
+
+        .h2h-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .h2h-logo.hermes {
+            background: linear-gradient(135deg, var(--hermes), #d45a10)
+        }
+
+        .h2h-logo.chanel {
+            background: linear-gradient(135deg, #6B7280, #374151)
+        }
+
+        .h2h-name {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -.01em
+        }
+
+        .h2h-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, .35);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px
+        }
+
+        .kpi-item {
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .04);
+            border-radius: 12px;
+            padding: 14px 16px;
+            transition: background .2s, border-color .2s;
+        }
+
+        .kpi-item:hover {
+            background: rgba(255, 255, 255, .06);
+            border-color: rgba(255, 255, 255, .1)
+        }
+
+        .kpi-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, .35);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 8px
+        }
+
+        .kpi-val {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -.03em
+        }
+
+        .kpi-val.hermes-c {
+            color: var(--hermes)
+        }
+
+        .kpi-val.chanel-c {
+            color: var(--chanel)
+        }
+
+        .kpi-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 6px;
+            padding: 3px 8px;
+            border-radius: 6px
+        }
+
+        .kpi-trend.up {
+            color: #34D399;
+            background: rgba(52, 211, 153, .1)
+        }
+
+        .kpi-trend.down {
+            color: #F87171;
+            background: rgba(248, 113, 113, .1)
+        }
+
+        .kpi-trend.flat {
+            color: #FCD34D;
+            background: rgba(252, 211, 77, .1)
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   2 & 3. MIDDLE ROW — two charts side by side
+   ══════════════════════════════════════════════════════════════════ */
+        .mid-row {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 16px;
+            min-height: 0
+        }
+
+        .chart-wrap {
+            flex: 1;
+            min-height: 0;
+            position: relative
+        }
+
+        .chart-wrap canvas {
+            width: 100% !important;
+            height: 100% !important
+        }
+
+        /* Legend dots */
+        .legend {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, .5)
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   4. PLATFORM DOMINANCE — bottom row
+   ══════════════════════════════════════════════════════════════════ */
+        .chart-platform {
+            height: 220px
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   5. ACTIONABLE INSIGHT BANNER
+   ══════════════════════════════════════════════════════════════════ */
+        .banner {
+            flex-shrink: 0;
+            background: var(--card-bg);
+            border: 1px solid rgba(243, 112, 33, .18);
+            border-radius: 12px;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .12);
+        }
+
+        .banner-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #DC2626, #F87171);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            animation: banner-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes banner-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, .4)
+            }
+
+            50% {
+                box-shadow: 0 0 0 8px rgba(220, 38, 38, 0)
+            }
+        }
+
+        .banner p {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .65);
+            flex: 1;
+            line-height: 1.55
+        }
+
+        .banner a {
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            background: var(--hermes);
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            transition: background .2s
+        }
+
+        .banner a:hover {
+            background: #d45a10
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- ═══ SIDEBAR — same as index.html ═══ -->
-<aside class="side">
-  <div class="s-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M4 24L10 4h4L8 24H4z" fill="#D93636"/><path d="M12 24L18 4h4L16 24h-4z" fill="#222"/></svg></div>
-  <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3.5" width="10" height="8" rx="1.5"/><path d="M5.5 8v4.5h7.5v-2"/></svg></a>
-  <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg></a>
-  <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5.5"/><path d="M5.5 9.5c0-1.5 1.1-2 2.5-2s2.5.5 2.5 2"/><circle cx="6" cy="6" r=".8"/><circle cx="10" cy="6" r=".8"/></svg></div>
-  <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0 2 2.5 3 5 3s5-1 5-3V6.5c0-.8-.4-1.5-1.2-2L8 2.5 4.2 4.5C3.4 5 3 5.7 3 6.5V12z"/><path d="M8 5.5V9"/></svg></a>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7"/></svg></div>
-  <div class="s-gap"></div>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l4-4-4-4"/><path d="M14 9H6.5a3 3 0 110-6H7"/></svg></div>
-</aside>
+    <!-- ─── SIDEBAR (identical to index.html) ─── -->
+    <aside class="side">
+        <div class="s-logo"><svg viewBox="0 0 28 28" fill="none">
+                <path d="M4 24L10 4h4L8 24H4z" fill="#D93636" />
+                <path d="M12 24L18 4h4L16 24h-4z" fill="#222" />
+            </svg></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3.5" width="10" height="8" rx="1.5" />
+                <path d="M5.5 8v4.5h7.5v-2" />
+            </svg></div>
+        <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1" />
+                <rect x="9" y="2.5" width="4.5" height="4.5" rx="1" />
+                <rect x="2.5" y="9" width="4.5" height="4.5" rx="1" />
+                <rect x="9" y="9" width="4.5" height="4.5" rx="1" />
+            </svg></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round">
+                <circle cx="4.5" cy="8" r="2" />
+                <circle cx="11.5" cy="4" r="2" />
+                <circle cx="11.5" cy="12" r="2" />
+                <path d="M6.5 7.3L9.5 4.7M6.5 8.7L9.5 11.3" />
+            </svg></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12c0 2 2.5 3 5 3s5-1 5-3V6.5c0-.8-.4-1.5-1.2-2L8 2.5 4.2 4.5C3.4 5 3 5.7 3 6.5V12z" />
+                <path d="M8 5.5V9" />
+            </svg></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="2.5" />
+                <path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7" />
+            </svg></div>
+        <div class="s-gap"></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13l4-4-4-4" />
+                <path d="M14 9H6.5a3 3 0 110-6H7" />
+            </svg></div>
+    </aside>
 
-<main class="main">
-  <!-- ═══ NAV — same as index.html ═══ -->
-  <nav class="nav">
-    <div class="nav-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M4 24L10 4h4L8 24H4z" fill="#D93636"/><path d="M12 24L18 4h4L16 24h-4z" fill="#D93636"/></svg></div>
-    <a href="index.html" class="tab">Dashboard</a>
-    <div class="tab on">Sentiment</div>
-    <div class="tab">Share of Voice</div>
-    <div class="tab">Competitors</div>
-    <div class="tab">Crisis Alert</div>
-    <div class="tab">Reports</div>
-    <div class="nav-r">
-      <div class="nav-toggle"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6.5" cy="6.5" r="2.5"/><path d="M6.5 1.5v1M6.5 11v1M1.5 6.5h1M11 6.5h1M3.5 3.5l.6.6M9.4 9.4l.6.6M3.5 9.5l.6-.6M9.4 3.6l.6-.6"/></svg><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M11 6.5a5 5 0 01-6.6 4.7A5 5 0 008.6 1.7 5 5 0 0011 6.5z"/></svg></div>
-      <div class="nav-bell"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10.5 4a4 4 0 10-6 3.5c.3.4.5 1 .5 1.5h5c0-.5.2-1.1.5-1.5a4 4 0 00-2-3.5z"/><path d="M5.5 12h4"/></svg><div class="nav-dot"></div></div>
-      <div class="avatar"><svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><circle cx="9" cy="6.5" r="2.8"/><path d="M3.5 15.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg></div>
-    </div>
-  </nav>
+    <main class="main">
+        <!-- ─── NAV (identical shell, "Competitors" tab is active) ─── -->
+        <nav class="nav">
+            <div class="nav-logo"><svg viewBox="0 0 28 28" fill="none">
+                    <path d="M4 24L10 4h4L8 24H4z" fill="#D93636" />
+                    <path d="M12 24L18 4h4L16 24h-4z" fill="#D93636" />
+                </svg></div>
+            <a href="index.html" class="tab" style="text-decoration:none">Dashboard</a>
+            <div class="tab on">Sentiment</div>
+            <div class="tab">Share of Voice</div>
+            <a href="competitors.html" class="tab" style="text-decoration:none">Competitors</a>
+            <div class="tab">Crisis Alert</div>
+            <div class="tab">Reports</div>
+            <div class="nav-r">
+                <div class="nav-toggle"><svg width="13" height="13" fill="none" stroke="currentColor"
+                        stroke-width="1.4">
+                        <circle cx="6.5" cy="6.5" r="2.5" />
+                        <path
+                            d="M6.5 1.5v1M6.5 11v1M1.5 6.5h1M11 6.5h1M3.5 3.5l.6.6M9.4 9.4l.6.6M3.5 9.5l.6-.6M9.4 3.6l.6-.6" />
+                    </svg><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4"
+                        stroke-linecap="round">
+                        <path d="M11 6.5a5 5 0 01-6.6 4.7A5 5 0 008.6 1.7 5 5 0 0011 6.5z" />
+                    </svg></div>
+                <div class="nav-bell"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round">
+                        <path d="M10.5 4a4 4 0 10-6 3.5c.3.4.5 1 .5 1.5h5c0-.5.2-1.1.5-1.5a4 4 0 00-2-3.5z" />
+                        <path d="M5.5 12h4" />
+                    </svg>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="avatar"><svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)"
+                        stroke-width="1.3">
+                        <circle cx="9" cy="6.5" r="2.8" />
+                        <path d="M3.5 15.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5" />
+                    </svg></div>
+            </div>
+        </nav>
 
-  <div class="ct">
+        <!-- ═══════════════════════════════════════════════════════════════
+       COMPETITORS CONTENT
+       ═══════════════════════════════════════════════════════════════ -->
+        <div class="ct">
+            <div class="ct-scroll">
 
-    <!-- ═══ 1. HEADER ═══ -->
-    <div class="hdr">
-      <div class="hdr-search"><svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M12 12l3.5 3.5"/></svg></div>
-      <div class="hdr-left">
-        <div class="hdr-title">Sentiment Analysis</div>
-        <div class="hdr-sub">Analyse des émotions et perceptions — Hermès</div>
-      </div>
-      <div class="hdr-actions">
-        <div class="period-sel" id="periodSel">
-          <button class="period-btn" data-period="7">7j</button>
-          <button class="period-btn on" data-period="30">30j</button>
-          <button class="period-btn" data-period="90">90j</button>
-          <button class="period-btn" data-period="365">12 mois</button>
-        </div>
-        <div class="plat-pills" id="platPills">
-          <button class="plat-pill on" data-plat="all">All</button>
-          <button class="plat-pill" data-plat="instagram">Instagram</button>
-          <button class="plat-pill" data-plat="tiktok">TikTok</button>
-          <button class="plat-pill" data-plat="twitter">Twitter</button>
-          <button class="plat-pill" data-plat="trustpilot">Trustpilot</button>
-          <button class="plat-pill" data-plat="reddit">Reddit</button>
-        </div>
-      </div>
-    </div>
+                <!-- ── Page Header ── -->
+                <div class="pg-hdr">
+                    <div class="pg-hdr-icon">
+                        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M4 9L10 4 16 9" />
+                            <path d="M6 8v7h3v-4h2v4h3V8" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="pg-title">Hermès vs Chanel</div>
+                        <div class="pg-sub">Head-to-Head Competitive Intelligence · Mars 2026 · 3 358 datapoints</div>
+                    </div>
+                    <div class="pg-badge"><span class="pg-badge-dot"></span> LIVE MONITORING</div>
+                </div>
 
-    <!-- ═══ 2. KPIs ═══ -->
-    <div class="kpi-grid" id="kpiGrid">
-      <div class="gc" id="kpiPos">
-        <div class="kpi-label">Positive Sentiment</div>
-        <div class="kpi-val" style="color:var(--green)">68% <span class="kpi-arr"><svg width="11" height="11" class="arr-svg"><path d="M3 8L8 3M8 3H4.5M8 3v3.5"/></svg></span></div>
-        <div class="kpi-delta">+2.4% vs période précédente</div>
-      </div>
-      <div class="gc" id="kpiNeg">
-        <div class="kpi-label">Negative Sentiment</div>
-        <div class="kpi-val" style="color:#EF4444">15% <span class="kpi-arr"><svg width="11" height="11" class="arr-svg down"><path d="M3 3L8 8M8 8H4.5M8 8v-3.5"/></svg></span></div>
-        <div class="kpi-delta">+1.1% vs période précédente</div>
-      </div>
-      <div class="gc" id="kpiNeu">
-        <div class="kpi-label">Neutral</div>
-        <div class="kpi-val" style="color:rgba(255,255,255,.45)">17% <span class="kpi-arr"><svg width="11" height="11" class="arr-svg flat"><path d="M2 5.5h7"/></svg></span></div>
-        <div class="kpi-delta">-0.3% vs période précédente</div>
-      </div>
-      <div class="gc" id="kpiScore">
-        <div class="kpi-label">Sentiment Score</div>
-        <div class="kpi-val" style="color:var(--green)">+53<small>/100</small></div>
-        <div class="kpi-delta" style="color:var(--green)">Net positif — tendance stable</div>
-      </div>
-    </div>
+                <!-- ══════════════════════════════════════════════════════════
+           1. HEAD-TO-HEAD KPIs
+           ══════════════════════════════════════════════════════════ -->
+                <div class="h2h">
+                    <!-- HERMÈS block -->
+                    <div class="crd h2h-card h2h-hermes">
+                        <div class="h2h-brand">
+                            <div class="h2h-logo hermes">H</div>
+                            <div>
+                                <div class="h2h-name" style="color:var(--hermes)">Hermès</div>
+                                <div class="h2h-label">Primary Brand</div>
+                            </div>
+                        </div>
+                        <div class="kpi-grid">
+                            <div class="kpi-item">
+                                <div class="kpi-label">Share of Voice</div>
+                                <div class="kpi-val hermes-c">41.2%</div>
+                                <div class="kpi-trend down">
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round">
+                                        <path d="M2 3l3 4 3-4" />
+                                    </svg>
+                                    -2.1pp
+                                </div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-label">Net Sentiment</div>
+                                <div class="kpi-val hermes-c">68%</div>
+                                <div class="kpi-trend up">
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round">
+                                        <path d="M2 7l3-4 3 4" />
+                                    </svg>
+                                    +3.2pp
+                                </div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-label">Engagement / Mention</div>
+                                <div class="kpi-val hermes-c" style="font-size:20px;margin-top:4px">Low</div>
+                                <div class="kpi-trend flat">
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round">
+                                        <path d="M2 5h6" />
+                                    </svg>
+                                    Stable
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- CHANEL block -->
+                    <div class="crd h2h-card h2h-chanel">
+                        <div class="h2h-brand">
+                            <div class="h2h-logo chanel">C</div>
+                            <div>
+                                <div class="h2h-name" style="color:var(--chanel)">Chanel</div>
+                                <div class="h2h-label">Main Competitor</div>
+                            </div>
+                        </div>
+                        <div class="kpi-grid">
+                            <div class="kpi-item">
+                                <div class="kpi-label">Share of Voice</div>
+                                <div class="kpi-val chanel-c">57.7%</div>
+                                <div class="kpi-trend up">
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round">
+                                        <path d="M2 7l3-4 3 4" />
+                                    </svg>
+                                    +4.8pp
+                                </div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-label">Net Sentiment</div>
+                                <div class="kpi-val chanel-c">74%</div>
+                                <div class="kpi-trend up">
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round">
+                                        <path d="M2 7l3-4 3 4" />
+                                    </svg>
+                                    +1.5pp
+                                </div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-label">Engagement / Mention</div>
+                                <div class="kpi-val chanel-c" style="font-size:20px;margin-top:4px">High</div>
+                                <div class="kpi-trend up">
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round">
+                                        <path d="M2 7l3-4 3 4" />
+                                    </svg>
+                                    Growing
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- ═══ 3. MAIN ROW ═══ -->
-    <div class="row-main">
-      <!-- Sentiment Evolution — uses same gc2 + evo pattern as index -->
-      <div class="gc2" style="display:flex;flex-direction:column;overflow:hidden">
-        <div class="evo-h">
-          <div class="evo-title">Sentiment Evolution</div>
-          <div class="evo-tabs" id="evoLegend">
-            <button class="evo-tab on" data-ds="0" style="color:#3CB371">● Positive</button>
-            <button class="evo-tab on" data-ds="1" style="color:#EF4444">● Negative</button>
-            <button class="evo-tab on" data-ds="2" style="color:rgba(255,255,255,.35)">● Neutral</button>
-          </div>
-        </div>
-        <div class="evo-chart"><canvas id="evoChart"></canvas></div>
-      </div>
-      <!-- Sentiment par plateforme — uses same gc2 pattern -->
-      <div class="gc2" style="display:flex;flex-direction:column;overflow:hidden">
-        <div class="card-hdr"><div class="card-title">Sentiment par plateforme</div><div class="card-arrow"><svg width="9" height="9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7L7 2M7 2H4M7 2v3"/></svg></div></div>
-        <div class="plat-bar-list" id="platBars"></div>
-      </div>
-    </div>
+                <!-- ══════════════════════════════════════════════════════════
+           2 & 3. MIDDLE ROW — SoV Evolution + Radar
+           ══════════════════════════════════════════════════════════ -->
+                <div class="mid-row">
 
-    <!-- ═══ 4. VERBATIMS ═══ -->
-    <div class="row-sec">
-      <div class="gc2" style="display:flex;flex-direction:column;overflow:hidden">
-        <div class="card-hdr"><div class="card-title">Top Verbatims Positifs</div><div class="card-arrow"><svg width="9" height="9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7L7 2M7 2H4M7 2v3"/></svg></div></div>
-        <div class="verb-scroll" id="verbPos"></div>
-      </div>
-      <div class="gc2" style="display:flex;flex-direction:column;overflow:hidden">
-        <div class="card-hdr"><div class="card-title">Top Verbatims Négatifs</div><div class="card-arrow"><svg width="9" height="9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7L7 2M7 2H4M7 2v3"/></svg></div></div>
-        <div class="verb-scroll" id="verbNeg"></div>
-      </div>
-    </div>
+                    <!-- 2. Share of Voice Evolution (dual line chart) -->
+                    <div class="crd" style="display:flex;flex-direction:column;min-height:280px">
+                        <div class="crd-title">Share of Voice Evolution</div>
+                        <div class="legend">
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--hermes)"></span>
+                                Hermès</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--chanel)"></span>
+                                Chanel</div>
+                            <div class="legend-item"
+                                style="margin-left:auto;font-size:10px;color:rgba(255,255,255,.25)">12-month rolling
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="sovChart"></canvas></div>
+                    </div>
 
-    <!-- ═══ 5. MOMENTUM BANNER ═══ -->
-    <div class="banner" style="flex-direction:column;align-items:stretch;padding:16px 24px" id="momentum">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-size:14px;font-weight:700;color:rgba(255,255,255,.8)">Sentiment Momentum</span>
-        <span style="font-size:11px;font-weight:600;color:var(--green)" id="momBadge">+8 pts ce mois</span>
-      </div>
-      <div class="gauge-wrap">
-        <div class="gauge-track">
-          <div class="gauge-center"></div>
-          <div class="gauge-fill" id="gaugeFill"></div>
-          <div class="gauge-marker" id="gaugeMarker"></div>
-        </div>
-        <div class="gauge-labels"><span>-100</span><span>0</span><span>+100</span></div>
-      </div>
-      <p class="momentum-desc" id="momDesc"></p>
-    </div>
+                    <!-- 3. Strategic Battleground (Radar) -->
+                    <div class="crd" style="display:flex;flex-direction:column;min-height:280px">
+                        <div class="crd-title">Strategic Battleground</div>
+                        <div class="legend">
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--hermes)"></span>
+                                Hermès</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--chanel)"></span>
+                                Chanel</div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
+                    </div>
 
-  </div>
-</main>
+                </div>
 
-<script>
-/* ═══════════════════════════════════════════════
-   STATE
-   ═══════════════════════════════════════════════ */
-let S={period:30,platforms:['all'],mentions:[]};
+                <!-- ══════════════════════════════════════════════════════════
+           4. PLATFORM DOMINANCE (100 % stacked horizontal bar)
+           ══════════════════════════════════════════════════════════ -->
+                <div class="crd">
+                    <div class="crd-title">Platform Dominance</div>
+                    <div class="legend" style="margin-bottom:8px">
+                        <div class="legend-item"><span class="legend-dot" style="background:var(--hermes)"></span>
+                            Hermès</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:var(--chanel)"></span>
+                            Chanel</div>
+                        <div class="legend-item" style="margin-left:auto;font-size:10px;color:rgba(255,255,255,.25)">%
+                            of total brand conversation per platform</div>
+                    </div>
+                    <div class="chart-platform"><canvas id="platformChart"></canvas></div>
+                </div>
 
-/* ═══════════════════════════════════════════════
-   FETCH DATA — uses centralized supabase-config.js
-   ═══════════════════════════════════════════════ */
-async function fetchData(){
-  const endDate=new Date().toISOString();
-  const startDate=new Date(Date.now()-S.period*864e5).toISOString();
-  // Fetch mentions for a wide window (12 months) so we can filter client-side for period comparisons
-  const data=await getMentions({brand:'hermes'});
-  S.mentions=data.map(m=>({
-    ...m,
-    date: m.date ? m.date.split('T')[0] : m.date,
-    location: m.location_country || m.location || ''
-  }));
-}
+                <!-- ══════════════════════════════════════════════════════════
+           5. ACTIONABLE INSIGHT BANNER
+           ══════════════════════════════════════════════════════════ -->
+                <div class="banner">
+                    <div class="banner-icon">⚡</div>
+                    <p>
+                        <strong style="color:#F87171">Alert:</strong> Chanel's Share of Voice on TikTok has grown by
+                        <strong style="color:#fff">+15%</strong> this quarter, capturing Gen-Z prescription.
+                        ⚡ <strong style="color:rgba(255,255,255,.85)">Recommendation:</strong> Counter-attack by
+                        activating an <em>'Art de Vivre &amp; Horology'</em> digital campaign.
+                    </p>
+                    <a href="#">👉 View Action Plan</a>
+                </div>
 
-function filtered(){
-  const since=new Date(Date.now()-S.period*864e5).toISOString().split('T')[0];
-  return S.mentions.filter(m=>m.date>=since&&(S.platforms.includes('all')||S.platforms.includes(m.platform)));
-}
-function prevFiltered(){
-  const s1=new Date(Date.now()-S.period*2*864e5).toISOString().split('T')[0];
-  const s2=new Date(Date.now()-S.period*864e5).toISOString().split('T')[0];
-  return S.mentions.filter(m=>m.date>=s1&&m.date<s2&&(S.platforms.includes('all')||S.platforms.includes(m.platform)));
-}
+            </div><!-- /ct-scroll -->
+        </div><!-- /ct -->
+    </main>
 
-/* ═══════════════════════════════════════════════
-   RENDER KPIs — uses same .kpi-val + .arr-svg pattern
-   ═══════════════════════════════════════════════ */
-function renderKPIs(data){
-  const T=data.length||1;
-  const pP=Math.round(data.filter(d=>d.sentiment==='positive').length/T*100);
-  const pN=Math.round(data.filter(d=>d.sentiment==='negative').length/T*100);
-  const pNe=100-pP-pN;
-  const score=pP-pN;
+    <!-- ═══════════════════════════════════════════════════════════════
+     CHARTS — Chart.js
+     ═══════════════════════════════════════════════════════════════ -->
+    <script>
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.font.size = 10;
+        Chart.defaults.color = 'rgba(255,255,255,.35)';
 
-  const prev=prevFiltered(),pT=prev.length||1;
-  const ppP=Math.round(prev.filter(d=>d.sentiment==='positive').length/pT*100);
-  const ppN=Math.round(prev.filter(d=>d.sentiment==='negative').length/pT*100);
-  const ppNe=100-ppP-ppN;
-
-  setKPI('kpiPos',pP+'%','var(--green)',(pP-ppP).toFixed(1),true);
-  setKPI('kpiNeg',pN+'%','#EF4444',(pN-ppN).toFixed(1),false);
-  setKPI('kpiNeu',pNe+'%','rgba(255,255,255,.45)',(pNe-ppNe).toFixed(1),null);
-
-  const scEl=document.getElementById('kpiScore');
-  const scCol=score>=0?'var(--green)':'#EF4444';
-  scEl.querySelector('.kpi-val').innerHTML=`${score>=0?'+':''}${score}<small>/100</small>`;
-  scEl.querySelector('.kpi-val').style.color=scCol;
-  scEl.querySelector('.kpi-delta').textContent=score>=0?'Net positif — tendance stable':'Net négatif — attention requise';
-  scEl.querySelector('.kpi-delta').style.color=scCol;
-}
-
-function setKPI(id,val,col,delta,posGood){
-  const el=document.getElementById(id);
-  const n=parseFloat(delta),sign=n>0?'+':'';
-  let arrowCls='arr-svg',arrowD='M3 8L8 3M8 3H4.5M8 3v3.5';
-  if(posGood===false){
-    if(n>0){arrowCls='arr-svg down';arrowD='M3 3L8 8M8 8H4.5M8 8v-3.5'}
-    else if(n<0){arrowCls='arr-svg';arrowD='M3 8L8 3M8 3H4.5M8 3v3.5'}
-    else{arrowCls='arr-svg flat';arrowD='M2 5.5h7'}
-  }else if(posGood===true){
-    if(n>0){arrowCls='arr-svg';arrowD='M3 8L8 3M8 3H4.5M8 3v3.5'}
-    else if(n<0){arrowCls='arr-svg down';arrowD='M3 3L8 8M8 8H4.5M8 8v-3.5'}
-    else{arrowCls='arr-svg flat';arrowD='M2 5.5h7'}
-  }else{
-    arrowCls=Math.abs(n)<.5?'arr-svg flat':'arr-svg';
-    arrowD=Math.abs(n)<.5?'M2 5.5h7':'M3 8L8 3M8 3H4.5M8 3v3.5';
-  }
-  el.querySelector('.kpi-val').innerHTML=`${val} <span class="kpi-arr"><svg width="11" height="11" class="${arrowCls}"><path d="${arrowD}"/></svg></span>`;
-  el.querySelector('.kpi-val').style.color=col;
-  el.querySelector('.kpi-delta').textContent=`${sign}${delta}% vs période précédente`;
-}
-
-/* ═══════════════════════════════════════════════
-   RENDER CHART — same Chart.js config style as index
-   ═══════════════════════════════════════════════ */
-Chart.defaults.font.family="'Inter',sans-serif";
-Chart.defaults.font.size=10;
-let evoInst=null;
-
-function renderEvo(data){
-  const ctx=document.getElementById('evoChart').getContext('2d');
-  if(evoInst)evoInst.destroy();
-
-  const byDate={};
-  data.forEach(m=>{
-    if(!byDate[m.date])byDate[m.date]={p:0,n:0,u:0,t:0};
-    byDate[m.date][m.sentiment==='positive'?'p':m.sentiment==='negative'?'n':'u']++;
-    byDate[m.date].t++;
-  });
-  const dates=Object.keys(byDate).sort();
-
-  // Bucket into max ~16 points
-  let labels=[],dP=[],dN=[],dU=[];
-  const bk=Math.max(1,Math.ceil(dates.length/16));
-  for(let i=0;i<dates.length;i+=bk){
-    const sl=dates.slice(i,i+bk);
-    let p=0,n=0,u=0,t=0;
-    sl.forEach(d=>{p+=byDate[d].p;n+=byDate[d].n;u+=byDate[d].u;t+=byDate[d].t});
-    labels.push(sl[0].slice(5));
-    dP.push(t?Math.round(p/t*100):0);
-    dN.push(t?Math.round(n/t*100):0);
-    dU.push(t?Math.round(u/t*100):0);
-  }
-
-  function mkGrad(ctx,r,g,b){
-    const gr=ctx.chart.ctx.createLinearGradient(0,0,0,ctx.chart.height);
-    gr.addColorStop(0,`rgba(${r},${g},${b},.12)`);
-    gr.addColorStop(1,`rgba(${r},${g},${b},.01)`);
-    return gr;
-  }
-
-  evoInst=new Chart(ctx,{
-    type:'line',
-    data:{labels,datasets:[
-      {label:'Positive',data:dP,borderColor:'#3CB371',backgroundColor:c=>mkGrad(c,60,179,113),borderWidth:2.5,fill:true,tension:.4,pointRadius:0,pointHoverRadius:5,pointHoverBackgroundColor:'#3CB371'},
-      {label:'Negative',data:dN,borderColor:'#EF4444',backgroundColor:c=>mkGrad(c,239,68,68),borderWidth:2.5,fill:true,tension:.4,pointRadius:0,pointHoverRadius:5,pointHoverBackgroundColor:'#EF4444'},
-      {label:'Neutral',data:dU,borderColor:'rgba(255,255,255,.25)',backgroundColor:c=>mkGrad(c,255,255,255),borderWidth:1.5,fill:true,tension:.4,pointRadius:0,pointHoverRadius:4,pointHoverBackgroundColor:'rgba(255,255,255,.5)'}
-    ]},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      interaction:{mode:'index',intersect:false},
-      layout:{padding:{top:8,right:10}},
-      plugins:{
-        legend:{display:false},
-        tooltip:{
-          backgroundColor:'rgba(30,30,30,.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,.7)',
-          borderColor:'rgba(255,255,255,.08)',borderWidth:1,cornerRadius:10,padding:10,
-          titleFont:{family:'Inter',weight:'600',size:11},bodyFont:{family:'Inter',size:10},
-          callbacks:{label:c=>' '+c.dataset.label+': '+c.parsed.y+'%'}
+        /* ── helper: gradient fill ── */
+        function makeGrad(ctx, chart, color, a1, a2) {
+            const g = ctx.createLinearGradient(0, 0, 0, chart.height);
+            g.addColorStop(0, color.replace(')', ',' + a1 + ')').replace('rgb', 'rgba'));
+            g.addColorStop(1, color.replace(')', ',' + a2 + ')').replace('rgb', 'rgba'));
+            return g;
         }
-      },
-      scales:{
-        x:{grid:{color:'rgba(255,255,255,.04)'},border:{display:false},ticks:{color:'rgba(255,255,255,.28)',font:{size:9}}},
-        y:{grid:{color:'rgba(255,255,255,.04)'},border:{display:false},min:0,max:100,
-           ticks:{stepSize:25,color:'rgba(255,255,255,.28)',font:{size:9},callback:v=>v+'%'},
-           title:{display:true,text:'% mentions',color:'rgba(255,255,255,.2)',font:{size:8,weight:500}}}
-      }
-    }
-  });
-}
 
-/* ═══════════════════════════════════════════════
-   LEGEND TOGGLE — same tab-toggle pattern as index
-   ═══════════════════════════════════════════════ */
-document.querySelectorAll('#evoLegend .evo-tab').forEach(btn=>{
-  btn.onclick=()=>{
-    const i=+btn.dataset.ds;
-    btn.classList.toggle('on');
-    if(evoInst){
-      const meta=evoInst.getDatasetMeta(i);
-      meta.hidden=!btn.classList.contains('on');
-      evoInst.update();
-    }
-  };
-});
+        /* ══════════════════════════════════════════════════
+           2. SHARE OF VOICE EVOLUTION — dual area / line
+           ══════════════════════════════════════════════════ */
+        const sovCtx = document.getElementById('sovChart');
+        new Chart(sovCtx, {
+            type: 'line',
+            data: {
+                labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+                datasets: [
+                    {
+                        label: 'Chanel',
+                        data: [52, 53, 54, 55, 54, 56, 58, 62, 68, 60, 58, 57.7],
+                        borderColor: '#D1D5DB',
+                        backgroundColor: function (c) {
+                            const g = c.chart.ctx.createLinearGradient(0, 0, 0, c.chart.chartArea?.bottom || 250);
+                            g.addColorStop(0, 'rgba(209,213,219,.18)');
+                            g.addColorStop(1, 'rgba(209,213,219,.01)');
+                            return g;
+                        },
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: .4,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#D1D5DB',
+                    },
+                    {
+                        label: 'Hermès',
+                        data: [40, 41, 39, 40, 42, 41, 40, 41, 39, 41, 42, 41.2],
+                        borderColor: '#F37021',
+                        backgroundColor: function (c) {
+                            const g = c.chart.ctx.createLinearGradient(0, 0, 0, c.chart.chartArea?.bottom || 250);
+                            g.addColorStop(0, 'rgba(243,112,33,.18)');
+                            g.addColorStop(1, 'rgba(243,112,33,.01)');
+                            return g;
+                        },
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: .4,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#F37021',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                layout: { padding: { top: 6, right: 12 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(24,24,27,.95)',
+                        borderColor: 'rgba(255,255,255,.08)',
+                        borderWidth: 1,
+                        titleFont: { weight: 700, size: 11 },
+                        bodyFont: { size: 11 },
+                        padding: 10,
+                        cornerRadius: 10,
+                        callbacks: {
+                            label: function (c) { return c.dataset.label + ': ' + c.parsed.y + '%'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+                        border: { display: false },
+                        ticks: { color: 'rgba(255,255,255,.3)', font: { size: 10 } }
+                    },
+                    y: {
+                        min: 20,
+                        max: 80,
+                        grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+                        border: { display: false },
+                        ticks: {
+                            stepSize: 15,
+                            color: 'rgba(255,255,255,.3)',
+                            font: { size: 10 },
+                            callback: v => v + '%'
+                        }
+                    }
+                }
+            },
+            /* ── Annotation: Chanel peak label ── */
+            plugins: [{
+                afterDatasetsDraw(chart) {
+                    const meta = chart.getDatasetMeta(0); // Chanel
+                    const pt = meta.data[8]; // Dec peak = 68
+                    if (!pt) return;
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    const txt = '↑ Digital Campaign Peak';
+                    ctx.font = '600 9px Inter';
+                    const tw = ctx.measureText(txt).width;
+                    const bw = tw + 14, bh = 20;
+                    const bx = pt.x - bw / 2, by = pt.y - 28;
+                    ctx.fillStyle = 'rgba(209,213,219,.15)';
+                    ctx.beginPath();
+                    ctx.roundRect(bx, by, bw, bh, 8);
+                    ctx.fill();
+                    ctx.fillStyle = '#D1D5DB';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(txt, pt.x, by + bh / 2);
+                    /* dot */
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(209,213,219,.25)';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
+                    ctx.fillStyle = '#D1D5DB';
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }]
+        });
 
-/* ═══════════════════════════════════════════════
-   RENDER PLATFORM BARS
-   ═══════════════════════════════════════════════ */
-function renderBars(data){
-  const pl=['instagram','tiktok','twitter','trustpilot','reddit'];
-  const nm={instagram:'Instagram',tiktok:'TikTok',twitter:'Twitter',trustpilot:'Trustpilot',reddit:'Reddit'};
-  const el=document.getElementById('platBars');
-  el.innerHTML='';
-  pl.forEach(p=>{
-    const d=data.filter(m=>m.platform===p),t=d.length||1;
-    const pP=Math.round(d.filter(m=>m.sentiment==='positive').length/t*100);
-    const pN=Math.round(d.filter(m=>m.sentiment==='negative').length/t*100);
-    const pU=100-pP-pN;
-    const item=document.createElement('div');
-    item.className='plat-bar-item';
-    item.onclick=()=>{
-      S.platforms=[p];
-      document.querySelectorAll('.plat-pill').forEach(b=>b.classList.toggle('on',b.dataset.plat===p));
-      refresh();
-    };
-    item.innerHTML=`<div class="plat-bar-lbl"><span>${nm[p]}</span><span>${d.length} mentions</span></div><div class="plat-bar-track"><div class="plat-bar-seg pos" style="width:${pP}%">${pP}%</div><div class="plat-bar-seg neu" style="width:${pU}%">${pU>8?pU+'%':''}</div><div class="plat-bar-seg neg" style="width:${pN}%">${pN}%</div></div>`;
-    el.appendChild(item);
-  });
-}
+        /* ══════════════════════════════════════════════════
+           3. STRATEGIC BATTLEGROUND — radar chart
+           ══════════════════════════════════════════════════ */
+        const radarCtx = document.getElementById('radarChart');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Product\nQuality', 'Innovation', 'Boutique\nExperience', 'Customer\nService', 'Pricing\nPower'],
+                datasets: [
+                    {
+                        label: 'Hermès',
+                        data: [92, 45, 72, 38, 95],
+                        borderColor: '#F37021',
+                        backgroundColor: 'rgba(243,112,33,.12)',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#F37021',
+                        pointBorderColor: '#F37021',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                    },
+                    {
+                        label: 'Chanel',
+                        data: [78, 88, 80, 85, 65],
+                        borderColor: '#D1D5DB',
+                        backgroundColor: 'rgba(209,213,219,.08)',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#D1D5DB',
+                        pointBorderColor: '#D1D5DB',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { top: 4, bottom: 4 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(24,24,27,.95)',
+                        borderColor: 'rgba(255,255,255,.08)',
+                        borderWidth: 1,
+                        titleFont: { weight: 700, size: 11 },
+                        bodyFont: { size: 11 },
+                        padding: 10,
+                        cornerRadius: 10,
+                        callbacks: {
+                            label: function (c) { return c.dataset.label + ': ' + c.parsed.r + '/100'; }
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            stepSize: 25,
+                            showLabelBackdrop: false,
+                            color: 'rgba(255,255,255,.15)',
+                            font: { size: 8 }
+                        },
+                        grid: { color: 'rgba(255,255,255,.06)' },
+                        angleLines: { color: 'rgba(255,255,255,.06)' },
+                        pointLabels: {
+                            color: 'rgba(255,255,255,.5)',
+                            font: { size: 10, weight: 600 },
+                            padding: 12
+                        }
+                    }
+                }
+            }
+        });
 
-/* ═══════════════════════════════════════════════
-   RENDER VERBATIMS — uses same table-row pattern
-   ═══════════════════════════════════════════════ */
-const platCls={instagram:'ig',tiktok:'tt',twitter:'tw',trustpilot:'tp',reddit:'rd'};
-const platLbl={instagram:'IG',tiktok:'TT',twitter:'TW',trustpilot:'TP',reddit:'RD'};
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+        /* ══════════════════════════════════════════════════
+           4. PLATFORM DOMINANCE — 100% stacked horiz bar
+           ══════════════════════════════════════════════════ */
+        const platCtx = document.getElementById('platformChart');
+        new Chart(platCtx, {
+            type: 'bar',
+            data: {
+                labels: ['TikTok', 'Instagram', 'X (Twitter)', 'LinkedIn', 'Forums'],
+                datasets: [
+                    {
+                        label: 'Hermès',
+                        data: [25, 38, 50, 65, 60],
+                        backgroundColor: '#F37021',
+                        borderRadius: { topLeft: 6, bottomLeft: 6, topRight: 0, bottomRight: 0 },
+                        borderSkipped: false,
+                        barPercentage: .55,
+                        categoryPercentage: .8,
+                    },
+                    {
+                        label: 'Chanel',
+                        data: [75, 62, 50, 35, 40],
+                        backgroundColor: '#D1D5DB',
+                        borderRadius: { topLeft: 0, bottomLeft: 0, topRight: 6, bottomRight: 6 },
+                        borderSkipped: false,
+                        barPercentage: .55,
+                        categoryPercentage: .8,
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { right: 30 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(24,24,27,.95)',
+                        borderColor: 'rgba(255,255,255,.08)',
+                        borderWidth: 1,
+                        titleFont: { weight: 700, size: 11 },
+                        bodyFont: { size: 11 },
+                        padding: 10,
+                        cornerRadius: 10,
+                        callbacks: {
+                            label: function (c) { return c.dataset.label + ': ' + c.parsed.x + '%'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+                        border: { display: false },
+                        ticks: {
+                            color: 'rgba(255,255,255,.25)',
+                            font: { size: 10 },
+                            callback: v => v + '%'
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: { display: false },
+                        border: { display: false },
+                        ticks: {
+                            color: 'rgba(255,255,255,.5)',
+                            font: { size: 12, weight: 600 },
+                            padding: 8
+                        }
+                    }
+                }
+            },
+            /* inline % labels at each end */
+            plugins: [{
+                afterDatasetsDraw(chart) {
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    chart.data.datasets[0].data.forEach((val, i) => {
+                        const meta0 = chart.getDatasetMeta(0);
+                        const meta1 = chart.getDatasetMeta(1);
+                        const bar0 = meta0.data[i];
+                        const bar1 = meta1.data[i];
+                        if (!bar0 || !bar1) return;
+                        /* Hermès % — inside left */
+                        ctx.fillStyle = '#fff';
+                        ctx.font = '700 11px Inter';
+                        ctx.textAlign = 'left';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(val + '%', bar0.x - (bar0.width || 40) + 10, bar0.y);
+                        /* Chanel % — inside right */
+                        const cVal = chart.data.datasets[1].data[i];
+                        ctx.textAlign = 'right';
+                        ctx.fillStyle = '#18181B';
+                        ctx.fillText(cVal + '%', bar1.x + bar1.width - 10, bar1.y);
+                    });
+                    ctx.restore();
+                }
+            }]
+        });
 
-function renderVerbs(data){
-  const pos=data.filter(m=>m.sentiment==='positive').sort((a,b)=>b.sentiment_score-a.sentiment_score).slice(0,5);
-  const neg=data.filter(m=>m.sentiment==='negative').sort((a,b)=>a.sentiment_score-b.sentiment_score).slice(0,5);
-  fillVerbs('verbPos',pos,'pos');
-  fillVerbs('verbNeg',neg,'neg');
-}
-
-function fillVerbs(id,items,type){
-  const el=document.getElementById(id);
-  el.innerHTML='';
-  if(!items.length){el.innerHTML='<div style="padding:16px;text-align:center;color:rgba(255,255,255,.25);font-size:12px">Aucun verbatim pour cette période</div>';return}
-  items.forEach(m=>{
-    const txt=m.text.length>120?m.text.slice(0,120)+'…':m.text;
-    const sc=type==='pos'?'+'+Math.round(m.sentiment_score*100):Math.round(m.sentiment_score*100);
-    const row=document.createElement('div');
-    row.className='verb-row';
-    row.innerHTML=`<span class="verb-plat ${platCls[m.platform]||''}">${platLbl[m.platform]||m.platform}</span><div class="verb-body"><div class="verb-txt">${esc(txt)}</div><div class="verb-meta"><span class="verb-date">${m.date}</span><span class="verb-score ${type}">${sc}</span></div></div>`;
-    el.appendChild(row);
-  });
-}
-
-/* ═══════════════════════════════════════════════
-   RENDER MOMENTUM — uses .banner pattern
-   ═══════════════════════════════════════════════ */
-function renderMomentum(data){
-  const T=data.length||1;
-  const pos=data.filter(d=>d.sentiment==='positive').length;
-  const neg=data.filter(d=>d.sentiment==='negative').length;
-  const score=Math.round((pos-neg)/T*100);
-
-  const prev=prevFiltered(),pT=prev.length||1;
-  const pScore=Math.round((prev.filter(d=>d.sentiment==='positive').length-prev.filter(d=>d.sentiment==='negative').length)/pT*100);
-  const delta=score-pScore;
-
-  const pct=(score+100)/200*100;
-  document.getElementById('gaugeFill').style.width=pct+'%';
-  document.getElementById('gaugeFill').style.background=score>=0?'linear-gradient(90deg,rgba(255,255,255,.04),rgba(60,179,113,.35))':'linear-gradient(90deg,rgba(239,68,68,.35),rgba(255,255,255,.04))';
-  document.getElementById('gaugeMarker').style.left=pct+'%';
-
-  const badge=document.getElementById('momBadge');
-  badge.textContent=(delta>=0?'+':'')+delta+' pts ce mois';
-  badge.style.color=delta>=0?'var(--green)':'var(--accent)';
-
-  // Find dominant themes
-  const posTheme=extractTheme(data.filter(d=>d.sentiment==='positive'));
-  const negTheme=extractTheme(data.filter(d=>d.sentiment==='negative'));
-  document.getElementById('momDesc').innerHTML=
-    `Le sentiment Hermès <strong>${delta>=0?'progresse':'recule'} de <span class="momentum-${delta>=0?'pos':'neg'}">${delta>=0?'+':''}${delta} points</span></strong> ce mois vs mois précédent. Principal driver : <strong class="momentum-pos">${posTheme}</strong>. Principal risque : <strong class="momentum-neg">${negTheme}</strong>.`;
-}
-
-function extractTheme(items){
-  const t={
-    'Qualité artisanale':/qualit|artisan|cuir|couture|savoir/i,
-    'Expérience boutique':/boutique|service|accueil|expérience|visite/i,
-    'Héritage & prestige':/investissement|valeur|héritage|prestige|intemporel/i,
-    'Design & collections':/collection|design|couleur|magnifique|sublime/i,
-    'Accessibilité & prix':/prix|hausse|quota|impossible|cher|rapport/i,
-    'Délais & SAV':/délai|réparation|attente|lent|retard/i,
-    'Digital & e-commerce':/site|e-commerce|navigation|stock|digital/i
-  };
-  const txt=items.map(i=>i.text).join(' ');
-  let best='Qualité artisanale',max=0;
-  for(const[k,re] of Object.entries(t)){
-    const c=(txt.match(new RegExp(re.source,'gi'))||[]).length;
-    if(c>max){max=c;best=k}
-  }
-  return best;
-}
-
-/* ═══════════════════════════════════════════════
-   REFRESH ALL
-   ═══════════════════════════════════════════════ */
-function refresh(){
-  const d=filtered();
-  renderKPIs(d);
-  renderEvo(d);
-  renderBars(d);
-  renderVerbs(d);
-  renderMomentum(d);
-}
-
-/* ═══════════════════════════════════════════════
-   EVENT LISTENERS — same toggle pattern as index
-   ═══════════════════════════════════════════════ */
-document.querySelectorAll('.period-btn').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.period-btn').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');
-  S.period=+b.dataset.period;
-  refresh();
-});
-
-document.querySelectorAll('.plat-pill').forEach(b=>b.onclick=()=>{
-  const p=b.dataset.plat;
-  if(p==='all'){
-    S.platforms=['all'];
-    document.querySelectorAll('.plat-pill').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-  }else{
-    document.querySelector('.plat-pill[data-plat="all"]').classList.remove('on');
-    S.platforms=S.platforms.filter(x=>x!=='all');
-    if(b.classList.contains('on')){
-      b.classList.remove('on');
-      S.platforms=S.platforms.filter(x=>x!==p);
-      if(!S.platforms.length){S.platforms=['all'];document.querySelector('.plat-pill[data-plat="all"]').classList.add('on')}
-    }else{b.classList.add('on');S.platforms.push(p)}
-  }
-  refresh();
-});
-
-// Tab navigation — same as index
-document.querySelectorAll('.tab').forEach(t=>{
-  if(!t.href)t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on')};
-});
-
-/* ═══════════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════════ */
-(async()=>{await fetchData();refresh()})();
-</script>
+        /* ── Nav tab click ── */
+        document.querySelectorAll('.tab').forEach(t => {
+            if (t.tagName === 'A') return;
+            t.onclick = () => {
+                document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+                t.classList.add('on');
+            };
+        });
+    </script>
 </body>
+
 </html>

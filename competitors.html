@@ -22,11 +22,12 @@
             /* Competitors page tokens */
             --hermes: #F37021;
             --chanel: #D1D5DB;
-            --lv: #C5A059;
+            --lv: #C5A039;
             --dior: #8BA6C1;
-            --dark-bg: #18181B;
-            --card-bg: #1F1F23;
-            --card-border: rgba(255, 255, 255, .06);
+            --dark-bg: #e6dac6;
+            --text-dark: #18181B;
+            --card-bg: #FFFFFF;
+            --card-border: rgba(0, 0, 0, .06);
             --r: 16px;
         }
 
@@ -265,17 +266,33 @@
             box-shadow: 0 4px 16px rgba(243, 112, 33, .35);
         }
 
+        /* ─── HEADER — adapt to light background ─── */
+        .hdr-title {
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: -.03em;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .hdr-sub {
+            font-size: 14px;
+            color: rgba(24, 24, 27, .55);
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
         .pg-title {
             font-size: 26px;
             font-weight: 800;
-            color: #fff;
+            color: var(--text-dark);
             letter-spacing: -.02em;
             line-height: 1.15
         }
 
         .pg-sub {
             font-size: 12px;
-            color: rgba(255, 255, 255, .4);
+            color: rgba(24, 24, 27, .45);
             font-weight: 500;
             letter-spacing: .02em
         }
@@ -323,20 +340,20 @@
             border: 1px solid var(--card-border);
             border-radius: var(--r);
             padding: 20px 24px;
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, .18);
+            color: var(--text-dark);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, .05);
             transition: border-color .25s, box-shadow .25s;
         }
 
         .crd:hover {
-            border-color: rgba(255, 255, 255, .12);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, .28)
+            border-color: rgba(0, 0, 0, .1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .1)
         }
 
         .crd-title {
             font-size: 13px;
             font-weight: 700;
-            color: rgba(255, 255, 255, .4);
+            color: rgba(24, 24, 27, .45);
             text-transform: uppercase;
             letter-spacing: .1em;
             margin-bottom: 16px
@@ -401,7 +418,7 @@
 
         .h2h-label {
             font-size: 10px;
-            color: rgba(255, 255, 255, .35);
+            color: rgba(24, 24, 27, .45);
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: .08em
@@ -414,22 +431,22 @@
         }
 
         .kpi-item {
-            background: rgba(255, 255, 255, .03);
-            border: 1px solid rgba(255, 255, 255, .04);
+            background: rgba(0, 0, 0, .03);
+            border: 1px solid rgba(0, 0, 0, .05);
             border-radius: 12px;
             padding: 14px 16px;
             transition: background .2s, border-color .2s;
         }
 
         .kpi-item:hover {
-            background: rgba(255, 255, 255, .06);
-            border-color: rgba(255, 255, 255, .1)
+            background: rgba(0, 0, 0, .05);
+            border-color: rgba(0, 0, 0, .08)
         }
 
         .kpi-label {
             font-size: 10px;
             font-weight: 600;
-            color: rgba(255, 255, 255, .35);
+            color: rgba(24, 24, 27, .45);
             text-transform: uppercase;
             letter-spacing: .06em;
             margin-bottom: 8px
@@ -513,7 +530,7 @@
             gap: 6px;
             font-size: 11px;
             font-weight: 600;
-            color: rgba(255, 255, 255, .5)
+            color: rgba(24, 24, 27, .5)
         }
 
         .legend-dot {
@@ -550,13 +567,14 @@
         .banner {
             flex-shrink: 0;
             background: var(--card-bg);
-            border: 1px solid rgba(243, 112, 33, .18);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 14px 24px;
             display: flex;
             align-items: center;
             gap: 14px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, .12);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, .05);
+            color: var(--text-dark);
         }
 
         .banner-icon {
@@ -587,7 +605,7 @@
         .banner p {
             font-size: 13px;
             font-weight: 500;
-            color: rgba(255, 255, 255, .65);
+            color: rgba(24, 24, 27, .65);
             flex: 1;
             line-height: 1.55
         }
@@ -615,12 +633,12 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: #27272A;
-            border: 1px solid rgba(255, 255, 255, .07);
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .06);
             border-radius: 14px;
             padding: 12px 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
         }
 
         .filter-item {
@@ -628,8 +646,8 @@
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
-            background: rgba(255, 255, 255, .04);
-            border: 1px solid rgba(255, 255, 255, .06);
+            background: rgba(0, 0, 0, .04);
+            border: 1px solid rgba(0, 0, 0, .06);
             border-radius: 10px;
             cursor: pointer;
             transition: background .2s, border-color .2s;
@@ -637,8 +655,8 @@
         }
 
         .filter-item:hover {
-            background: rgba(255, 255, 255, .08);
-            border-color: rgba(255, 255, 255, .12);
+            background: rgba(0, 0, 0, .07);
+            border-color: rgba(0, 0, 0, .1);
         }
 
         .filter-icon {
@@ -648,14 +666,15 @@
             width: 20px;
             height: 20px;
             border-radius: 6px;
-            background: rgba(255, 255, 255, .06);
+            background: rgba(0, 0, 0, .05);
             flex-shrink: 0;
+            color: rgba(24, 24, 27, .4);
         }
 
         .filter-label {
             font-size: 11px;
             font-weight: 500;
-            color: rgba(255, 255, 255, .35);
+            color: rgba(24, 24, 27, .4);
             letter-spacing: .02em;
             white-space: nowrap;
         }
@@ -663,12 +682,12 @@
         .filter-value {
             font-size: 12px;
             font-weight: 700;
-            color: rgba(255, 255, 255, .85);
+            color: rgba(24, 24, 27, .85);
             white-space: nowrap;
         }
 
         .filter-chevron {
-            color: rgba(255, 255, 255, .25);
+            color: rgba(24, 24, 27, .3);
             flex-shrink: 0;
             margin-left: 2px;
         }
@@ -676,7 +695,7 @@
         .filter-sep {
             width: 1px;
             height: 28px;
-            background: rgba(255, 255, 255, .06);
+            background: rgba(0, 0, 0, .06);
             flex-shrink: 0;
         }
 
@@ -719,7 +738,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 4px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            border-bottom: 1px solid rgba(0, 0, 0, .04);
         }
 
         .comp-row:last-child {
@@ -732,7 +751,7 @@
             gap: 6px;
             font-size: 13px;
             font-weight: 500;
-            color: rgba(255, 255, 255, .55);
+            color: rgba(24, 24, 27, .55);
         }
 
         .comp-dot {
@@ -746,7 +765,7 @@
         .comp-val {
             font-size: 14px;
             font-weight: 700;
-            color: rgba(255, 255, 255, .9);
+            color: var(--text-dark);
             letter-spacing: .01em;
         }
     </style>
@@ -861,8 +880,8 @@
                         <!-- Period -->
                         <div class="filter-item" id="filter-period">
                             <div class="filter-icon">
-                                <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.4"
-                                    stroke-linecap="round" stroke-linejoin="round">
+                                <svg width="12" height="12" fill="none" stroke="rgba(24, 24, 27, .45)"
+                                    stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="1.5" y="2" width="9" height="8.5" rx="1.5" />
                                     <path d="M1.5 5h9M4 1v2M8 1v2" />
                                 </svg>
@@ -882,8 +901,8 @@
                         <!-- Region -->
                         <div class="filter-item" id="filter-region">
                             <div class="filter-icon">
-                                <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.3"
-                                    stroke-linecap="round">
+                                <svg width="12" height="12" fill="none" stroke="rgba(24, 24, 27, .45)"
+                                    stroke-width="1.3" stroke-linecap="round">
                                     <circle cx="6" cy="6" r="4.5" />
                                     <path d="M1.5 6h9M6 1.5c-1.8 2-1.8 7 0 9M6 1.5c1.8 2 1.8 7 0 9" />
                                 </svg>
@@ -903,8 +922,8 @@
                         <!-- Sentiment -->
                         <div class="filter-item" id="filter-sentiment">
                             <div class="filter-icon">
-                                <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.3"
-                                    stroke-linecap="round" stroke-linejoin="round">
+                                <svg width="12" height="12" fill="none" stroke="rgba(24, 24, 27, .45)"
+                                    stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M10.5 5.5H7l-1 2-2-4-1 2H1.5" />
                                 </svg>
                             </div>
@@ -1109,9 +1128,9 @@
                 <div class="banner">
                     <div class="banner-icon">⚡</div>
                     <p>
-                        <strong style="color:#F87171">Alert:</strong> Chanel's Share of Voice on TikTok has grown by
-                        <strong style="color:#fff">+15%</strong> this quarter, capturing Gen-Z prescription.
-                        ⚡ <strong style="color:rgba(255,255,255,.85)">Recommendation:</strong> Counter-attack by
+                        <strong style="color:#DC2626">Alert:</strong> Chanel's Share of Voice on TikTok has grown by
+                        <strong style="color:var(--text-dark)">+15%</strong> this quarter, capturing Gen-Z prescription.
+                        ⚡ <strong style="color:rgba(24, 24, 27, .85)">Recommendation:</strong> Counter-attack by
                         activating an <em>'Art de Vivre &amp; Horology'</em> digital campaign.
                     </p>
                     <a href="#">👉 View Action Plan</a>
@@ -1180,14 +1199,14 @@
                     {
                         label: 'Louis Vuitton',
                         data: [22, 21, 22, 20, 19, 18, 19, 17, 16, 18, 19, 20.1],
-                        borderColor: '#C5A059',
+                        borderColor: '#C5A039',
                         backgroundColor: 'transparent',
                         borderWidth: 1.8,
                         fill: false,
                         tension: .4,
                         pointRadius: 0,
                         pointHoverRadius: 5,
-                        pointHoverBackgroundColor: '#C5A059',
+                        pointHoverBackgroundColor: '#C5A039',
                         borderDash: [6, 3],
                         order: 2,
                     },
@@ -1229,18 +1248,18 @@
                 },
                 scales: {
                     x: {
-                        grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+                        grid: { color: 'rgba(0, 0, 0, .05)', drawBorder: false },
                         border: { display: false },
-                        ticks: { color: 'rgba(255,255,255,.3)', font: { size: 10 } }
+                        ticks: { color: 'rgba(24, 24, 27, .45)', font: { size: 10 } }
                     },
                     y: {
                         min: 0,
                         max: 55,
-                        grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+                        grid: { color: 'rgba(0, 0, 0, .05)', drawBorder: false },
                         border: { display: false },
                         ticks: {
                             stepSize: 10,
-                            color: 'rgba(255,255,255,.3)',
+                            color: 'rgba(24, 24, 27, .45)',
                             font: { size: 10 },
                             callback: v => v + '%'
                         }
@@ -1259,21 +1278,21 @@
                     const tw = ctx.measureText(txt).width;
                     const bw = tw + 14, bh = 20;
                     const bx = pt.x - bw / 2, by = pt.y - 28;
-                    ctx.fillStyle = 'rgba(209,213,219,.15)';
+                    ctx.fillStyle = 'rgba(0, 0, 0, .05)';
                     ctx.beginPath();
                     ctx.roundRect(bx, by, bw, bh, 8);
                     ctx.fill();
-                    ctx.fillStyle = '#D1D5DB';
+                    ctx.fillStyle = 'var(--text-dark)';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText(txt, pt.x, by + bh / 2);
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(209,213,219,.25)';
+                    ctx.fillStyle = 'rgba(0, 0, 0, .1)';
                     ctx.fill();
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
-                    ctx.fillStyle = '#D1D5DB';
+                    ctx.fillStyle = 'var(--text-dark)';
                     ctx.fill();
                     ctx.restore();
                 }
@@ -1314,11 +1333,11 @@
                     {
                         label: 'Louis Vuitton',
                         data: [70, 90, 68, 72, 88],
-                        borderColor: '#C5A059',
-                        backgroundColor: 'rgba(197,160,89,.15)',
+                        borderColor: '#C5A039',
+                        backgroundColor: 'rgba(197,160,57,.15)',
                         borderWidth: 2,
-                        pointBackgroundColor: '#C5A059',
-                        pointBorderColor: '#C5A059',
+                        pointBackgroundColor: '#C5A039',
+                        pointBorderColor: '#C5A039',
                         pointRadius: 3,
                         pointHoverRadius: 5,
                     },
@@ -1361,13 +1380,13 @@
                         ticks: {
                             stepSize: 25,
                             showLabelBackdrop: false,
-                            color: 'rgba(255,255,255,.15)',
+                            color: 'rgba(24, 24, 27, .3)',
                             font: { size: 8 }
                         },
-                        grid: { color: 'rgba(255,255,255,.06)' },
-                        angleLines: { color: 'rgba(255,255,255,.06)' },
+                        grid: { color: 'rgba(0, 0, 0, .08)' },
+                        angleLines: { color: 'rgba(0, 0, 0, .08)' },
                         pointLabels: {
-                            color: 'rgba(255,255,255,.5)',
+                            color: 'rgba(24, 24, 27, .65)',
                             font: { size: 10, weight: 600 },
                             padding: 12
                         }
@@ -1447,10 +1466,10 @@
                     x: {
                         stacked: true,
                         max: 100,
-                        grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+                        grid: { color: 'rgba(0, 0, 0, .05)', drawBorder: false },
                         border: { display: false },
                         ticks: {
-                            color: 'rgba(255,255,255,.25)',
+                            color: 'rgba(24, 24, 27, .4)',
                             font: { size: 10 },
                             callback: v => v + '%'
                         }
@@ -1460,7 +1479,7 @@
                         grid: { display: false },
                         border: { display: false },
                         ticks: {
-                            color: 'rgba(255,255,255,.5)',
+                            color: 'rgba(24, 24, 27, .65)',
                             font: { size: 12, weight: 600 },
                             padding: 8
                         }
