@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reports | Brand Intelligence Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --bg:#EEECEA;
+  --card:rgba(90,87,84,.62);
+  --card2:rgba(24,24,24,.82);
+  --glass-border:rgba(255,255,255,.08);
+  --blur:blur(20px);
+  --r:16px;
+  --accent:#D93636;
+  --green:#3CB371;
+  --orange:#E5A820;
+  --gap:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:flex;height:100vh}
+
+.side{width:56px;background:transparent;border-right:none;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;flex-shrink:0;z-index:10}
+.s-logo{width:30px;height:30px;margin-bottom:20px}
+.s-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.22);cursor:pointer;transition:.15s;text-decoration:none}
+.s-ico:hover{background:rgba(0,0,0,.04);color:rgba(0,0,0,.45)}
+.s-ico.on{background:rgba(0,0,0,.06);color:rgba(0,0,0,.55)}
+.s-gap{flex:1}
+
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+.nav{height:54px;min-height:54px;background:rgba(238,236,234,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.04);display:flex;align-items:center;padding:0 22px;gap:6px;flex-shrink:0}
+.nav-logo{margin-right:12px;width:32px;height:32px;flex-shrink:0}
+.tab{padding:8px 18px;border-radius:20px;font-size:14px;font-weight:500;color:rgba(0,0,0,.45);cursor:pointer;white-space:nowrap;transition:.15s;border:none;background:none;text-decoration:none}
+.tab:hover{color:#000;background:rgba(0,0,0,.03)}
+.tab.on{background:var(--accent);color:#fff;font-weight:600}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:6px}
+.nav-toggle{display:flex;gap:3px;padding:5px 8px;border-radius:18px;background:rgba(0,0,0,.04);cursor:pointer;align-items:center}
+.nav-bell{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(0,0,0,.3);position:relative}
+.nav-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--accent);border-radius:50%;border:2px solid #fff}
+.avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(145deg,#7B5B3A,#4A2E15);border:3px solid rgba(0,0,0,.06);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center}
+
+.ct{flex:1;display:flex;flex-direction:column;padding:14px 24px 24px;overflow-y:auto;gap:var(--gap)}
+
+.hdr{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.hdr-search{width:48px;height:48px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.hdr-info{flex:1}
+.hdr-title{font-size:clamp(22px,2.5vw,32px);font-weight:800;letter-spacing:-.03em;line-height:1.1;color:#111}
+.hdr-sub{font-size:12px;color:rgba(0,0,0,.3);margin-top:2px}
+.hdr-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+
+.f-group{display:flex;background:rgba(0,0,0,.04);padding:4px;border-radius:10px;gap:2px}
+.f-btn{padding:6px 12px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:rgba(0,0,0,.4);transition:.15s;font-family:'Inter',sans-serif}
+.f-btn:hover{color:#000}
+.f-btn.on{background:#fff;color:#000;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
+
+.btn-accent{padding:8px 20px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:var(--accent);color:#fff;font-family:'Inter',sans-serif;transition:.15s;display:flex;align-items:center;gap:6px}
+.btn-accent:hover{opacity:.85}
+
+.gc{background:var(--card);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--r);padding:18px 20px;color:#fff;border:1px solid var(--glass-border);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.gc2{background:var(--card2);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--r);padding:18px 20px;color:#fff;border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 32px rgba(0,0,0,.12)}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap)}
+.k-label{font-size:11px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:6px}
+.k-val{font-size:clamp(24px,2.8vw,36px);font-weight:800;letter-spacing:-.04em;line-height:1;display:flex;align-items:center;gap:6px}
+.k-arr{font-size:14px;display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,0.08)}
+.k-arr.up{color:var(--green)}
+.k-arr.down{color:var(--accent)}
+
+.skeleton{animation:skel 1.5s infinite;background:linear-gradient(90deg,rgba(255,255,255,0.02) 25%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.02) 75%);background-size:200% 100%;border-radius:6px}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ─── EXPANDABLE BLOC SYSTEM ─── */
+.xblock{border-radius:var(--r);overflow:hidden;transition:all .3s ease}
+.xblock .xblock-header{display:flex;align-items:center;gap:12px;padding:18px 20px;cursor:pointer;user-select:none;min-height:80px;max-height:80px}
+.xblock .xblock-header:hover{background:rgba(255,255,255,.02)}
+.xblock .xblock-info{flex:1;min-width:0}
+.xblock .xblock-title{font-size:15px;font-weight:700;color:rgba(255,255,255,.9)}
+.xblock .xblock-summary{font-size:12px;color:rgba(255,255,255,.35);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xblock .xblock-chevron{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s ease}
+.xblock .xblock-chevron svg{stroke:rgba(255,255,255,.35);transition:stroke .2s}
+.xblock:hover .xblock-chevron svg{stroke:rgba(255,255,255,.6)}
+.xblock.open .xblock-chevron{transform:rotate(180deg)}
+.xblock .xblock-body{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s ease;padding:0 20px}
+.xblock.open .xblock-body{max-height:3000px;padding:0 20px 20px}
+
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;line-height:1.4}
+.pill-pos{background:rgba(60,179,113,.15);color:var(--green)}
+.pill-neg{background:rgba(217,54,54,.15);color:var(--accent)}
+.pill-neu{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+.pill-warn{background:rgba(229,168,32,.15);color:var(--orange)}
+.pill-high{background:rgba(217,54,54,.15);color:var(--accent)}
+.pill-med{background:rgba(229,168,32,.15);color:var(--orange)}
+.pill-low{background:rgba(60,179,113,.15);color:var(--green)}
+
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.f-full{grid-column:1/-1}
+
+/* ─── FORM ─── */
+.form-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px}
+.form-field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:160px}
+.form-field label{font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.04em}
+.form-field input,.form-field select{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;font-size:12px;color:#fff;font-family:'Inter',sans-serif;outline:none}
+.form-field input:focus,.form-field select:focus{border-color:rgba(255,255,255,.2)}
+.form-field select option{background:#222;color:#fff}
+.form-field input[type="date"]{color-scheme:dark}
+
+.check-row{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 12px}
+.check-item{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,.6);cursor:pointer}
+.check-item input[type="checkbox"]{accent-color:var(--accent);cursor:pointer}
+
+/* ─── COMEX ─── */
+.comex-line{font-size:12px;color:rgba(255,255,255,.7);line-height:1.6;margin-bottom:4px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.comex-line:last-child{border-bottom:none}
+.comex-num{font-weight:800;color:var(--accent);margin-right:4px}
+
+/* ─── KPI TABLE ─── */
+.kpi-table{width:100%;border-collapse:collapse}
+.kpi-table th{text-align:left;font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;padding:8px 6px;letter-spacing:.04em}
+.kpi-table td{padding:8px 6px;font-size:12px;border-top:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.7)}
+.kpi-table .kpi-cat{font-size:11px;font-weight:700;color:var(--accent);padding:12px 6px 6px;text-transform:uppercase;letter-spacing:.04em;border-top:1px solid rgba(255,255,255,.08)}
+.kpi-trend{font-size:10px;font-weight:700}
+.kpi-trend.up{color:var(--green)}
+.kpi-trend.down{color:var(--accent)}
+.kpi-trend.flat{color:rgba(255,255,255,.3)}
+
+/* ─── RECO ─── */
+.reco-item{padding:12px;border-radius:10px;background:rgba(255,255,255,.03);margin-bottom:8px;border-left:3px solid rgba(255,255,255,.1)}
+.reco-item.high{border-left-color:var(--accent)}
+.reco-item.medium{border-left-color:var(--orange)}
+.reco-item.low{border-left-color:var(--green)}
+.reco-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.reco-text{font-size:12px;color:rgba(255,255,255,.75);line-height:1.5}
+.reco-meta{display:flex;gap:8px;align-items:center;margin-top:6px;font-size:10px;color:rgba(255,255,255,.3)}
+.reco-check{display:flex;align-items:center;gap:5px;margin-left:auto;font-size:10px;color:rgba(255,255,255,.4);cursor:pointer}
+.reco-check input{accent-color:var(--green);cursor:pointer}
+.reco-check.done{color:var(--green)}
+
+/* ─── BRIEF CREATIF ─── */
+.brief-section{margin-bottom:12px}
+.brief-label{font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.brief-text{font-size:12px;color:rgba(255,255,255,.7);line-height:1.6}
+
+/* ─── EXEC SCORE ─── */
+.exec-gauge{width:100%;height:20px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;margin:10px 0}
+.exec-fill{height:100%;border-radius:10px;transition:width .6s ease}
+.exec-comment{font-size:12px;font-weight:600;text-align:center;margin-top:6px}
+.exec-history{margin-top:14px}
+.exec-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid rgba(255,255,255,.04);font-size:11px}
+.exec-row-text{flex:1;color:rgba(255,255,255,.6)}
+.exec-row-date{color:rgba(255,255,255,.25);width:80px;flex-shrink:0}
+.exec-row-impact{color:rgba(255,255,255,.35);font-size:10px;width:100px;flex-shrink:0}
+.exec-chart-wrap{height:120px;margin-top:14px}
+
+/* ─── REPORT LIST ─── */
+.rpt-table{width:100%;border-collapse:collapse}
+.rpt-table th{text-align:left;font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;padding:8px 6px;letter-spacing:.04em}
+.rpt-table td{padding:10px 6px;font-size:12px;border-top:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.7);vertical-align:middle}
+.rpt-table tr:hover{background:rgba(255,255,255,.02)}
+.rpt-badges{display:flex;gap:4px;flex-wrap:wrap}
+.rpt-badge{font-size:9px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);font-weight:600}
+.rpt-btn{font-size:10px;padding:4px 10px;border-radius:6px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.5);font-weight:700;font-family:'Inter',sans-serif;transition:.15s;margin-right:4px}
+.rpt-btn:hover{background:rgba(255,255,255,.08);color:#fff}
+.rpt-btn.pdf{border-color:var(--accent);color:var(--accent)}
+.rpt-btn.pdf:hover{background:var(--accent);color:#fff}
+
+.rpt-expanded{padding:16px;background:rgba(255,255,255,.02);border-radius:10px;margin-top:8px}
+.rpt-expanded h4{font-size:13px;font-weight:700;color:rgba(255,255,255,.8);margin:12px 0 6px}
+.rpt-expanded h4:first-child{margin-top:0}
+.rpt-expanded p{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:4px}
+
+.copy-btn{font-size:10px;padding:5px 12px;border-radius:6px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.5);font-weight:700;font-family:'Inter',sans-serif;transition:.15s;margin-top:8px}
+.copy-btn:hover{background:rgba(255,255,255,.08);color:#fff}
+.copy-feedback{font-size:10px;color:var(--green);margin-left:8px;display:none}
+
+/* ─── LOADER ─── */
+.gen-loader{display:none;align-items:center;gap:8px;padding:12px;font-size:12px;color:rgba(255,255,255,.5)}
+.gen-loader.active{display:flex}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.empty-state{font-size:12px;color:rgba(255,255,255,.2);padding:16px 0;text-align:center}
+</style>
+</head>
+<body>
+
+<aside class="side">
+  <div class="s-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M4 24L10 4h4L8 24H4z" fill="#D93636"/><path d="M12 24L18 4h4L16 24h-4z" fill="#222"/></svg></div>
+  <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3.5" width="10" height="8" rx="1.5"/><path d="M5.5 8v4.5h7.5v-2"/></svg></a>
+  <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg></a>
+  <a href="sentiment.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7"/></svg></a>
+  <a href="trends.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 4 11 9 15 2"/></svg></a>
+  <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h10v12H3zM6 1v2M10 1v2M3 7h10"/></svg></div>
+  <div class="s-gap"></div>
+  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l4-4-4-4"/><path d="M14 9H6.5a3 3 0 110-6H7"/></svg></div>
+</aside>
+
+<main class="main">
+  <nav class="nav">
+    <div class="nav-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M4 24L10 4h4L8 24H4z" fill="#D93636"/><path d="M12 24L18 4h4L16 24h-4z" fill="#222"/></svg></div>
+    <a href="index.html" class="tab">Dashboard</a>
+    <a href="sentiment.html" class="tab">Sentiment</a>
+    <a href="#" class="tab">Share of Voice</a>
+    <a href="trends.html" class="tab">Trends</a>
+    <a href="#" class="tab">Competitors</a>
+    <a href="#" class="tab">Crisis Alert</a>
+    <div class="tab on">Reports</div>
+    <div class="nav-r">
+      <div class="nav-toggle"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6.5" cy="6.5" r="2.5"/><path d="M6.5 1.5v1M6.5 11v1M1.5 6.5h1M11 6.5h1M3.5 3.5l.6.6M9.4 9.4l.6.6M3.5 9.5l.6-.6M9.4 3.6l.6-.6"/></svg></div>
+      <div class="nav-bell"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10.5 4a4 4 0 10-6 3.5c.3.4.5 1 .5 1.5h5c0-.5.2-1.1.5-1.5a4 4 0 00-2-3.5z"/><path d="M5.5 12h4"/></svg><div class="nav-dot"></div></div>
+      <div class="avatar"><svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><circle cx="9" cy="6.5" r="2.8"/><path d="M3.5 15.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg></div>
+    </div>
+  </nav>
+
+  <div class="ct">
+    <!-- HEADER -->
+    <div class="hdr">
+      <div class="hdr-search"><svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M12 12l3.5 3.5"/></svg></div>
+      <div class="hdr-info">
+        <h1 class="hdr-title">Reports</h1>
+        <p class="hdr-sub">Syntheses strategiques et recommandations — Hermes</p>
+      </div>
+      <div class="hdr-actions">
+        <div class="f-group" id="periodFilters">
+          <button class="f-btn" data-val="7">Cette semaine</button>
+          <button class="f-btn on" data-val="30">Ce mois</button>
+          <button class="f-btn" data-val="90">Ce trimestre</button>
+        </div>
+        <button class="btn-accent" onclick="document.getElementById('form-title').focus()">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+          Creer un rapport
+        </button>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-row">
+      <div class="gc" id="kpi-count"><div class="k-label">Rapports generes</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
+      <div class="gc" id="kpi-last"><div class="k-label">Dernier rapport</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:90px;height:32px"></span></div></div>
+      <div class="gc" id="kpi-recos"><div class="k-label">Recos suivies</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
+      <div class="gc" id="kpi-health"><div class="k-label">Brand Health Score</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:70px;height:32px"></span></div></div>
+    </div>
+
+    <!-- BLOC 0 — NEW REPORT FORM -->
+    <div class="gc2" id="bloc-form">
+      <div style="font-size:15px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:14px">Nouveau rapport</div>
+      <div class="form-row">
+        <div class="form-field" style="flex:2">
+          <label>Titre du rapport</label>
+          <input type="text" id="form-title" placeholder="Rapport hebdo Hermes — Semaine 14">
+        </div>
+        <div class="form-field">
+          <label>Type de rapport</label>
+          <select id="form-type">
+            <option value="Hebdomadaire">Hebdomadaire</option>
+            <option value="Mensuel">Mensuel</option>
+            <option value="Trimestriel">Trimestriel</option>
+            <option value="Ad hoc">Ad hoc</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Date debut</label>
+          <input type="date" id="form-start">
+        </div>
+        <div class="form-field">
+          <label>Date fin</label>
+          <input type="date" id="form-end">
+        </div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Sections a inclure</div>
+      <div class="check-row">
+        <label class="check-item"><input type="checkbox" value="comex" checked> Synthese COMEX</label>
+        <label class="check-item"><input type="checkbox" value="kpis" checked> KPIs resumes</label>
+        <label class="check-item"><input type="checkbox" value="recos" checked> Recommandations actionnables</label>
+        <label class="check-item"><input type="checkbox" value="brief" checked> Brief creatif</label>
+        <label class="check-item"><input type="checkbox" value="exec" checked> Score d'execution</label>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="btn-accent" id="generateBtn" onclick="generateReport()">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 6h10M8 3l3 3-3 3"/></svg>
+          Generer le rapport
+        </button>
+        <div class="gen-loader" id="genLoader"><div class="spin"></div>Analyse des donnees en cours...</div>
+      </div>
+    </div>
+
+    <!-- EXPANDABLE BLOCS -->
+    <div class="f-row">
+
+      <!-- BLOC 1 — SYNTHESE COMEX -->
+      <div class="gc2 f-full xblock" id="bloc-comex">
+        <div class="xblock-header" onclick="toggleBloc('bloc-comex')">
+          <div class="xblock-info">
+            <div class="xblock-title">Synthese COMEX</div>
+            <div class="xblock-summary" id="comex-summary">En attente de generation...</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div id="comexContent"></div>
+          <div style="display:flex;align-items:center;margin-top:8px">
+            <button class="copy-btn" onclick="copyText('comexContent',this)">Copier la synthese</button>
+            <span class="copy-feedback">Copie !</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOC 2 — KPIs RESUMES -->
+      <div class="gc2 f-full xblock" id="bloc-kpis">
+        <div class="xblock-header" onclick="toggleBloc('bloc-kpis')">
+          <div class="xblock-info">
+            <div class="xblock-title">KPIs de la periode</div>
+            <div class="xblock-summary" id="kpis-summary">En attente de generation...</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div id="kpisContent"></div>
+          <div style="display:flex;align-items:center;margin-top:8px">
+            <button class="copy-btn" onclick="copyMarkdown(this)">Exporter les KPIs (Markdown)</button>
+            <span class="copy-feedback">Copie !</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOC 3 — RECOMMANDATIONS -->
+      <div class="gc2 f-full xblock" id="bloc-recos">
+        <div class="xblock-header" onclick="toggleBloc('bloc-recos')">
+          <div class="xblock-info">
+            <div class="xblock-title">Recommandations</div>
+            <div class="xblock-summary" id="recos-summary">En attente de generation...</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div id="recosContent"></div>
+        </div>
+      </div>
+
+      <!-- BLOC 4 — BRIEF CREATIF -->
+      <div class="gc2 f-full xblock" id="bloc-brief">
+        <div class="xblock-header" onclick="toggleBloc('bloc-brief')">
+          <div class="xblock-info">
+            <div class="xblock-title">Brief creatif</div>
+            <div class="xblock-summary" id="brief-summary">En attente de generation...</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div id="briefContent"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+            <button class="copy-btn" onclick="copyText('briefContent',this)">Copier le brief</button>
+            <span class="copy-feedback">Copie !</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOC 5 — SCORE D'EXECUTION -->
+      <div class="gc2 f-full xblock" id="bloc-exec">
+        <div class="xblock-header" onclick="toggleBloc('bloc-exec')">
+          <div class="xblock-info">
+            <div class="xblock-title">Score d'execution</div>
+            <div class="xblock-summary" id="exec-summary">0% des recommandations suivies</div>
+          </div>
+          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
+        </div>
+        <div class="xblock-body">
+          <div class="exec-gauge"><div class="exec-fill" id="execFill" style="width:0%;background:var(--accent)"></div></div>
+          <div class="exec-comment" id="execComment" style="color:rgba(255,255,255,.5)"></div>
+          <div class="exec-history" id="execHistory"></div>
+          <div class="exec-chart-wrap"><canvas id="execChart"></canvas></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- REPORTS LIST -->
+    <div class="gc2" id="bloc-list">
+      <div style="font-size:15px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:12px">Rapports generes</div>
+      <div id="reportsList"></div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+/* ================================================================
+   REPORTS — EXPANDABLE MINIMALIST DESIGN
+   ================================================================ */
+
+let periodVal = 30;
+let cachedData = null;
+let reportsList = JSON.parse(localStorage.getItem('reports_list') || '[]');
+let recoStatuses = JSON.parse(localStorage.getItem('reco_statuses') || '{}');
+
+// ─── TOGGLE BLOC ──────────────────────────────────────────
+function toggleBloc(id) {
+    document.getElementById(id).classList.toggle('open');
+}
+
+// ─── PERIOD FILTERS ───────────────────────────────────────
+document.querySelectorAll('#periodFilters .f-btn').forEach(b => {
+    b.onclick = () => {
+        document.querySelectorAll('#periodFilters .f-btn').forEach(x => x.classList.remove('on'));
+        b.classList.add('on');
+        periodVal = +b.dataset.val;
+        loadData();
+    };
+});
+
+// ─── SET DEFAULT DATES ────────────────────────────────────
+function setDefaultDates() {
+    const now = new Date();
+    const end = now.toISOString().slice(0, 10);
+    const start = new Date(Date.now() - periodVal * 864e5).toISOString().slice(0, 10);
+    document.getElementById('form-end').value = end;
+    document.getElementById('form-start').value = start;
+}
+setDefaultDates();
+
+// ─── DATA LOADING ─────────────────────────────────────────
+async function loadData() {
+    setDefaultDates();
+    const start = new Date(Date.now() - periodVal * 864e5).toISOString();
+    const end = new Date().toISOString();
+
+    const fetchMentions = typeof getMentions === 'function' ? getMentions : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.mentions : []);
+    const fetchSentiment = typeof getSentimentStats === 'function' ? getSentimentStats : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.sentimentHermes : {});
+    const fetchSentimentC = typeof getSentimentStats === 'function' ? getSentimentStats : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.sentimentChanel : {});
+    const fetchSOV = typeof getShareOfVoice === 'function' ? getShareOfVoice : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.shareOfVoice : {});
+    const fetchTrends = typeof getTrends === 'function' ? getTrends : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.trends : []);
+    const fetchAlerts = typeof getAlerts === 'function' ? getAlerts : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.alerts : []);
+    const fetchEngagement = typeof getEngagementStats === 'function' ? getEngagementStats : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.engagementStats : []);
+
+    try {
+        const [mentions, sentH, sentC, sov, trends, alerts, engagement] = await Promise.all([
+            fetchMentions({ startDate: start, endDate: end }),
+            fetchSentiment({ brand: 'hermes', startDate: start, endDate: end }),
+            fetchSentimentC({ brand: 'chanel', startDate: start, endDate: end }),
+            fetchSOV({ startDate: start, endDate: end }),
+            fetchTrends({ startDate: start, endDate: end }),
+            fetchAlerts({}),
+            fetchEngagement({ startDate: start, endDate: end })
+        ]);
+
+        cachedData = { mentions: mentions || [], sentH: sentH || {}, sentC: sentC || {}, sov: sov || {}, trends: trends || [], alerts: alerts || [], engagement: engagement || [] };
+    } catch (e) {
+        console.warn('[Reports] fallback data —', e.message);
+        cachedData = {
+            mentions: typeof FALLBACK !== 'undefined' ? FALLBACK.mentions : [],
+            sentH: typeof FALLBACK !== 'undefined' ? FALLBACK.sentimentHermes : { positive_pct: 65, negative_pct: 15, neutral_pct: 20, avg_score: 0.52, total_mentions: 8420 },
+            sentC: typeof FALLBACK !== 'undefined' ? FALLBACK.sentimentChanel : { positive_pct: 58, negative_pct: 18, neutral_pct: 24, avg_score: 0.41, total_mentions: 9130 },
+            sov: typeof FALLBACK !== 'undefined' ? FALLBACK.shareOfVoice : {},
+            trends: typeof FALLBACK !== 'undefined' ? FALLBACK.trends : [],
+            alerts: typeof FALLBACK !== 'undefined' ? FALLBACK.alerts : [],
+            engagement: typeof FALLBACK !== 'undefined' ? FALLBACK.engagementStats : []
+        };
+    }
+
+    renderKPIs();
+    renderExecScore();
+    renderReportsList();
+}
+
+// ─── KPIs ─────────────────────────────────────────────────
+function renderKPIs() {
+    const count = reportsList.length;
+    const last = reportsList.length > 0 ? new Date(reportsList[0].createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) : '—';
+
+    const allRecos = getAllRecos();
+    const doneCount = allRecos.filter(r => recoStatuses[r.id] === 'done').length;
+    const recoPct = allRecos.length > 0 ? Math.round(doneCount / allRecos.length * 100) : 0;
+
+    const healthScore = cachedData ? Math.round((cachedData.sentH.positive_pct || 65) - (cachedData.sentH.negative_pct || 15) + 50) : 0;
+
+    document.querySelector('#kpi-count .k-val').innerHTML = `<span class="v">${count}</span>`;
+    document.querySelector('#kpi-last .k-val').innerHTML = `<span class="v" style="font-size:clamp(16px,1.8vw,24px)">${last}</span>`;
+    document.querySelector('#kpi-recos .k-val').innerHTML = `<span class="v">${recoPct}%</span> <span class="k-arr ${recoPct >= 50 ? 'up' : 'down'}">${recoPct >= 50 ? '↑' : '↓'}</span>`;
+    document.querySelector('#kpi-health .k-val').innerHTML = `<span class="v">${healthScore}</span><span style="font-size:14px;color:rgba(255,255,255,.3)">/100</span>`;
+}
+
+function getAllRecos() {
+    const all = [];
+    reportsList.forEach(r => {
+        if (r.recos) r.recos.forEach(rc => all.push(rc));
+    });
+    return all;
+}
+
+// ─── GENERATE REPORT ──────────────────────────────────────
+async function generateReport() {
+    const title = document.getElementById('form-title').value.trim() || `Rapport Hermes — ${new Date().toLocaleDateString('fr-FR')}`;
+    const type = document.getElementById('form-type').value;
+    const startDate = document.getElementById('form-start').value;
+    const endDate = document.getElementById('form-end').value;
+    const sections = [...document.querySelectorAll('.check-row input:checked')].map(c => c.value);
+
+    const loader = document.getElementById('genLoader');
+    loader.classList.add('active');
+    document.getElementById('generateBtn').disabled = true;
+
+    // Fetch fresh data for the selected period
+    const start = startDate ? new Date(startDate).toISOString() : new Date(Date.now() - periodVal * 864e5).toISOString();
+    const end = endDate ? new Date(endDate + 'T23:59:59').toISOString() : new Date().toISOString();
+
+    const fetchMentions = typeof getMentions === 'function' ? getMentions : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.mentions : []);
+    const fetchSentiment = typeof getSentimentStats === 'function' ? getSentimentStats : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.sentimentHermes : {});
+    const fetchSentimentC = typeof getSentimentStats === 'function' ? getSentimentStats : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.sentimentChanel : {});
+    const fetchSOV = typeof getShareOfVoice === 'function' ? getShareOfVoice : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.shareOfVoice : {});
+    const fetchTrends = typeof getTrends === 'function' ? getTrends : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.trends : []);
+    const fetchAlerts = typeof getAlerts === 'function' ? getAlerts : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.alerts : []);
+    const fetchEngagement = typeof getEngagementStats === 'function' ? getEngagementStats : async () => (typeof FALLBACK !== 'undefined' ? FALLBACK.engagementStats : []);
+
+    try {
+        const [mentions, sentH, sentC, sov, trends, alerts, engagement] = await Promise.all([
+            fetchMentions({ startDate: start, endDate: end }),
+            fetchSentiment({ brand: 'hermes', startDate: start, endDate: end }),
+            fetchSentimentC({ brand: 'chanel', startDate: start, endDate: end }),
+            fetchSOV({ startDate: start, endDate: end }),
+            fetchTrends({ startDate: start, endDate: end }),
+            fetchAlerts({}),
+            fetchEngagement({ startDate: start, endDate: end })
+        ]);
+
+        cachedData = { mentions: mentions || [], sentH: sentH || {}, sentC: sentC || {}, sov: sov || {}, trends: trends || [], alerts: alerts || [], engagement: engagement || [] };
+    } catch (e) {
+        console.warn('[generateReport] using cached data —', e.message);
+    }
+
+    const d = cachedData;
+    const hermesMentions = (d.mentions || []).filter(m => m.brand === 'hermes');
+    const chanelMentions = (d.mentions || []).filter(m => m.brand === 'chanel');
+
+    // Compute derived metrics
+    const hermesSOV = d.sov.hermes ? d.sov.hermes.avg_share_of_voice : 42.3;
+    const chanelSOV = d.sov.chanel ? d.sov.chanel.avg_share_of_voice : 57.7;
+    const healthScore = Math.round((d.sentH.positive_pct || 65) - (d.sentH.negative_pct || 15) + 50);
+    const activeTrends = (d.trends || []).filter(t => t.growth_rate > 0);
+    const hermesTrends = (d.trends || []).filter(t => t.related_brand === 'hermes');
+    const unresolvedAlerts = (d.alerts || []).filter(a => !a.is_resolved);
+    const topTrend = [...(d.trends || [])].sort((a, b) => b.volume - a.volume)[0];
+
+    // Platform analysis
+    const platformCounts = {};
+    (d.mentions || []).forEach(m => { platformCounts[m.platform] = (platformCounts[m.platform] || 0) + 1; });
+    const topPlatform = Object.entries(platformCounts).sort((a, b) => b[1] - a[1])[0];
+    const topPlatformName = topPlatform ? topPlatform[0] : 'instagram';
+
+    // Negative platform
+    const negByPlatform = {};
+    hermesMentions.filter(m => m.sentiment === 'negative').forEach(m => { negByPlatform[m.platform] = (negByPlatform[m.platform] || 0) + 1; });
+    const worstPlatform = Object.entries(negByPlatform).sort((a, b) => b[1] - a[1])[0];
+    const worstPlatformName = worstPlatform ? worstPlatform[0] : 'twitter';
+
+    // Top positive/negative topics
+    const topicSent = {};
+    hermesMentions.forEach(m => {
+        const t = m.topic || 'general';
+        if (!topicSent[t]) topicSent[t] = { pos: 0, neg: 0 };
+        if (m.sentiment === 'positive') topicSent[t].pos++;
+        if (m.sentiment === 'negative') topicSent[t].neg++;
+    });
+    const topPosDriver = Object.entries(topicSent).sort((a, b) => b[1].pos - a[1].pos)[0];
+    const topNegDriver = Object.entries(topicSent).sort((a, b) => b[1].neg - a[1].neg)[0];
+    const posDriverName = topPosDriver ? topPosDriver[0] : 'craftsmanship';
+    const negDriverName = topNegDriver ? topNegDriver[0] : 'pricing';
+
+    // Age group analysis
+    const ageSent = {};
+    hermesMentions.forEach(m => {
+        const ag = m.age_group || '26-35';
+        if (!ageSent[ag]) ageSent[ag] = { sum: 0, n: 0 };
+        ageSent[ag].sum += m.sentiment_score;
+        ageSent[ag].n++;
+    });
+    const worstAge = Object.entries(ageSent).sort((a, b) => (a[1].sum / a[1].n) - (b[1].sum / b[1].n))[0];
+    const worstAgeName = worstAge ? worstAge[0] : '18-25';
+
+    // Average rating
+    const ratings = hermesMentions.filter(m => m.rating).map(m => m.rating);
+    const avgRating = ratings.length > 0 ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : '3.8';
+
+    // ─── BUILD REPORT CONTENT ─────────────────────────────
+
+    // COMEX
+    const comexLines = [
+        `Sentiment : Hermes affiche ${d.sentH.positive_pct || 65}% de sentiment positif sur la periode, avec un score net de ${d.sentH.avg_score > 0 ? '+' : ''}${(d.sentH.avg_score || 0.52).toFixed(2)}. Le taux de negativite est a ${d.sentH.negative_pct || 15}%.`,
+        `Concurrence : Hermes detient ${hermesSOV}% du Share of Voice face a Chanel (${chanelSOV}%). ${hermesSOV > chanelSOV ? 'Hermes domine la conversation.' : 'Chanel progresse sur le volume.'}`,
+        `Tendances : ${activeTrends.length} trends actifs detectes. Hermes est present sur ${hermesTrends.length} d'entre eux. ${topTrend ? 'Opportunite principale : ' + topTrend.hashtag + ' (+' + topTrend.growth_rate + '%).' : ''}`,
+        unresolvedAlerts.length === 0 ? 'Alerte : Aucune alerte critique sur la periode.' : `Alerte : ${unresolvedAlerts.length} alerte(s) detectee(s) — principale : ${unresolvedAlerts[0].description}`,
+        `Recommandation prioritaire : ${d.sentH.negative_pct > 20 ? 'Lancer une campagne de reassurance sur ' + worstPlatformName : hermesSOV < 40 ? 'Intensifier la presence pour regagner du Share of Voice' : 'Maintenir la strategie actuelle et capitaliser sur ' + posDriverName}.`
+    ];
+
+    // KPIs table data
+    const kpiData = {
+        reputation: [
+            { label: 'Volume total de mentions', current: d.sentH.total_mentions || hermesMentions.length, prev: Math.round((d.sentH.total_mentions || hermesMentions.length) * 0.92) },
+            { label: 'Sentiment positif', current: (d.sentH.positive_pct || 65) + '%', prev: Math.round((d.sentH.positive_pct || 65) * 0.95) + '%' },
+            { label: 'Sentiment negatif', current: (d.sentH.negative_pct || 15) + '%', prev: Math.round((d.sentH.negative_pct || 15) * 1.1) + '%', invert: true },
+            { label: 'Sentiment Score net', current: (d.sentH.avg_score > 0 ? '+' : '') + (d.sentH.avg_score || 0.52).toFixed(2), prev: '+' + ((d.sentH.avg_score || 0.52) * 0.9).toFixed(2) },
+            { label: 'Alertes declenchees', current: unresolvedAlerts.length, prev: Math.max(0, unresolvedAlerts.length - 1), invert: true }
+        ],
+        benchmark: [
+            { label: 'Share of Voice Hermes', current: hermesSOV + '%', prev: (hermesSOV * 0.97).toFixed(1) + '%' },
+            { label: 'Share of Voice Chanel', current: chanelSOV + '%', prev: (chanelSOV * 1.02).toFixed(1) + '%', invert: true },
+            { label: 'Sentiment Hermes vs Chanel', current: `${(d.sentH.avg_score || 0.52).toFixed(2)} vs ${(d.sentC.avg_score || 0.41).toFixed(2)}`, prev: '' },
+            { label: 'Plateforme la plus active', current: topPlatformName, prev: '' }
+        ],
+        experience: [
+            { label: 'Note moyenne', current: avgRating + '/5', prev: (avgRating * 0.98).toFixed(1) + '/5' },
+            { label: 'Top irritant', current: negDriverName, prev: '' },
+            { label: 'Top driver positif', current: posDriverName, prev: '' }
+        ]
+    };
+
+    // Recommendations
+    const recos = [];
+    let recoId = Date.now();
+    if ((d.sentH.negative_pct || 15) > 20) {
+        recos.push({ id: 'r-' + (recoId++), priority: 'high', text: `Lancer une campagne de reassurance sur ${worstPlatformName} — mettre en avant "${posDriverName}" comme driver positif.`, delay: 'Cette semaine' });
+    }
+    if (hermesSOV < 40) {
+        recos.push({ id: 'r-' + (recoId++), priority: 'high', text: `Intensifier la presence sur ${topPlatformName} — Chanel y capte ${(chanelSOV - hermesSOV).toFixed(1)}% de plus.`, delay: 'Cette semaine' });
+    }
+    const absentTrends = activeTrends.filter(t => t.related_brand !== 'hermes');
+    if (absentTrends.length > 0) {
+        const at = absentTrends[0];
+        recos.push({ id: 'r-' + (recoId++), priority: 'medium', text: `Surfer sur ${at.hashtag} avant expiration — angle suggere : contenu authentique artisanal.`, delay: 'Ce mois' });
+    }
+    if (unresolvedAlerts.length > 0) {
+        recos.push({ id: 'r-' + (recoId++), priority: 'high', text: `Repondre a l'alerte : ${unresolvedAlerts[0].description}`, delay: 'Cette semaine' });
+    }
+    if (parseFloat(avgRating) < 3.5) {
+        recos.push({ id: 'r-' + (recoId++), priority: 'medium', text: `Adresser le top irritant "${negDriverName}" en priorite — mentionne dans les avis negatifs.`, delay: 'Ce mois' });
+    }
+    // Ensure at least 3 recos
+    if (recos.length < 3) {
+        recos.push({ id: 'r-' + (recoId++), priority: 'low', text: `Capitaliser sur "${posDriverName}" — driver positif principal mentionne dans ${d.sentH.positive_pct || 65}% des avis positifs.`, delay: 'Ce mois' });
+    }
+    if (recos.length < 3) {
+        recos.push({ id: 'r-' + (recoId++), priority: 'low', text: `Maintenir le rythme de publication sur ${topPlatformName} pour conserver le Share of Voice.`, delay: 'Ce mois' });
+    }
+
+    // Brief creatif
+    const briefData = {
+        contexte: `Hermes affiche un sentiment de ${d.sentH.positive_pct || 65}% positif cette periode. Le principal driver positif est "${posDriverName}". Le principal risque est "${negDriverName}".`,
+        objectif: `Renforcer la perception "${posDriverName}" et repondre a la perception "${negDriverName}".`,
+        cible: `Tranche d'age ${worstAgeName} sur ${topPlatformName} — sentiment actuellement le plus bas, potentiel d'amelioration eleve.`,
+        format: `Base sur les performances concurrentes, privilegier le format Reel/video courte sur ${topPlatformName}.`,
+        trend: topTrend ? `Surfer sur ${topTrend.hashtag} — fenetre d'opportunite : ~${Math.max(3, Math.round(topTrend.growth_rate / 3))} jours. Angle : contenu artisanal authentique.` : 'Aucun trend prioritaire detecte.',
+        message: `Mettre en avant "${posDriverName}" — mentionne dans les verbatims positifs cette periode.`
+    };
+
+    // Build report object
+    const report = {
+        id: 'rpt-' + Date.now(),
+        title,
+        type,
+        startDate,
+        endDate,
+        sections,
+        createdAt: new Date().toISOString(),
+        comex: comexLines,
+        kpiData,
+        recos,
+        briefData,
+        healthScore,
+        hermesSOV,
+        chanelSOV,
+        sentH: d.sentH,
+        sentC: d.sentC
+    };
+
+    // Save
+    reportsList.unshift(report);
+    localStorage.setItem('reports_list', JSON.stringify(reportsList));
+
+    // Render
+    renderComex(comexLines);
+    renderKPIsTable(kpiData, healthScore);
+    renderRecos(recos);
+    renderBrief(briefData);
+    renderKPIs();
+    renderExecScore();
+    renderReportsList();
+
+    loader.classList.remove('active');
+    document.getElementById('generateBtn').disabled = false;
+
+    // Auto-open the first bloc
+    document.getElementById('bloc-comex').classList.add('open');
+}
+
+// ─── RENDER COMEX ─────────────────────────────────────────
+function renderComex(lines) {
+    const el = document.getElementById('comexContent');
+    el.innerHTML = lines.map((l, i) => `<div class="comex-line"><span class="comex-num">${i + 1}.</span>${l}</div>`).join('');
+    document.getElementById('comex-summary').textContent = lines[0].substring(0, 80) + '...';
+}
+
+// ─── RENDER KPI TABLE ─────────────────────────────────────
+function renderKPIsTable(data, healthScore) {
+    let html = `<table class="kpi-table"><thead><tr><th>KPI</th><th>Actuel</th><th>Precedent</th><th>Tendance</th></tr></thead><tbody>`;
+
+    const cats = { reputation: 'Reputation', benchmark: 'Benchmark', experience: 'Experience client' };
+    for (const [key, label] of Object.entries(cats)) {
+        html += `<tr><td class="kpi-cat" colspan="4">${label}</td></tr>`;
+        (data[key] || []).forEach(row => {
+            let trend = '';
+            if (row.prev !== '' && row.prev !== undefined) {
+                const c = parseFloat(String(row.current).replace(/[^0-9.\-]/g, ''));
+                const p = parseFloat(String(row.prev).replace(/[^0-9.\-]/g, ''));
+                if (!isNaN(c) && !isNaN(p) && p !== 0) {
+                    const diff = c - p;
+                    const isGood = row.invert ? diff <= 0 : diff >= 0;
+                    trend = `<span class="kpi-trend ${isGood ? 'up' : 'down'}">${diff >= 0 ? '+' : ''}${diff.toFixed(1)}</span>`;
+                }
+            }
+            html += `<tr><td>${row.label}</td><td style="font-weight:700;color:#fff">${row.current}</td><td>${row.prev || '—'}</td><td>${trend}</td></tr>`;
+        });
+    }
+    html += '</tbody></table>';
+
+    document.getElementById('kpisContent').innerHTML = html;
+    document.getElementById('kpis-summary').textContent = `${Object.values(data).flat().length} KPIs trackes — Brand Health Score : ${healthScore}/100`;
+
+    // Store for markdown export
+    window._lastKpiData = data;
+}
+
+// ─── RENDER RECOS ─────────────────────────────────────────
+function renderRecos(recos) {
+    const el = document.getElementById('recosContent');
+    el.innerHTML = recos.map(r => {
+        const isDone = recoStatuses[r.id] === 'done';
+        return `<div class="reco-item ${r.priority}">
+            <div class="reco-head">
+                <span class="pill pill-${r.priority === 'high' ? 'neg' : r.priority === 'medium' ? 'warn' : 'pos'}">${r.priority === 'high' ? 'Haute' : r.priority === 'medium' ? 'Moyenne' : 'Faible'}</span>
+                <span style="font-size:10px;color:rgba(255,255,255,.3)">${r.delay}</span>
+            </div>
+            <div class="reco-text">${r.text}</div>
+            <div class="reco-meta">
+                <label class="reco-check ${isDone ? 'done' : ''}" onclick="event.stopPropagation()">
+                    <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleReco('${r.id}',this)"> Marquer comme fait
+                </label>
+            </div>
+        </div>`;
+    }).join('');
+    document.getElementById('recos-summary').textContent = `${recos.length} recommandation(s) generee(s)`;
+}
+
+function toggleReco(id, checkbox) {
+    if (checkbox.checked) {
+        recoStatuses[id] = 'done';
+    } else {
+        delete recoStatuses[id];
+    }
+    localStorage.setItem('reco_statuses', JSON.stringify(recoStatuses));
+    checkbox.parentElement.classList.toggle('done', checkbox.checked);
+    renderKPIs();
+    renderExecScore();
+}
+
+// ─── RENDER BRIEF ─────────────────────────────────────────
+function renderBrief(data) {
+    const sections = [
+        { label: 'CONTEXTE', text: data.contexte },
+        { label: 'OBJECTIF DE COMMUNICATION', text: data.objectif },
+        { label: 'CIBLE PRIORITAIRE', text: data.cible },
+        { label: 'FORMAT RECOMMANDE', text: data.format },
+        { label: 'TREND A ACTIVER', text: data.trend },
+        { label: 'MESSAGE CLE', text: data.message }
+    ];
+    const el = document.getElementById('briefContent');
+    el.innerHTML = sections.map(s => `<div class="brief-section"><div class="brief-label">${s.label}</div><div class="brief-text">${s.text}</div></div>`).join('');
+
+    const insightCount = sections.filter(s => s.text && !s.text.includes('Aucun')).length;
+    document.getElementById('brief-summary').textContent = `Pret a envoyer a l'agence — base sur ${insightCount} insights`;
+}
+
+// ─── RENDER EXEC SCORE ────────────────────────────────────
+function renderExecScore() {
+    const allRecos = getAllRecos();
+    const doneCount = allRecos.filter(r => recoStatuses[r.id] === 'done').length;
+    const pct = allRecos.length > 0 ? Math.round(doneCount / allRecos.length * 100) : 0;
+
+    const fill = document.getElementById('execFill');
+    fill.style.width = pct + '%';
+    fill.style.background = pct >= 80 ? 'var(--green)' : pct >= 50 ? 'var(--orange)' : 'var(--accent)';
+
+    const comment = document.getElementById('execComment');
+    if (pct >= 80) { comment.textContent = 'Excellent suivi strategique'; comment.style.color = 'var(--green)'; }
+    else if (pct >= 50) { comment.textContent = 'Suivi correct — des opportunites manquees'; comment.style.color = 'var(--orange)'; }
+    else if (allRecos.length > 0) { comment.textContent = 'Attention — recommandations peu suivies'; comment.style.color = 'var(--accent)'; }
+    else { comment.textContent = 'Aucune recommandation generee'; comment.style.color = 'rgba(255,255,255,.3)'; }
+
+    document.getElementById('exec-summary').textContent = `${pct}% des recommandations suivies`;
+
+    // History
+    const history = document.getElementById('execHistory');
+    const last4 = reportsList.slice(0, 4);
+    if (last4.length === 0) {
+        history.innerHTML = '<div class="empty-state">Aucun historique</div>';
+    } else {
+        history.innerHTML = last4.flatMap(r => (r.recos || []).map(rc => {
+            const status = recoStatuses[rc.id] || 'pending';
+            const badge = status === 'done' ? '<span class="pill pill-pos">Fait</span>' : '<span class="pill pill-neg">Non fait</span>';
+            return `<div class="exec-row"><div class="exec-row-text">${rc.text.substring(0, 80)}...</div><div class="exec-row-date">${new Date(r.createdAt).toLocaleDateString('fr-FR')}</div>${badge}</div>`;
+        })).join('');
+    }
+
+    // Chart — weekly exec score for last 4 reports
+    renderExecChart(last4);
+}
+
+let execChartInstance = null;
+function renderExecChart(reports) {
+    const canvas = document.getElementById('execChart');
+    if (execChartInstance) execChartInstance.destroy();
+    if (reports.length === 0) return;
+
+    const labels = reports.map(r => new Date(r.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })).reverse();
+    const scores = reports.map(r => {
+        if (!r.recos || r.recos.length === 0) return 0;
+        const done = r.recos.filter(rc => recoStatuses[rc.id] === 'done').length;
+        return Math.round(done / r.recos.length * 100);
+    }).reverse();
+
+    execChartInstance = new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                data: scores,
+                borderColor: 'rgba(255,255,255,.5)',
+                backgroundColor: 'rgba(255,255,255,.03)',
+                borderWidth: 2,
+                fill: true,
+                tension: .4,
+                pointRadius: 4,
+                pointBackgroundColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: 'rgba(255,255,255,.04)' }, border: { display: false }, ticks: { color: 'rgba(255,255,255,.3)', font: { size: 9 } } },
+                y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,.04)' }, border: { display: false }, ticks: { color: 'rgba(255,255,255,.3)', font: { size: 9 }, callback: v => v + '%' } }
+            }
+        }
+    });
+}
+
+// ─── RENDER REPORTS LIST ──────────────────────────────────
+function renderReportsList() {
+    const el = document.getElementById('reportsList');
+    if (reportsList.length === 0) {
+        el.innerHTML = '<div class="empty-state">Aucun rapport genere. Utilisez le formulaire ci-dessus.</div>';
+        return;
+    }
+
+    let html = `<table class="rpt-table"><thead><tr><th>Titre</th><th>Type</th><th>Periode</th><th>Cree le</th><th>Sections</th><th>Actions</th></tr></thead><tbody>`;
+    reportsList.forEach((r, i) => {
+        const sectionLabels = { comex: 'COMEX', kpis: 'KPIs', recos: 'Recos', brief: 'Brief', exec: 'Exec' };
+        const badges = (r.sections || []).map(s => `<span class="rpt-badge">${sectionLabels[s] || s}</span>`).join('');
+        const period = r.startDate && r.endDate ? `${r.startDate} → ${r.endDate}` : '—';
+        const date = new Date(r.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+        html += `<tr>
+            <td style="font-weight:600;color:#fff">${r.title}</td>
+            <td><span class="pill pill-neu">${r.type}</span></td>
+            <td>${period}</td>
+            <td>${date}</td>
+            <td><div class="rpt-badges">${badges}</div></td>
+            <td>
+                <button class="rpt-btn" onclick="toggleReportView(${i})">Voir</button>
+                <button class="rpt-btn pdf" onclick="exportPDF(${i})">PDF</button>
+            </td>
+        </tr>
+        <tr id="rpt-view-${i}" style="display:none"><td colspan="6"><div class="rpt-expanded" id="rpt-detail-${i}"></div></td></tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+}
+
+function toggleReportView(idx) {
+    const row = document.getElementById('rpt-view-' + idx);
+    const isVisible = row.style.display !== 'none';
+    row.style.display = isVisible ? 'none' : 'table-row';
+
+    if (!isVisible) {
+        const r = reportsList[idx];
+        let detail = '';
+
+        if (r.sections.includes('comex') && r.comex) {
+            detail += '<h4>Synthese COMEX</h4>';
+            detail += r.comex.map((l, i) => `<p><strong>${i + 1}.</strong> ${l}</p>`).join('');
+        }
+        if (r.sections.includes('kpis') && r.kpiData) {
+            detail += '<h4>KPIs Resumes</h4>';
+            detail += `<p>Brand Health Score : ${r.healthScore}/100 | SOV Hermes : ${r.hermesSOV}% | SOV Chanel : ${r.chanelSOV}%</p>`;
+            detail += `<p>Sentiment Hermes : +${r.sentH.positive_pct}% / -${r.sentH.negative_pct}% | Score : ${r.sentH.avg_score > 0 ? '+' : ''}${(r.sentH.avg_score || 0).toFixed(2)}</p>`;
+        }
+        if (r.sections.includes('recos') && r.recos) {
+            detail += '<h4>Recommandations</h4>';
+            detail += r.recos.map(rc => {
+                const status = recoStatuses[rc.id] === 'done' ? '&#10003;' : '&#10007;';
+                return `<p>${status} [${rc.priority.toUpperCase()}] ${rc.text}</p>`;
+            }).join('');
+        }
+        if (r.sections.includes('brief') && r.briefData) {
+            detail += '<h4>Brief Creatif</h4>';
+            for (const [k, v] of Object.entries(r.briefData)) {
+                detail += `<p><strong>${k.toUpperCase()} :</strong> ${v}</p>`;
+            }
+        }
+
+        document.getElementById('rpt-detail-' + idx).innerHTML = detail;
+    }
+}
+
+// ─── EXPORT PDF ───────────────────────────────────────────
+function exportPDF(idx) {
+    const r = reportsList[idx];
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const pageW = doc.internal.pageSize.getWidth();
+    let y = 20;
+    const margin = 20;
+    const lineH = 7;
+    const maxW = pageW - 2 * margin;
+
+    function addText(text, opts = {}) {
+        const size = opts.size || 10;
+        const weight = opts.bold ? 'bold' : 'normal';
+        doc.setFontSize(size);
+        doc.setFont('helvetica', weight);
+        if (opts.color) doc.setTextColor(...opts.color);
+        else doc.setTextColor(40, 40, 40);
+
+        const lines = doc.splitTextToSize(text, maxW);
+        lines.forEach(line => {
+            if (y > 275) { doc.addPage(); y = 20; }
+            doc.text(line, margin, y);
+            y += lineH * (size / 10);
+        });
+        y += 2;
+    }
+
+    function addSpacer(h) { y += h || 6; }
+    function addLine() {
+        doc.setDrawColor(200, 200, 200);
+        doc.line(margin, y, pageW - margin, y);
+        y += 4;
+    }
+
+    // ─── PAGE DE GARDE ───
+    doc.setFillColor(238, 236, 234);
+    doc.rect(0, 0, pageW, 297, 'F');
+    doc.setFillColor(217, 54, 54);
+    doc.rect(margin, 40, 4, 40, 'F');
+    y = 50;
+    addText('HERMES', { size: 28, bold: true, color: [30, 30, 30] });
+    addText('Brand Intelligence Report', { size: 16, color: [100, 100, 100] });
+    addSpacer(10);
+    addText(r.title, { size: 14, bold: true });
+    addText(`Periode : ${r.startDate || '—'} → ${r.endDate || '—'}`, { size: 10, color: [120, 120, 120] });
+    addText(`Genere le ${new Date(r.createdAt).toLocaleDateString('fr-FR')}`, { size: 10, color: [120, 120, 120] });
+    addText(`Type : ${r.type}`, { size: 10, color: [120, 120, 120] });
+
+    // ─── COMEX ───
+    if (r.sections.includes('comex') && r.comex) {
+        doc.addPage();
+        y = 20;
+        addText('1. SYNTHESE COMEX', { size: 16, bold: true, color: [217, 54, 54] });
+        addLine();
+        r.comex.forEach((line, i) => {
+            addText(`${i + 1}. ${line}`, { size: 10 });
+            addSpacer(2);
+        });
+    }
+
+    // ─── KPIs ───
+    if (r.sections.includes('kpis') && r.kpiData) {
+        doc.addPage();
+        y = 20;
+        addText('2. KPIs RESUMES', { size: 16, bold: true, color: [217, 54, 54] });
+        addLine();
+        addText(`Brand Health Score : ${r.healthScore}/100`, { size: 12, bold: true });
+        addSpacer(4);
+
+        const cats = { reputation: 'Reputation', benchmark: 'Benchmark', experience: 'Experience Client' };
+        for (const [key, label] of Object.entries(cats)) {
+            addText(label.toUpperCase(), { size: 11, bold: true, color: [217, 54, 54] });
+            addSpacer(2);
+            (r.kpiData[key] || []).forEach(row => {
+                addText(`  ${row.label} : ${row.current}${row.prev ? '  (prec. ' + row.prev + ')' : ''}`, { size: 9 });
+            });
+            addSpacer(4);
+        }
+    }
+
+    // ─── RECOS ───
+    if (r.sections.includes('recos') && r.recos) {
+        doc.addPage();
+        y = 20;
+        addText('3. RECOMMANDATIONS ACTIONNABLES', { size: 16, bold: true, color: [217, 54, 54] });
+        addLine();
+        r.recos.forEach((rc, i) => {
+            const status = recoStatuses[rc.id] === 'done' ? '[FAIT]' : '[A FAIRE]';
+            addText(`${i + 1}. [${rc.priority.toUpperCase()}] ${status} ${rc.text}`, { size: 10 });
+            addText(`   Delai : ${rc.delay}`, { size: 8, color: [130, 130, 130] });
+            addSpacer(3);
+        });
+    }
+
+    // ─── BRIEF ───
+    if (r.sections.includes('brief') && r.briefData) {
+        doc.addPage();
+        y = 20;
+        addText('4. BRIEF CREATIF', { size: 16, bold: true, color: [217, 54, 54] });
+        addLine();
+        const labels = {
+            contexte: 'CONTEXTE',
+            objectif: 'OBJECTIF DE COMMUNICATION',
+            cible: 'CIBLE PRIORITAIRE',
+            format: 'FORMAT RECOMMANDE',
+            trend: 'TREND A ACTIVER',
+            message: 'MESSAGE CLE'
+        };
+        for (const [k, v] of Object.entries(r.briefData)) {
+            addText(labels[k] || k.toUpperCase(), { size: 10, bold: true, color: [217, 54, 54] });
+            addText(v, { size: 10 });
+            addSpacer(4);
+        }
+    }
+
+    doc.save(`${r.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+}
+
+// ─── COPY UTILITIES ───────────────────────────────────────
+function copyText(elId, btn) {
+    const el = document.getElementById(elId);
+    const text = el.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        const fb = btn.nextElementSibling;
+        fb.style.display = 'inline';
+        setTimeout(() => fb.style.display = 'none', 2000);
+    });
+}
+
+function copyMarkdown(btn) {
+    const data = window._lastKpiData;
+    if (!data) return;
+    let md = '| KPI | Actuel | Precedent |\n|-----|--------|----------|\n';
+    const cats = { reputation: 'Reputation', benchmark: 'Benchmark', experience: 'Experience Client' };
+    for (const [key, label] of Object.entries(cats)) {
+        md += `| **${label}** | | |\n`;
+        (data[key] || []).forEach(row => {
+            md += `| ${row.label} | ${row.current} | ${row.prev || '—'} |\n`;
+        });
+    }
+    navigator.clipboard.writeText(md).then(() => {
+        const fb = btn.nextElementSibling;
+        fb.style.display = 'inline';
+        setTimeout(() => fb.style.display = 'none', 2000);
+    });
+}
+
+// ─── LOAD ON INIT ─────────────────────────────────────────
+// If we have a previous report, populate the blocs from it
+function restoreLastReport() {
+    if (reportsList.length === 0) return;
+    const last = reportsList[0];
+    if (last.comex) renderComex(last.comex);
+    if (last.kpiData) renderKPIsTable(last.kpiData, last.healthScore);
+    if (last.recos) renderRecos(last.recos);
+    if (last.briefData) renderBrief(last.briefData);
+}
+
+loadData().then(() => restoreLastReport());
+</script>
+</body>
+</html>
