@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Share of Voice | Brand Intelligence Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
+<style>
+:root{
+  --bg:#F0EFEB;
+  --dark:#1A1A1A;
+  --card:#2D2D2D;
+  --g2:#3A3A3A;
+  --g3:#444444;
+  --green:#22C55E;
+  --red:#E8383D;
+  --gr:#999999;
+  --t1:#FFFFFF;
+  --r:16px;
+  --gap:13px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);display:flex;flex-direction:column;height:100vh}
+
+/* ── NAVBAR ── */
+.nav{height:54px;min-height:54px;background:var(--dark);display:flex;align-items:center;padding:0 18px;gap:2px;flex-shrink:0;z-index:100}
+.nav-logo{width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-right:12px;flex-shrink:0}
+.ntab{padding:5px 12px;border-radius:20px;font-size:13px;font-weight:500;color:var(--gr);cursor:pointer;white-space:nowrap;transition:.15s;text-decoration:none;font-family:inherit;background:none;border:none}
+.ntab:hover{color:#ccc}
+.ntab.on{background:var(--red);color:#fff;font-weight:600}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:6px}
+.btn-ref{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;background:var(--dark);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.15);font-family:inherit;white-space:nowrap}
+.btn-ico{width:32px;height:32px;border-radius:50%;background:var(--dark);border:1px solid rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* ── BODY SPLIT ── */
+.wrap{flex:1;display:flex;overflow:hidden;min-height:0}
+
+/* ── SIDEBAR ── */
+.side{width:54px;min-width:54px;background:var(--bg);border-right:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px}
+.s-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--gr);cursor:pointer;transition:.15s;text-decoration:none}
+.s-ico:hover{background:rgba(0,0,0,.06);color:#333}
+.s-ico.on{background:rgba(0,0,0,.08);color:var(--dark)}
+.s-gap{flex:1}
+
+/* ── CONTENT ── */
+.ct{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── PAGE HEADER ── */
+.phdr{padding:16px 24px 12px;display:flex;align-items:center;gap:13px;flex-shrink:0}
+.phdr-icon{width:48px;height:48px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.phdr-info{flex:1}
+.phdr-title{font-size:34px;font-weight:700;color:var(--dark);letter-spacing:-.025em;line-height:1.05}
+.phdr-sub{font-size:13px;color:var(--gr);margin-top:2px}
+.phdr-r{display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0}
+.pf-row{display:flex;align-items:center;gap:3px}
+.pf-sep{color:var(--gr);font-size:13px;padding:0 1px}
+.pf-btn{padding:3px 5px;font-size:13px;font-weight:500;color:var(--gr);cursor:pointer;background:none;border:none;font-family:inherit;transition:.15s}
+.pf-btn:hover{color:var(--dark)}
+.pf-btn.on{color:var(--dark);font-weight:700}
+.phdr-btns{display:flex;gap:6px;align-items:center}
+
+/* ── ROWS CONTAINER ── */
+.rows{flex:1;display:flex;flex-direction:column;gap:var(--gap);padding:0 22px 0;overflow:hidden;min-height:0}
+
+/* ── ROW 1 — 4 KPI cards ── */
+.r1{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:var(--gap);height:116px;flex-shrink:0}
+.kc{background:var(--card);border-radius:var(--r);padding:14px 18px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.kc-hdr{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.kc-lbl{font-size:13px;font-weight:500;color:var(--t1)}
+.kc-arr{width:27px;height:27px;border-radius:50%;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.kc-val{font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1.05}
+.kc-val.g{color:var(--green)}
+.kc-val.r{color:var(--red)}
+.kc-val.w{color:var(--t1)}
+.kc-spark{position:absolute;bottom:11px;right:12px;width:125px;height:33px;pointer-events:none}
+.kc-sub{font-size:11.5px;color:var(--gr)}
+.bdg-dom{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;color:#fff;white-space:nowrap;flex-shrink:0}
+.bdg-dom.g{background:var(--green)}
+.bdg-dom.r{background:var(--red)}
+
+/* ── ROW 2 ── */
+.r2{display:grid;grid-template-columns:58% 1fr;gap:var(--gap);height:188px;flex-shrink:0}
+
+.cc{background:var(--card);border-radius:var(--r);padding:14px 18px;display:flex;flex-direction:column;overflow:hidden}
+.cc-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;flex-shrink:0}
+.cc-title{font-size:14.5px;font-weight:600;color:var(--t1)}
+.cper{display:flex;gap:4px;align-items:center}
+.cp-btn{font-size:11.5px;font-weight:500;color:var(--gr);cursor:pointer;border:none;background:none;font-family:inherit;padding:0;transition:.15s}
+.cp-btn.on{color:var(--t1);font-weight:700}
+.cp-sep{color:rgba(255,255,255,.2);font-size:11px;padding:0 1px}
+.cc-wrap{flex:1;min-height:0;position:relative}
+
+.pc{background:var(--card);border-radius:var(--r);padding:14px 18px;display:flex;flex-direction:column;overflow:hidden}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-shrink:0}
+.card-title{font-size:14.5px;font-weight:600;color:var(--t1)}
+
+/* Platform rows */
+.plat-list{display:flex;flex-direction:column;gap:4px;flex:1;justify-content:center}
+.plat-r{display:grid;grid-template-columns:72px 1fr 34px auto;align-items:center;gap:6px}
+.plat-n{font-size:12px;font-weight:500;color:var(--t1)}
+.bars2{display:flex;flex-direction:column;gap:2px}
+.bar2-trk{background:var(--g3);border-radius:3px;overflow:hidden;height:5px}
+.bar2{height:100%;border-radius:3px;transition:width .5s}
+.plat-pct{font-size:11.5px;font-weight:700;color:var(--t1);text-align:right}
+.pbdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:9.5px;font-weight:600;color:#fff;white-space:nowrap}
+.pbdg.g{background:var(--green)}
+.pbdg.r{background:var(--red)}
+
+/* ── ROW 3 ── */
+.r3{display:grid;grid-template-columns:58% 1fr;gap:var(--gap);flex:1;min-height:0;overflow:hidden}
+
+.fc{background:var(--card);border-radius:var(--r);padding:14px 18px;display:flex;flex-direction:column;overflow:hidden}
+.fmt-list{display:flex;flex-direction:column;gap:0;flex:1;justify-content:space-evenly}
+.fmt-r{display:grid;grid-template-columns:65px 1fr 32px auto;align-items:center;gap:6px}
+.fmt-n{font-size:12px;font-weight:500;color:var(--t1)}
+.fmt-pct{font-size:11.5px;font-weight:700;color:var(--t1);text-align:right}
+.fbar2-trk{background:var(--g3);border-radius:3px;overflow:hidden;height:6px}
+.fbar2{height:100%;border-radius:3px;transition:width .5s}
+
+/* Territory card */
+.terr{background:var(--card);border-radius:var(--r);padding:14px 18px;display:flex;flex-direction:column;overflow:hidden}
+.terr-cols{display:grid;grid-template-columns:1fr 1fr;gap:9px;flex:1;min-height:0;overflow:hidden}
+.terr-col{display:flex;flex-direction:column;overflow:hidden}
+.terr-hdr{border-radius:7px;padding:5px 9px;font-size:10px;font-weight:600;color:#fff;margin-bottom:5px;flex-shrink:0}
+.terr-hdr.r{background:var(--red)}
+.terr-hdr.g{background:var(--green)}
+.terr-sub{display:grid;grid-template-columns:1fr auto;padding:0 2px 3px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:2px;flex-shrink:0}
+.terr-sub span{font-size:8.5px;font-weight:600;color:var(--gr);text-transform:uppercase;letter-spacing:.05em}
+.terr-item{display:grid;grid-template-columns:1fr auto;align-items:center;padding:3px 2px;gap:4px;border-bottom:1px solid rgba(255,255,255,.04)}
+.terr-item:last-child{border-bottom:none}
+.terr-theme{font-size:10.5px;color:rgba(255,255,255,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.terr-vol{font-size:10px;color:var(--gr);white-space:nowrap}
+.terr-bdg{display:inline-flex;padding:2px 6px;border-radius:20px;font-size:9.5px;font-weight:600;color:#fff;white-space:nowrap}
+.terr-bdg.r{background:var(--red)}
+.terr-bdg.g{background:var(--green)}
+.terr-foot{margin-top:5px;font-size:10.5px;color:var(--gr);flex-shrink:0}
+
+/* ── ACTION BAR ── */
+.ab{height:44px;min-height:44px;background:var(--red);display:flex;align-items:center;padding:0 24px;gap:10px;flex-shrink:0}
+.ab-text{flex:1;font-size:13px;color:#fff}
+.ab-cta{font-size:13px;font-weight:700;color:#fff;cursor:pointer;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;text-decoration:none}
+.ab-cta:hover{opacity:.85}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <div class="nav-logo">
+    <svg viewBox="0 0 28 28" width="20" height="20"><path d="M3 24L9 4h4L7 24H3z" fill="#1A1A1A"/><path d="M12 24L18 4h4L16 24h-4z" fill="#888"/></svg>
+  </div>
+  <a href="index.html" class="ntab">Dashboard</a>
+  <a href="#" class="ntab">Suppliers</a>
+  <a href="#" class="ntab">Purchase order</a>
+  <a href="#" class="ntab">Inventory</a>
+  <a href="#" class="ntab">Contracts</a>
+  <div class="ntab on">Share of Voice</div>
+  <a href="reports.html" class="ntab">Reports &amp; Analytics</a>
+  <div class="nav-r">
+    <button class="btn-ref" id="btnRefresh">
+      <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><polyline points="1 3 4 3 4 6"/><path d="M4 3A4.5 4.5 0 1 1 2 6.5"/></svg>
+      Refresh
+    </button>
+    <div class="btn-ico"><svg width="12" height="12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M2 11v-2a3.5 3.5 0 013.5-3.5h3.5m0 0l-2-2m2 2l-2 2"/></svg></div>
+    <div class="btn-ico"><svg width="12" height="12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="3.5" cy="6" r="1.5"/><circle cx="9" cy="2" r="1.5"/><circle cx="9" cy="10" r="1.5"/><path d="M5 5.1l2.8-2M5 6.9l2.8 2"/></svg></div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 7.5L8 2l6 5.5"/><path d="M4 6v8h3v-4h3v4h3V6"/></svg></a>
+    <a href="#" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg></a>
+    <a href="#" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="3" r="1.5"/><circle cx="3" cy="11.5" r="1.5"/><circle cx="13" cy="11.5" r="1.5"/><path d="M8 4.5v3l-3.5 4.5M8 7.5l3.5 4.5"/></svg></a>
+    <a href="sentiment.html" class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 5c0-2.2 1.8-4 4-4s4 1.8 4 4c0 1.7-1 3-2.5 3.7V11h-3V8.7C5 8 4 6.7 4 5z"/><path d="M6 13h4M6.5 15h3"/></svg></a>
+    <a href="trends.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 11.5 5.5 5.5 9.5 8.5 14 2"/></svg></a>
+    <div class="s-gap"></div>
+    <a href="reports.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="2" width="10" height="12" rx="1.5"/><path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3"/></svg></a>
+    <a href="#" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><path d="M8 2v1.5M8 12.5v1.5M2 8h1.5M12.5 8H14M3.8 3.8l1 1M11.2 11.2l1 1M3.8 12.2l1-1M11.2 4.8l1-1"/></svg></a>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="ct">
+
+    <!-- PAGE HEADER -->
+    <div class="phdr">
+      <div class="phdr-icon">
+        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M17 17l-2.8-2.8"/></svg>
+      </div>
+      <div class="phdr-info">
+        <h1 class="phdr-title">Share of Voice</h1>
+        <p class="phdr-sub">Share of Voice — Hermès vs Chanel</p>
+      </div>
+      <div class="phdr-r">
+        <div class="pf-row">
+          <button class="pf-btn on" data-v="7" id="pf7">7 days</button>
+          <span class="pf-sep">/</span>
+          <button class="pf-btn" data-v="30" id="pf30">30 days</button>
+          <span class="pf-sep">/</span>
+          <button class="pf-btn" data-v="90" id="pf90">90 days</button>
+          <span class="pf-sep">/</span>
+          <button class="pf-btn" data-v="365" id="pf365">12 months</button>
+        </div>
+        <div class="phdr-btns">
+          <button class="btn-ref" id="btnRefresh2">
+            <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><polyline points="1 3 4 3 4 6"/><path d="M4 3A4.5 4.5 0 1 1 2 6.5"/></svg>
+            Refresh
+          </button>
+          <div class="btn-ico" style="background:var(--dark);border:1px solid rgba(0,0,0,.12)"><svg width="12" height="12" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round"><path d="M2 11v-2a3.5 3.5 0 013.5-3.5h3.5m0 0l-2-2m2 2l-2 2"/></svg></div>
+          <div class="btn-ico" style="background:var(--dark);border:1px solid rgba(0,0,0,.12)"><svg width="12" height="12" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round"><circle cx="3.5" cy="6" r="1.5"/><circle cx="9" cy="2" r="1.5"/><circle cx="9" cy="10" r="1.5"/><path d="M5 5.1l2.8-2M5 6.9l2.8 2"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROWS -->
+    <div class="rows">
+
+      <!-- ROW 1 -->
+      <div class="r1">
+
+        <div class="kc">
+          <div class="kc-hdr">
+            <span class="kc-lbl">Hermès SOV</span>
+            <div class="kc-arr" id="hArr" style="color:var(--green)">↗</div>
+          </div>
+          <div class="kc-val g" id="hSov">41.2%</div>
+          <svg class="kc-spark" id="spkH" viewBox="0 0 125 33" fill="none" preserveAspectRatio="none"></svg>
+        </div>
+
+        <div class="kc">
+          <div class="kc-hdr">
+            <span class="kc-lbl">Chanel SOV</span>
+            <div class="kc-arr" id="cArr" style="color:var(--red)">↘</div>
+          </div>
+          <div class="kc-val r" id="cSov">35.8%</div>
+          <svg class="kc-spark" id="spkC" viewBox="0 0 125 33" fill="none" preserveAspectRatio="none"></svg>
+        </div>
+
+        <div class="kc">
+          <div class="kc-hdr" style="flex-wrap:wrap;gap:5px">
+            <span class="kc-lbl">Gap</span>
+            <span class="bdg-dom g" id="gapBdg">Hermès Dominates</span>
+          </div>
+          <div class="kc-val w" id="gapVal">+5.4 pts</div>
+        </div>
+
+        <div class="kc">
+          <div class="kc-hdr">
+            <span class="kc-lbl">Key Platform</span>
+          </div>
+          <div class="kc-val w" id="keyPlat" style="font-size:36px;margin-top:2px">TikTok</div>
+          <div class="kc-sub">largest gap</div>
+        </div>
+
+      </div><!-- /r1 -->
+
+      <!-- ROW 2 -->
+      <div class="r2">
+
+        <!-- SOV evolution chart -->
+        <div class="cc">
+          <div class="cc-hdr">
+            <div class="cc-title">12-month SOV evolution</div>
+            <div class="cper" id="sovTog">
+              <button class="cp-btn on" data-v="all">All</button>
+              <span class="cp-sep">/</span>
+              <button class="cp-btn" data-v="weekly">Weekly</button>
+              <span class="cp-sep">/</span>
+              <button class="cp-btn" data-v="monthly">Monthly</button>
+              <span class="cp-sep">/</span>
+              <button class="cp-btn" data-v="yearly">Yearly</button>
+            </div>
+          </div>
+          <div class="cc-wrap"><canvas id="sovChart"></canvas></div>
+        </div>
+
+        <!-- SOV by platform -->
+        <div class="pc">
+          <div class="card-hdr">
+            <div class="card-title">SOV by platform</div>
+          </div>
+          <div class="plat-list" id="platList"></div>
+        </div>
+
+      </div><!-- /r2 -->
+
+      <!-- ROW 3 -->
+      <div class="r3">
+
+        <!-- SOV by content format -->
+        <div class="fc">
+          <div class="cc-hdr">
+            <div class="cc-title">SOV by content format</div>
+            <div class="cper" id="fmtTog">
+              <button class="cp-btn on" data-v="all">All</button>
+              <span class="cp-sep">/</span>
+              <button class="cp-btn" data-v="weekly">Weekly</button>
+              <span class="cp-sep">/</span>
+              <button class="cp-btn" data-v="monthly">Monthly</button>
+              <span class="cp-sep">/</span>
+              <button class="cp-btn" data-v="yearly">Yearly</button>
+            </div>
+          </div>
+          <div class="fmt-list" id="fmtList"></div>
+        </div>
+
+        <!-- Untapped Territories -->
+        <div class="terr">
+          <div class="card-hdr" style="margin-bottom:6px">
+            <div class="card-title">Untapped Territories</div>
+          </div>
+          <div class="terr-cols">
+            <div class="terr-col">
+              <div class="terr-hdr r">Chanel present, Hermès absent</div>
+              <div class="terr-sub"><span>Themes</span><span>Illustrative volume</span></div>
+              <div class="terr-item"><span class="terr-theme">Sustainability in Leather</span><span class="terr-vol">4 illustrative</span></div>
+              <div class="terr-item"><span class="terr-theme">Skincare Rituals</span><span class="terr-vol">3 illustrative</span></div>
+              <div class="terr-item"><span class="terr-theme">Beauty Rituals</span><span class="terr-vol">1 illustrative</span></div>
+              <div class="terr-item"><span class="terr-theme">Anti-Aging Skincare</span><span class="terr-bdg r">Opportunity</span></div>
+            </div>
+            <div class="terr-col">
+              <div class="terr-hdr g">Hermès exclusive</div>
+              <div class="terr-sub"><span>Themes</span><span>Illustrative volume</span></div>
+              <div class="terr-item"><span class="terr-theme">Equestrian Accessories</span><span class="terr-vol">3 illustrative</span></div>
+              <div class="terr-item"><span class="terr-theme">Saddle Craftsmanship</span><span class="terr-vol">3 illustrative</span></div>
+              <div class="terr-item"><span class="terr-theme">Bespoke Tailoring</span><span class="terr-bdg g">Advantage</span></div>
+            </div>
+          </div>
+          <div class="terr-foot">Score: Hermès occupies 62% of Chanel's territories</div>
+        </div>
+
+      </div><!-- /r3 -->
+
+    </div><!-- /rows -->
+
+    <!-- ACTION BAR -->
+    <div class="ab">
+      <span class="ab-text" id="abMsg">Chanel dominates TikTok with +12% SOV. Opportunity to seize.</span>
+      <a href="reports.html" class="ab-cta" style="text-decoration:underline;text-underline-offset:2px">→ Action Plan.</a>
+    </div>
+
+  </div><!-- /ct -->
+</div><!-- /wrap -->
+
+<script>
+/* ─── STATE ─── */
+let pDays = 7, sovMode = 'all', fmtMode = 'all';
+let hM = [], cM = [], compPosts = [];
+let sovChartInst = null;
+
+/* ─── FALLBACK DATA ─── */
+const FB = {
+  hermesSOV: 41.2, chanelSOV: 35.8, gap: 5.4, keyPlatform: 'TikTok',
+  evo: {
+    h: [42,44,46,43,45,48,52,48,44,42,40,42],
+    c: [35,37,36,38,36,33,30,34,36,38,40,36],
+    lbls: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  },
+  platforms: [
+    {p:'Instagram', h:75, c:40, pct:40, leader:'h'},
+    {p:'TikTok',    h:90, c:30, pct:75, leader:'h'},
+    {p:'Twitter',   h:40, c:70, pct:35, leader:'c'},
+    {p:'Trustpilot',h:60, c:35, pct:25, leader:'h'},
+    {p:'Reddit',    h:30, c:55, pct:16, leader:'c'}
+  ],
+  formats: [
+    {f:'Reel',     h:70, c:45, pct:55, leader:'h'},
+    {f:'Story',    h:55, c:65, pct:45, leader:'c'},
+    {f:'Carousel', h:60, c:50, pct:50, leader:'n'},
+    {f:'Post',     h:28, c:40, pct:23, leader:'n'},
+    {f:'Live',     h:20, c:18, pct:16, leader:'n'}
+  ]
+};
+
+/* ─── FILTERS ─── */
+['pf7','pf30','pf90','pf365'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    ['pf7','pf30','pf90','pf365'].forEach(i=>document.getElementById(i).classList.remove('on'));
+    e.target.classList.add('on');
+    pDays = +e.target.dataset.v;
+    loadData();
+  });
+});
+document.getElementById('btnRefresh').addEventListener('click', loadData);
+document.getElementById('btnRefresh2').addEventListener('click', loadData);
+document.querySelectorAll('#sovTog .cp-btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#sovTog .cp-btn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); sovMode=b.dataset.v; renderEvoChart();
+}));
+document.querySelectorAll('#fmtTog .cp-btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#fmtTog .cp-btn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); fmtMode=b.dataset.v; renderFormats();
+}));
+
+/* ─── LOAD DATA ─── */
+async function loadData() {
+  const startDate = new Date(Date.now() - pDays*86400000).toISOString().slice(0,10);
+  try {
+    [hM, cM] = await Promise.all([
+      getMentions({brand:'hermes', startDate}),
+      getMentions({brand:'chanel', startDate})
+    ]);
+  } catch(e) { hM=[]; cM=[]; }
+  try {
+    if (typeof getCompetitorPosts === 'function') {
+      compPosts = await getCompetitorPosts({startDate});
+    }
+  } catch(e) { compPosts=[]; }
+  render();
+}
+
+function render() {
+  renderKPIs();
+  renderEvoChart();
+  renderPlatforms();
+  renderFormats();
+  renderActionBar();
+}
+
+/* ─── SPARKLINE ─── */
+function mkSpark(svgEl, pts, color) {
+  if (!pts||pts.length<2) return;
+  const W=125,H=33,mn=Math.min(...pts),mx=Math.max(...pts),rng=mx-mn||1;
+  const coords=pts.map((v,i)=>`${((i/(pts.length-1))*W).toFixed(1)},${(H-((v-mn)/rng)*(H-4)-2).toFixed(1)}`).join(' ');
+  svgEl.innerHTML=`<polyline points="${coords}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
+
+/* ─── KPIs ─── */
+function renderKPIs() {
+  const hTot=hM.length, cTot=cM.length, total=hTot+cTot;
+  const useReal = total>=30;
+  const hSOV = useReal ? +((hTot/total*100).toFixed(1)) : FB.hermesSOV;
+  const cSOV = useReal ? +((cTot/total*100).toFixed(1)) : FB.chanelSOV;
+  const gap  = +(hSOV-cSOV).toFixed(1);
+
+  document.getElementById('hSov').textContent = hSOV.toFixed(1)+'%';
+  document.getElementById('cSov').textContent = cSOV.toFixed(1)+'%';
+  document.getElementById('gapVal').textContent = (gap>=0?'+':'')+gap.toFixed(1)+' pts';
+
+  const gbEl=document.getElementById('gapBdg');
+  if(gap>=0){gbEl.textContent='Hermès Dominates';gbEl.className='bdg-dom g';}
+  else{gbEl.textContent='Chanel Dominates';gbEl.className='bdg-dom r';}
+
+  const hA=document.getElementById('hArr'),cA=document.getElementById('cArr');
+  hA.textContent=gap>=0?'↗':'↘'; hA.style.color=gap>=0?'var(--green)':'var(--red)';
+  cA.textContent=gap>=0?'↘':'↗'; cA.style.color=gap>=0?'var(--red)':'var(--green)';
+
+  // Key platform
+  const lmap={instagram:'Instagram',tiktok:'TikTok',twitter:'Twitter',trustpilot:'Trustpilot',reddit:'Reddit'};
+  const hC={},cC={};
+  hM.forEach(m=>{const p=lmap[(m.platform||'').toLowerCase()];if(p)hC[p]=(hC[p]||0)+1;});
+  cM.forEach(m=>{const p=lmap[(m.platform||'').toLowerCase()];if(p)cC[p]=(cC[p]||0)+1;});
+  let maxG=0,kp=FB.keyPlatform;
+  Object.values(lmap).forEach(p=>{
+    const ht=hC[p]||0,ct=cC[p]||0,tot=ht+ct;
+    if(tot>5){const g=Math.abs(ht/tot-ct/tot)*100;if(g>maxG){maxG=g;kp=p;}}
+  });
+  document.getElementById('keyPlat').textContent=kp;
+
+  // Sparklines
+  const N=7,bSz=pDays/N;
+  const spH=[],spC=[];
+  for(let i=0;i<N;i++){
+    const s=new Date(Date.now()-(N-i)*bSz*86400000),e=new Date(Date.now()-(N-i-1)*bSz*86400000);
+    const hb=hM.filter(m=>{const d=new Date(m.date);return d>=s&&d<e;}).length;
+    const cb=cM.filter(m=>{const d=new Date(m.date);return d>=s&&d<e;}).length;
+    const t=hb+cb||1;
+    spH.push(useReal&&(hb+cb)>2?hb/t*100:FB.evo.h[i+5]||hSOV+(Math.random()-.5)*5);
+    spC.push(useReal&&(hb+cb)>2?cb/t*100:FB.evo.c[i+5]||cSOV+(Math.random()-.5)*5);
+  }
+  mkSpark(document.getElementById('spkH'),spH,'#22C55E');
+  mkSpark(document.getElementById('spkC'),spC,'#E8383D');
+}
+
+/* ─── SOV AREA CHART with annotation ─── */
+const annotPlugin = {
+  id:'sovAnnot',
+  afterDraw(chart){
+    const{ctx,scales:{x,y},data}=chart;
+    if(!data.datasets[1]) return;
+    const hData=data.datasets[1].data;
+    const cData=data.datasets[0].data;
+    const peakIdx=hData.indexOf(Math.max(...hData.map(Number)));
+    const xPos=x.getPixelForValue(peakIdx);
+    // In stacked mode, Hermès top = chanel + hermes
+    const topVal=(hData[peakIdx]||0)+(cData[peakIdx]||0);
+    const yPos=y.getPixelForValue(topVal);
+
+    ctx.save();
+    ctx.setLineDash([3,3]);
+    ctx.strokeStyle='rgba(255,255,255,0.5)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(xPos,y.top);ctx.lineTo(xPos,y.bottom);ctx.stroke();
+    ctx.setLineDash([]);
+
+    // dot at Chanel line (bottom of Hermès area)
+    const cTop=y.getPixelForValue(cData[peakIdx]||0);
+    ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.arc(xPos,cTop,4,0,Math.PI*2);ctx.fill();
+
+    // Label chip at top
+    const text='Hermès';
+    ctx.font='600 10px Inter,sans-serif';
+    const tw=ctx.measureText(text).width;
+    const cW=tw+14,cH=18,cX=xPos-cW/2,cY=yPos-cH-8;
+    ctx.fillStyle='#fff';
+    ctx.beginPath();
+    ctx.roundRect?ctx.roundRect(cX,cY,cW,cH,5):(()=>{ctx.moveTo(cX+5,cY);ctx.lineTo(cX+cW-5,cY);ctx.quadraticCurveTo(cX+cW,cY,cX+cW,cY+5);ctx.lineTo(cX+cW,cY+cH-5);ctx.quadraticCurveTo(cX+cW,cY+cH,cX+cW-5,cY+cH);ctx.lineTo(cX+5,cY+cH);ctx.quadraticCurveTo(cX,cY+cH,cX,cY+cH-5);ctx.lineTo(cX,cY+5);ctx.quadraticCurveTo(cX,cY,cX+5,cY);ctx.closePath()})();
+    ctx.fill();
+    ctx.fillStyle='#1A1A1A';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(text,cX+cW/2,cY+cH/2+0.5);
+    ctx.restore();
+  }
+};
+Chart.register(annotPlugin);
+
+function renderEvoChart() {
+  const lbls=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const N=12,yearMs=365*86400000,now=Date.now();
+  let hData=[], cData=[];
+
+  if(hM.length>50&&cM.length>10){
+    for(let i=0;i<N;i++){
+      const s=new Date(now-yearMs+(i*(yearMs/N)));
+      const e=new Date(s.getTime()+(yearMs/N));
+      const hb=hM.filter(m=>{const d=new Date(m.date);return d>=s&&d<e;}).length;
+      const cb=cM.filter(m=>{const d=new Date(m.date);return d>=s&&d<e;}).length;
+      const tot=hb+cb||1;
+      hData.push(+(hb/tot*100).toFixed(1));
+      cData.push(+(cb/tot*100).toFixed(1));
+    }
+  } else {
+    hData=[...FB.evo.h]; cData=[...FB.evo.c];
+  }
+
+  const ctx=document.getElementById('sovChart').getContext('2d');
+  if(sovChartInst) sovChartInst.destroy();
+  sovChartInst=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:lbls,
+      datasets:[
+        {label:'Chanel',data:cData,borderColor:'#E8383D',backgroundColor:'rgba(232,56,61,0.5)',borderWidth:2,tension:.4,fill:'origin',pointRadius:0,pointHoverRadius:3,order:2},
+        {label:'Hermès',data:hData,borderColor:'#22C55E',backgroundColor:'rgba(34,197,94,0.5)',borderWidth:2,tension:.4,fill:'-1',pointRadius:0,pointHoverRadius:3,order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#1A1A1A',titleColor:'#fff',bodyColor:'#aaa',borderColor:'rgba(255,255,255,.1)',borderWidth:1,padding:8,cornerRadius:8,callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y.toFixed(1)}%`}}
+      },
+      scales:{
+        x:{stacked:true,grid:{display:false,drawBorder:false},ticks:{color:'#999',font:{size:10},maxRotation:0}},
+        y:{stacked:true,min:0,max:100,grid:{color:'rgba(255,255,255,.06)',drawBorder:false,borderDash:[4,4]},ticks:{color:'#999',font:{size:10},stepSize:25,callback:v=>v+'%'}}
+      }
+    }
+  });
+}
+
+/* ─── PLATFORMS ─── */
+function renderPlatforms() {
+  const lmap={instagram:'Instagram',tiktok:'TikTok',twitter:'Twitter',trustpilot:'Trustpilot',reddit:'Reddit'};
+  const hC={},cC={};
+  hM.forEach(m=>{const p=lmap[(m.platform||'').toLowerCase()];if(p)hC[p]=(hC[p]||0)+1;});
+  cM.forEach(m=>{const p=lmap[(m.platform||'').toLowerCase()];if(p)cC[p]=(cC[p]||0)+1;});
+  const plats=['Instagram','TikTok','Twitter','Trustpilot','Reddit'];
+  const hasData=plats.some(p=>(hC[p]||0)+(cC[p]||0)>=10);
+
+  let rows;
+  if(hasData){
+    rows=plats.map(p=>{
+      const ht=hC[p]||0,ct=cC[p]||0,tot=ht+ct||1;
+      const hP=Math.round(ht/tot*100),cP=Math.round(ct/tot*100);
+      return{p,h:hP,c:cP,pct:hP,leader:hP>=cP?'h':'c'};
+    });
+  } else {
+    rows=FB.platforms;
+  }
+
+  document.getElementById('platList').innerHTML=rows.map(r=>{
+    const bdg=r.leader==='h'?`<span class="pbdg g">Hermès leader</span>`:`<span class="pbdg r">Chanel leader</span>`;
+    return`<div class="plat-r">
+      <div class="plat-n">${r.p}</div>
+      <div class="bars2">
+        <div class="bar2-trk"><div class="bar2" style="width:${r.h}%;background:var(--green)"></div></div>
+        <div class="bar2-trk"><div class="bar2" style="width:${r.c}%;background:var(--red)"></div></div>
+      </div>
+      <div class="plat-pct">${r.pct}%</div>
+      ${bdg}
+    </div>`;
+  }).join('');
+}
+
+/* ─── FORMATS ─── */
+function renderFormats() {
+  let rows;
+  if(compPosts.length>=20){
+    const fmts=['Reel','Story','Carousel','Post','Live'];
+    const fg={};
+    compPosts.forEach(p=>{
+      const f=p.format||p.content_type||'Post';
+      const br=(p.brand||'').toLowerCase();
+      if(!fg[f])fg[f]={h:0,c:0};
+      if(br==='hermes'||br==='hermès')fg[f].h++;
+      else if(br==='chanel')fg[f].c++;
+    });
+    rows=fmts.map(f=>{
+      const g=fg[f]||{h:0,c:0},tot=g.h+g.c||1;
+      const hP=Math.round(g.h/tot*100),cP=Math.round(g.c/tot*100);
+      const gap2=hP-cP,leader=gap2>10?'h':gap2<-10?'c':'n';
+      return{f,h:hP,c:cP,pct:hP,leader};
+    });
+  } else {
+    rows=FB.formats;
+  }
+
+  document.getElementById('fmtList').innerHTML=rows.map(r=>{
+    let bdg='';
+    if(r.leader==='h')bdg=`<span class="pbdg g">Hermès outperforms</span>`;
+    else if(r.leader==='c')bdg=`<span class="pbdg r">Chanel ahead</span>`;
+    return`<div class="fmt-r">
+      <div class="fmt-n">${r.f}</div>
+      <div class="bars2">
+        <div class="fbar2-trk"><div class="fbar2" style="width:${r.h}%;background:var(--green)"></div></div>
+        <div class="fbar2-trk"><div class="fbar2" style="width:${r.c}%;background:var(--red)"></div></div>
+      </div>
+      <div class="fmt-pct">${r.pct}%</div>
+      ${bdg}
+    </div>`;
+  }).join('');
+}
+
+/* ─── ACTION BAR ─── */
+function renderActionBar() {
+  const lmap={instagram:'Instagram',tiktok:'TikTok',twitter:'Twitter',trustpilot:'Trustpilot',reddit:'Reddit'};
+  const hC={},cC={};
+  hM.forEach(m=>{const p=lmap[(m.platform||'').toLowerCase()];if(p)hC[p]=(hC[p]||0)+1;});
+  cM.forEach(m=>{const p=lmap[(m.platform||'').toLowerCase()];if(p)cC[p]=(cC[p]||0)+1;});
+  let maxG=0,domP=FB.keyPlatform;
+  Object.values(lmap).forEach(p=>{
+    const ht=hC[p]||0,ct=cC[p]||0,tot=ht+ct;
+    if(tot>5){const g=(ct/tot-ht/tot)*100;if(g>maxG){maxG=g;domP=p;}}
+  });
+  const pct=Math.round(Math.abs(maxG))||12;
+  document.getElementById('abMsg').textContent=`Chanel dominates ${domP} with +${pct}% SOV. Opportunity to seize.`;
+}
+
+/* ─── INIT ─── */
+loadData();
+</script>
+</body>
+</html>

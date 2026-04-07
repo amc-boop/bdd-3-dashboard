@@ -1,775 +1,623 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Trends | Brand Intelligence Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="supabase-config.js"></script>
 <style>
 :root{
-  --bg:#EEECEA;
-  --card:rgba(90,87,84,.62);
-  --card2:rgba(24,24,24,.82);
-  --glass-border:rgba(255,255,255,.08);
-  --blur:blur(20px);
+  --bg:#F0EFEB;
+  --dark:#1A1A1A;
+  --card:#2D2D2D;
+  --g2:#3A3A3A;
+  --g3:#444444;
+  --green:#22C55E;
+  --orange:#F59E0B;
+  --red:#E8383D;
+  --gr:#999999;
+  --t1:#FFFFFF;
   --r:16px;
-  --accent:#D93636;
-  --green:#3CB371;
-  --orange:#E5A820;
-  --gap:10px;
+  --gap:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:#1a1a1a;display:flex;height:100vh}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);display:flex;flex-direction:column;height:100vh}
 
-.side{width:56px;background:transparent;border-right:none;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px;flex-shrink:0;z-index:10}
-.s-logo{width:30px;height:30px;margin-bottom:20px}
-.s-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.22);cursor:pointer;transition:.15s;text-decoration:none}
-.s-ico:hover{background:rgba(0,0,0,.04);color:rgba(0,0,0,.45)}
-.s-ico.on{background:rgba(0,0,0,.06);color:rgba(0,0,0,.55)}
+/* ── NAVBAR ── */
+.nav{height:52px;min-height:52px;background:var(--dark);display:flex;align-items:center;padding:0 16px;gap:1px;flex-shrink:0;z-index:100}
+.nav-logo{width:30px;height:30px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-right:10px;flex-shrink:0;font-size:13px;font-weight:900;color:var(--dark);letter-spacing:-1px}
+.ntab{padding:5px 11px;border-radius:20px;font-size:13px;font-weight:500;color:var(--gr);cursor:pointer;white-space:nowrap;transition:.15s;text-decoration:none;font-family:inherit;background:none;border:none}
+.ntab:hover{color:#ccc}
+.ntab.on{background:var(--red);color:#fff;font-weight:600}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:7px}
+.theme-tog{display:flex;align-items:center;gap:4px;background:var(--bg);border-radius:20px;padding:4px 9px;cursor:pointer;flex-shrink:0}
+.nav-bell{width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c7c7c,#4a4a4a);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+
+/* ── LAYOUT ── */
+.wrap{flex:1;display:flex;overflow:hidden;min-height:0}
+.side{width:52px;min-width:52px;background:var(--bg);border-right:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:3px}
+.s-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--gr);cursor:pointer;transition:.15s;text-decoration:none}
+.s-ico:hover{background:rgba(0,0,0,.06);color:#333}
+.s-ico.on{background:rgba(0,0,0,.08);color:var(--dark)}
 .s-gap{flex:1}
+.ct{flex:1;display:flex;flex-direction:column;overflow:hidden}
 
-.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+/* ── PAGE HEADER ── */
+.phdr{padding:12px 20px 8px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.phdr-icon{width:44px;height:44px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.phdr-info{flex:1}
+.phdr-title{font-size:32px;font-weight:700;color:var(--dark);letter-spacing:-.025em;line-height:1}
+.phdr-sub{font-size:12.5px;color:var(--gr);margin-top:2px}
+.phdr-r{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+.pf-row{display:flex;align-items:center;gap:2px}
+.pf-sep{color:var(--gr);font-size:13px;padding:0 2px}
+.pf-btn{padding:3px 5px;font-size:13px;font-weight:500;color:var(--gr);cursor:pointer;background:none;border:none;font-family:inherit;transition:.15s}
+.pf-btn:hover{color:var(--dark)}
+.pf-btn.on{color:var(--dark);font-weight:700}
+.phdr-btns{display:flex;gap:5px;align-items:center}
+.btn-ref{display:flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;background:var(--dark);color:#fff;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit;white-space:nowrap}
+.btn-ico{width:30px;height:30px;border-radius:50%;background:var(--dark);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
 
-.nav{height:54px;min-height:54px;background:rgba(238,236,234,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.04);display:flex;align-items:center;padding:0 22px;gap:6px;flex-shrink:0}
-.nav-logo{margin-right:12px;width:32px;height:32px;flex-shrink:0}
-.tab{padding:8px 18px;border-radius:20px;font-size:14px;font-weight:500;color:rgba(0,0,0,.45);cursor:pointer;white-space:nowrap;transition:.15s;border:none;background:none;text-decoration:none}
-.tab:hover{color:#000;background:rgba(0,0,0,.03)}
-.tab.on{background:var(--accent);color:#fff;font-weight:600}
-.nav-r{margin-left:auto;display:flex;align-items:center;gap:6px}
-.nav-toggle{display:flex;gap:3px;padding:5px 8px;border-radius:18px;background:rgba(0,0,0,.04);cursor:pointer;align-items:center}
-.nav-bell{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(0,0,0,.3);position:relative}
-.nav-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--accent);border-radius:50%;border:2px solid #fff}
-.avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(145deg,#7B5B3A,#4A2E15);border:3px solid rgba(0,0,0,.06);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center}
+/* ── ROWS CONTAINER ── */
+.rows{flex:1;display:flex;flex-direction:column;gap:var(--gap);padding:0 20px 12px;overflow:hidden;min-height:0}
 
-.ct{flex:1;display:flex;flex-direction:column;padding:14px 24px 24px;overflow-y:auto;gap:var(--gap)}
+/* ── ROW 1 — KPI Cards ── */
+.r1{display:grid;grid-template-columns:1fr 1.45fr 1fr 1fr;gap:var(--gap);height:122px;flex-shrink:0}
+.kc{background:var(--card);border-radius:var(--r);padding:12px 16px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.kc-hdr{display:flex;align-items:center;justify-content:space-between}
+.kc-lbl{font-size:12.5px;font-weight:500;color:var(--t1)}
+.kc-lbl-sm{font-size:10px;font-weight:600;color:var(--gr);letter-spacing:.06em;text-transform:uppercase}
+.kc-arr{width:24px;height:24px;border-radius:50%;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.kc-val{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-top:3px}
+.kc-val.w{color:var(--t1)}
+.kc-val.g{color:var(--green)}
+.kc-val.r{color:var(--red)}
+.kc-hash{font-size:26px;font-weight:800;color:var(--green);letter-spacing:-.02em;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc-gsub{font-size:13px;font-weight:600;color:var(--green);margin-top:2px}
+.kc-sub{font-size:11px;color:var(--gr);margin-top:2px}
+.kc-spark{position:absolute;bottom:9px;right:10px;pointer-events:none}
+.bdg-act{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;color:#fff;background:var(--red);white-space:nowrap;flex-shrink:0}
 
-.hdr{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.hdr-search{width:48px;height:48px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
-.hdr-info{flex:1}
-.hdr-title{font-size:clamp(22px,2.5vw,32px);font-weight:800;letter-spacing:-.03em;line-height:1.1;color:#111}
-.hdr-sub{font-size:12px;color:rgba(0,0,0,.3);margin-top:2px}
-.hdr-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+/* ── ROW 2 ── */
+.r2{display:grid;grid-template-columns:52% 1fr;gap:var(--gap);flex:1;min-height:0;overflow:hidden}
 
-.f-group{display:flex;background:rgba(0,0,0,.04);padding:4px;border-radius:10px;gap:2px}
-.f-btn{padding:6px 12px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:rgba(0,0,0,.4);transition:.15s}
-.f-btn:hover{color:#000}
-.f-btn.on{background:#fff;color:#000;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
+/* Growing Hashtags card */
+.gc{background:var(--card);border-radius:var(--r);padding:12px 15px;display:flex;flex-direction:column;overflow:hidden}
+.gc-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;flex-shrink:0}
+.gc-title{font-size:14px;font-weight:600;color:var(--t1)}
+.gc-srch{display:flex;align-items:center;gap:5px;background:var(--g2);border-radius:8px;padding:4px 9px}
+.gc-srch input{background:none;border:none;outline:none;color:var(--t1);font-size:12px;font-family:'Inter',sans-serif;width:80px}
+.gc-srch input::placeholder{color:var(--gr)}
+.ht{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.ht-head{display:grid;grid-template-columns:1fr 68px 50px 50px 64px 84px;gap:2px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.ht-head span{font-size:8.5px;font-weight:600;color:var(--gr);letter-spacing:.08em;text-transform:uppercase}
+.ht-body{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;min-height:0}
+.ht-row{display:grid;grid-template-columns:1fr 68px 50px 50px 64px 84px;gap:2px;align-items:center;border-bottom:1px solid rgba(255,255,255,.04)}
+.ht-row:last-child{border-bottom:none}
+.ht-hash{font-size:12px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ht-plat{font-size:11px;color:var(--gr)}
+.ht-vol{font-size:11px;color:var(--t1)}
+.ht-gr{font-size:11px;font-weight:700}
+.ht-gr.pos{color:var(--green)}
+.ht-gr.neg{color:var(--red)}
+.ht-bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:9.5px;font-weight:600;color:#fff;white-space:nowrap}
+.ht-bdg.up{background:var(--green)}
+.ht-bdg.peak{background:var(--orange)}
+.ht-bdg.dec{background:var(--red)}
 
-.gc{background:var(--card);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--r);padding:18px 20px;color:#fff;border:1px solid var(--glass-border);box-shadow:0 8px 32px rgba(0,0,0,.08)}
-.gc2{background:var(--card2);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--r);padding:18px 20px;color:#fff;border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 32px rgba(0,0,0,.12)}
+/* Viral Topics card */
+.vc{background:var(--card);border-radius:var(--r);padding:12px 15px;display:flex;flex-direction:column;overflow:hidden}
+.vc-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:5px;flex-shrink:0}
+.vt-top{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;min-height:0}
+.vt-row{display:grid;grid-template-columns:1fr 40px auto auto;align-items:center;gap:4px;border-bottom:1px solid rgba(255,255,255,.04)}
+.vt-row:last-child{border-bottom:none}
+.vt-topic{font-size:11px;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vt-vol{font-size:10.5px;color:var(--gr);text-align:right}
+.vt-bdg{display:inline-flex;align-items:center;padding:1.5px 7px;border-radius:20px;font-size:9px;font-weight:600;color:#fff;white-space:nowrap}
+.vt-bdg.pos{background:var(--green)}
+.vt-bdg.mix{background:#6B7280}
+.vt-bdg.neg{background:var(--red)}
+.vt-bdg.org{background:var(--orange)}
+.tl-div{height:1px;background:rgba(255,255,255,.08);margin:4px 0;flex-shrink:0}
+.tl-rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;min-height:0}
+.tl-row{display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:6px}
+.tl-hash{font-size:11px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-trk{background:var(--g3);border-radius:3px;overflow:hidden;height:5px}
+.tl-bar{height:100%;border-radius:3px}
+.tl-lbl{font-size:9.5px;white-space:nowrap;display:flex;align-items:center;gap:3px;justify-content:flex-end;min-width:90px}
+.tl-act{display:inline-flex;padding:1px 6px;border-radius:20px;font-size:9px;font-weight:600;color:#fff;background:var(--red);flex-shrink:0}
 
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap)}
-.k-label{font-size:11px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:6px}
-.k-val{font-size:clamp(24px,2.8vw,36px);font-weight:800;letter-spacing:-.04em;line-height:1;display:flex;align-items:center;gap:6px}
-.k-arr{font-size:14px;display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,0.08)}
-.k-arr.up{color:var(--green)}
-.k-arr.down{color:var(--accent)}
+/* ── ROW 3 ── */
+.r3{display:grid;grid-template-columns:52% 1fr;gap:var(--gap);flex:1;min-height:0;overflow:hidden}
 
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.f-full{grid-column:1/-1}
+/* Trend Matcher */
+.mc{background:var(--card);border-radius:var(--r);padding:12px 15px;display:flex;flex-direction:column;overflow:hidden}
+.mc-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:7px;flex-shrink:0}
+.mc-rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;min-height:0}
+.mc-row{display:flex;flex-direction:column;gap:3px}
+.mc-top{display:flex;align-items:center;gap:5px}
+.mc-hash{font-size:13px;font-weight:700;color:var(--t1);white-space:nowrap;flex-shrink:0}
+.mc-dots{flex:1;font-size:12px;color:#4a4a4a;letter-spacing:2px;overflow:hidden;white-space:nowrap;min-width:10px}
+.mc-snum{font-size:13px;font-weight:800;white-space:nowrap;flex-shrink:0}
+.mc-sden{font-size:12px;color:var(--gr);font-weight:400;flex-shrink:0}
+.mc-btrk{width:130px;background:var(--g3);border-radius:3px;overflow:hidden;height:5px;flex-shrink:0}
+.mc-bfill{height:100%;border-radius:3px}
+.mc-btn{padding:4px 10px;border-radius:8px;background:var(--g2);color:var(--t1);font-size:11px;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;transition:.15s}
+.mc-btn:hover{background:var(--g3)}
+.mc-btn.done{background:#1b3d24;color:var(--green);cursor:default}
+.mc-sug{font-size:11px;color:var(--gr);font-style:italic}
 
-.skeleton{animation:skel 1.5s infinite;background:linear-gradient(90deg,rgba(255,255,255,0.02) 25%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.02) 75%);background-size:200% 100%;border-radius:6px}
-@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Weekly Brief */
+.wc{background:var(--card);border-radius:var(--r);padding:12px 15px;display:flex;flex-direction:column;overflow:hidden}
+.wc-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;flex-shrink:0}
+.wc-hl{display:flex;flex-direction:column;gap:2px}
+.wc-title{font-size:15px;font-weight:700;color:var(--t1)}
+.wc-sub{font-size:11px;color:var(--gr)}
+.wc-exp{padding:6px 12px;border-radius:9px;background:var(--dark);color:var(--t1);font-size:11.5px;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:.15s;flex-shrink:0}
+.wc-exp:hover{background:#333}
+.wc-items{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1;min-height:0;overflow:hidden}
+.wci{background:var(--g2);border-radius:10px;padding:9px 11px;display:flex;flex-direction:column;gap:3px;overflow:hidden;min-height:0}
+.wci-top{display:flex;align-items:center;justify-content:space-between;gap:3px}
+.wci-hash{font-size:12.5px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wci-dur{font-size:10.5px;color:var(--gr);white-space:nowrap;flex-shrink:0}
+.wci-plat{font-size:10.5px;color:var(--gr)}
+.wci-angle{font-size:10.5px;color:var(--gr);line-height:1.35}
 
-/* ─── EXPANDABLE BLOC SYSTEM ─── */
-.xblock{border-radius:var(--r);overflow:hidden;transition:all .3s ease}
-.xblock .xblock-header{display:flex;align-items:center;gap:12px;padding:18px 20px;cursor:pointer;user-select:none;min-height:80px;max-height:80px}
-.xblock .xblock-header:hover{background:rgba(255,255,255,.02)}
-.xblock .xblock-info{flex:1;min-width:0}
-.xblock .xblock-title{font-size:15px;font-weight:700;color:rgba(255,255,255,.9)}
-.xblock .xblock-summary{font-size:12px;color:rgba(255,255,255,.35);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.xblock .xblock-chevron{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s ease}
-.xblock .xblock-chevron svg{stroke:rgba(255,255,255,.35);transition:stroke .2s}
-.xblock:hover .xblock-chevron svg{stroke:rgba(255,255,255,.6)}
-.xblock.open .xblock-chevron{transform:rotate(180deg)}
-.xblock .xblock-body{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s ease;padding:0 20px}
-.xblock.open .xblock-body{max-height:2000px;padding:0 20px 20px}
-.xblock .xblock-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;flex-shrink:0}
-.xblock .xblock-badge.urgent{background:rgba(217,54,54,.15);color:var(--accent);animation:pulse-d 1.5s infinite}
-@keyframes pulse-d{0%,100%{opacity:1}50%{opacity:.6}}
-
-/* ─── TABLE ─── */
-.tr-table{width:100%;border-collapse:collapse}
-.tr-table th{text-align:left;font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;padding:8px 6px;cursor:pointer;user-select:none;white-space:nowrap}
-.tr-table th:hover{color:rgba(255,255,255,.5)}
-.tr-table th.sorted::after{content:' ▼';font-size:8px}
-.tr-table th.sorted.asc::after{content:' ▲'}
-.tr-table td{padding:10px 6px;font-size:12px;border-top:1px solid rgba(255,255,255,.04);vertical-align:middle}
-.tr-table tr:hover{background:rgba(255,255,255,.02)}
-.tr-hash{font-weight:700;color:#fff}
-.tr-spark{width:80px;height:24px}
-.plat-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.08);text-transform:uppercase}
-.search-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 12px;font-size:12px;color:#fff;font-family:'Inter',sans-serif;outline:none;width:100%;max-width:260px;margin-bottom:10px}
-.search-input::placeholder{color:rgba(255,255,255,.25)}
-.search-input:focus{border-color:rgba(255,255,255,.2)}
-
-.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;line-height:1.4}
-.pill-pos{background:rgba(60,179,113,.15);color:var(--green)}
-.pill-neg{background:rgba(217,54,54,.15);color:var(--accent)}
-.pill-neu{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
-.pill-warn{background:rgba(229,168,32,.15);color:var(--orange)}
-
-/* ─── VIRAL ─── */
-.viral-item{padding:10px;border-radius:8px;background:rgba(255,255,255,.03);margin-bottom:6px;border-left:3px solid rgba(255,255,255,.1)}
-.viral-name{font-size:12px;font-weight:700;color:#fff;margin-bottom:3px}
-.viral-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:10px;color:rgba(255,255,255,.35)}
-
-/* ─── SURF COLUMNS ─── */
-.surf-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.surf-col{border-radius:10px;padding:10px}
-.surf-col.present{background:rgba(60,179,113,.04);border:1px solid rgba(60,179,113,.1)}
-.surf-col.absent{background:rgba(229,168,32,.04);border:1px solid rgba(229,168,32,.1)}
-.surf-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.06)}
-.surf-col.present .surf-col-title{color:var(--green)}
-.surf-col.absent .surf-col-title{color:var(--orange)}
-.surf-item{padding:6px;border-radius:6px;margin-bottom:4px;background:rgba(255,255,255,.02);font-size:11px}
-.surf-item-name{font-weight:700;color:#fff}
-.surf-item-meta{color:rgba(255,255,255,.3);font-size:10px;margin-top:1px}
-.surf-gauge{height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:12px;overflow:hidden}
-.surf-fill{height:100%;border-radius:3px;transition:width .5s}
-.surf-score{font-size:12px;font-weight:700;color:rgba(255,255,255,.5);margin-top:6px;text-align:center}
-
-/* ─── MATCHER ─── */
-.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-.match-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px}
-.match-name{font-size:13px;font-weight:800;color:#fff;margin-bottom:6px}
-.match-total{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
-.match-dims{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
-.match-dim{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.4)}
-.match-dim-bar{flex:1;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
-.match-dim-fill{height:100%;border-radius:2px;background:var(--green)}
-.match-dim-val{width:18px;text-align:right;font-weight:700;color:rgba(255,255,255,.6)}
-.match-sug{font-size:11px;color:rgba(255,255,255,.4);line-height:1.35;margin-bottom:10px;font-style:italic}
-.match-btn{font-size:10px;padding:5px 12px;border-radius:6px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.5);font-weight:700;font-family:'Inter',sans-serif;transition:.15s}
-.match-btn:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.2)}
-.match-btn.added{background:var(--green);color:#fff;border-color:transparent;cursor:default}
-
-/* ─── OPPORTUNITY ─── */
-.opp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.opp-name{font-size:11px;font-weight:700;color:#fff;width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.opp-bar{flex:1;height:14px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
-.opp-fill{height:100%;border-radius:4px;transition:width .4s}
-.opp-label{font-size:10px;color:rgba(255,255,255,.35);width:110px;flex-shrink:0;text-align:right}
-.opp-spark{width:50px;height:18px;flex-shrink:0}
-
-/* ─── BRIEF ─── */
-.brief-item{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:6px}
-.brief-item-info{flex:1}
-.brief-item-name{font-size:12px;font-weight:700;color:#fff}
-.brief-item-sug{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
-.brief-item-meta{display:flex;gap:8px;margin-top:3px}
-.brief-remove{font-size:10px;padding:4px 8px;border-radius:5px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.3);font-weight:700;font-family:'Inter',sans-serif}
-.brief-remove:hover{color:var(--accent);border-color:var(--accent)}
-.brief-export{padding:8px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:var(--accent);color:#fff;font-family:'Inter',sans-serif;margin-top:10px;transition:.15s}
-.brief-export:hover{opacity:.85}
-.brief-empty{font-size:12px;color:rgba(255,255,255,.2);padding:12px 0}
-.brief-copied{font-size:11px;color:var(--green);margin-left:12px;display:none}
+/* ── ACTION BAR ── */
+.ab{height:44px;min-height:44px;background:var(--red);display:flex;align-items:center;padding:0 22px;gap:10px;flex-shrink:0}
+.ab-txt{flex:1;font-size:13px;color:#fff}
+.ab-bold{font-weight:700}
+.ab-cta{font-size:13px;font-weight:700;color:#fff;cursor:pointer;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.ab-cta:hover{opacity:.85}
 </style>
 </head>
 <body>
 
-<aside class="side">
-  <div class="s-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M4 24L10 4h4L8 24H4z" fill="#D93636"/><path d="M12 24L18 4h4L16 24h-4z" fill="#222"/></svg></div>
-  <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3.5" width="10" height="8" rx="1.5"/><path d="M5.5 8v4.5h7.5v-2"/></svg></a>
-  <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg></a>
-  <a href="sentiment.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7"/></svg></a>
-  <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 4 11 9 15 2"/></svg></div>
-  <div class="s-gap"></div>
-  <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l4-4-4-4"/><path d="M14 9H6.5a3 3 0 110-6H7"/></svg></div>
-</aside>
-
-<main class="main">
-  <nav class="nav">
-    <div class="nav-logo"><svg viewBox="0 0 28 28" fill="none"><path d="M4 24L10 4h4L8 24H4z" fill="#D93636"/><path d="M12 24L18 4h4L16 24h-4z" fill="#222"/></svg></div>
-    <a href="index.html" class="tab">Dashboard</a>
-    <a href="sentiment.html" class="tab">Sentiment</a>
-    <a href="#" class="tab">Share of Voice</a>
-    <div class="tab on">Trends</div>
-    <a href="#" class="tab">Competitors</a>
-    <a href="#" class="tab">Crisis Alert</a>
-    <a href="reports.html" class="tab">Reports</a>
-    <div class="nav-r">
-      <div class="nav-toggle"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6.5" cy="6.5" r="2.5"/><path d="M6.5 1.5v1M6.5 11v1M1.5 6.5h1M11 6.5h1M3.5 3.5l.6.6M9.4 9.4l.6.6M3.5 9.5l.6-.6M9.4 3.6l.6-.6"/></svg></div>
-      <div class="nav-bell"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10.5 4a4 4 0 10-6 3.5c.3.4.5 1 .5 1.5h5c0-.5.2-1.1.5-1.5a4 4 0 00-2-3.5z"/><path d="M5.5 12h4"/></svg><div class="nav-dot"></div></div>
-      <div class="avatar"><svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><circle cx="9" cy="6.5" r="2.8"/><path d="M3.5 15.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg></div>
+<!-- NAVBAR -->
+<nav class="nav">
+  <div class="nav-logo">//</div>
+  <a href="index.html" class="ntab">Dashboard</a>
+  <button class="ntab">Suppliers</button>
+  <button class="ntab on">Trends</button>
+  <a href="sentiment.html" class="ntab">Sentiments</a>
+  <button class="ntab">Contracts</button>
+  <button class="ntab">Contact</button>
+  <div class="nav-r">
+    <div class="theme-tog">
+      <svg width="13" height="13" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="2.5"/><path d="M6.5 1v1M6.5 11v1M1 6.5h1M11 6.5h1M2.9 2.9l.7.7M9.4 9.4l.7.7M9.4 2.9l-.7.7M2.9 9.4l.7.7"/></svg>
+      <svg width="13" height="13" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round"><path d="M11 7A5 5 0 1 1 6 2 3 3 0 0 0 11 7z"/></svg>
     </div>
-  </nav>
-
-  <div class="ct">
-    <!-- HEADER -->
-    <div class="hdr">
-      <div class="hdr-search"><svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M12 12l3.5 3.5"/></svg></div>
-      <div class="hdr-info">
-        <h1 class="hdr-title">Trends</h1>
-        <p class="hdr-sub">Tendances émergentes — Secteur Luxe</p>
-      </div>
-      <div class="hdr-actions">
-        <div class="f-group" id="periodFilters">
-          <button class="f-btn" data-val="7">7j</button>
-          <button class="f-btn on" data-val="30">30j</button>
-          <button class="f-btn" data-val="90">90j</button>
-        </div>
-        <div class="f-group" id="platformFilters">
-          <button class="f-btn on" data-val="all">All</button>
-          <button class="f-btn" data-val="instagram">Instagram</button>
-          <button class="f-btn" data-val="tiktok">TikTok</button>
-          <button class="f-btn" data-val="twitter">Twitter</button>
-          <button class="f-btn" data-val="reddit">Reddit</button>
-        </div>
-      </div>
+    <div class="nav-bell">
+      <svg width="16" height="17" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round"><path d="M8 2a4.5 4.5 0 0 1 4.5 4.5v3l1 2H2.5l1-2V6.5A4.5 4.5 0 0 1 8 2z"/><path d="M6.5 14.5a1.5 1.5 0 0 0 3 0"/></svg>
     </div>
-
-    <!-- KPIs — always visible -->
-    <div class="kpi-row">
-      <div class="gc" id="kpi-active"><div class="k-label">Trends actifs</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
-      <div class="gc" id="kpi-top"><div class="k-label">Trend #1</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:100px;height:32px"></span></div></div>
-      <div class="gc" id="kpi-opps"><div class="k-label">Opportunités</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
-      <div class="gc" id="kpi-expired"><div class="k-label">Expirés</div><div class="k-val"><span class="v skeleton" style="display:inline-block;width:50px;height:32px"></span></div></div>
-    </div>
-
-    <!-- EXPANDABLE BLOCS -->
-    <div class="f-row">
-
-      <!-- BLOC 1 — Hashtags -->
-      <div class="gc2 f-full xblock" id="bloc-hash">
-        <div class="xblock-header" onclick="toggleBloc('bloc-hash')">
-          <div class="xblock-info">
-            <div class="xblock-title">Hashtags en croissance</div>
-            <div class="xblock-summary" id="hash-summary">Chargement...</div>
-          </div>
-          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
-        </div>
-        <div class="xblock-body">
-          <input type="text" class="search-input" id="hashSearch" placeholder="Rechercher un hashtag...">
-          <div style="max-height:340px;overflow-y:auto">
-            <table class="tr-table" id="hashTable">
-              <thead><tr>
-                <th data-col="hashtag" class="sorted">Hashtag</th>
-                <th data-col="platform">Plateforme</th>
-                <th data-col="volume">Volume</th>
-                <th data-col="growth_rate">Croissance</th>
-                <th>Sparkline</th>
-                <th data-col="status">Statut</th>
-              </tr></thead>
-              <tbody id="hashBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- BLOC 2 — Sujets viraux -->
-      <div class="gc2 xblock" id="bloc-viral">
-        <div class="xblock-header" onclick="toggleBloc('bloc-viral')">
-          <div class="xblock-info">
-            <div class="xblock-title">Sujets viraux — Luxe</div>
-            <div class="xblock-summary" id="viral-summary">Chargement...</div>
-          </div>
-          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
-        </div>
-        <div class="xblock-body">
-          <div id="viralList"></div>
-        </div>
-      </div>
-
-      <!-- BLOC 3 — Surfe ou ignore -->
-      <div class="gc2 xblock" id="bloc-surf">
-        <div class="xblock-header" onclick="toggleBloc('bloc-surf')">
-          <div class="xblock-info">
-            <div class="xblock-title">Hermès — Surfe ou ignore ?</div>
-            <div class="xblock-summary" id="surf-summary">Chargement...</div>
-          </div>
-          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
-        </div>
-        <div class="xblock-body">
-          <div class="surf-cols" id="surfCols"></div>
-          <div class="surf-gauge"><div class="surf-fill" id="surfFill" style="width:0%"></div></div>
-          <div class="surf-score" id="surfScoreLabel"></div>
-        </div>
-      </div>
-
-      <!-- BLOC 4 — Trend Matcher -->
-      <div class="gc2 f-full xblock" id="bloc-match">
-        <div class="xblock-header" onclick="toggleBloc('bloc-match')">
-          <div class="xblock-info">
-            <div class="xblock-title">Trend Matcher</div>
-            <div class="xblock-summary" id="match-summary">Chargement...</div>
-          </div>
-          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
-        </div>
-        <div class="xblock-body">
-          <div class="match-grid" id="matchGrid"></div>
-        </div>
-      </div>
-
-      <!-- BLOC 5 — Fenêtre d'opportunité -->
-      <div class="gc2 f-full xblock" id="bloc-opp">
-        <div class="xblock-header" onclick="toggleBloc('bloc-opp')">
-          <div class="xblock-info">
-            <div class="xblock-title">Fenêtre d'opportunité</div>
-            <div class="xblock-summary" id="opp-summary">Chargement...</div>
-          </div>
-          <span class="xblock-badge urgent" id="opp-urgent" style="display:none">Agir maintenant</span>
-          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
-        </div>
-        <div class="xblock-body">
-          <div id="oppRows"></div>
-        </div>
-      </div>
-
-      <!-- BLOC 6 — Brief -->
-      <div class="gc2 f-full xblock" id="bloc-brief">
-        <div class="xblock-header" onclick="toggleBloc('bloc-brief')">
-          <div class="xblock-info">
-            <div class="xblock-title">Brief de la semaine</div>
-            <div class="xblock-summary" id="brief-summary">0 trends ajoutés au brief</div>
-          </div>
-          <div class="xblock-chevron"><svg width="12" height="12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></div>
-        </div>
-        <div class="xblock-body">
-          <div id="briefList"></div>
-          <div style="display:flex;align-items:center">
-            <button class="brief-export" id="briefExport">Exporter le brief</button>
-            <span class="brief-copied" id="briefCopied">Copié !</span>
-          </div>
-        </div>
-      </div>
-
+    <div class="nav-av">
+      <svg width="17" height="17" fill="none" viewBox="0 0 17 17"><circle cx="8.5" cy="6.5" r="2.8" fill="rgba(255,255,255,0.65)"/><path d="M3 15c0-3 2.5-5.2 5.5-5.2S14 12 14 15" stroke="rgba(255,255,255,0.65)" stroke-width="1.5" stroke-linecap="round"/></svg>
     </div>
   </div>
-</main>
+</nav>
+
+<!-- BODY -->
+<div class="wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <a class="s-ico" href="index.html">
+      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 7L8.5 2 15 7v9H2V7z"/><rect x="6" y="10" width="5" height="6"/></svg>
+    </a>
+    <a class="s-ico on" href="trends.html">
+      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="2" width="5.5" height="5.5" rx="1"/><rect x="9.5" y="2" width="5.5" height="5.5" rx="1"/><rect x="2" y="9.5" width="5.5" height="5.5" rx="1"/><rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1"/></svg>
+    </a>
+    <a class="s-ico" href="#">
+      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="4.5" cy="4.5" r="1.8"/><circle cx="12.5" cy="4.5" r="1.8"/><circle cx="8.5" cy="13" r="1.8"/><path d="M6.2 4.5h3.1M6.8 6l-1 5.3M10.2 6l1 5.3"/></svg>
+    </a>
+    <a class="s-ico" href="sentiment.html">
+      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 8.5a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M8.5 1v1.5M8.5 14v1.5M1 8.5h1.5M14 8.5h1.5"/></svg>
+    </a>
+    <div class="s-gap"></div>
+    <a class="s-ico" href="#">
+      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="2.5"/><path d="M8.5 1.5v1.5M8.5 13.5v1.5M1.5 8.5h1.5M13.5 8.5h1.5M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M11.3 3.6l-1.1 1.1M3.6 11.3l1.1 1.1"/></svg>
+    </a>
+    <a class="s-ico" href="#">
+      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M13.5 10.8a1.8 1.8 0 0 1-1.8 1.8H5L2 15V4a1.8 1.8 0 0 1 1.8-1.8h8a1.8 1.8 0 0 1 1.8 1.8z"/></svg>
+    </a>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="ct">
+
+    <!-- PAGE HEADER -->
+    <div class="phdr">
+      <div class="phdr-icon">
+        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M14 14l3 3"/></svg>
+      </div>
+      <div class="phdr-info">
+        <div class="phdr-title">Trends</div>
+        <div class="phdr-sub">Emerging Trends — Luxury Sector</div>
+      </div>
+      <div class="phdr-r">
+        <div class="pf-row">
+          <button class="pf-btn on" data-v="7" id="pf7">7 days</button>
+          <span class="pf-sep">/</span>
+          <button class="pf-btn" data-v="30" id="pf30">30 days</button>
+          <span class="pf-sep">/</span>
+          <button class="pf-btn" data-v="90" id="pf90">90 days</button>
+        </div>
+        <div class="phdr-btns">
+          <button class="btn-ref" id="btnRefresh">
+            <svg width="10" height="10" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><polyline points="1 3 3.5 3 3.5 5.5"/><path d="M3.5 3A4 4 0 1 1 2 5.5"/></svg>
+            Refresh
+          </button>
+          <button class="btn-ico">
+            <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5.5 1v7M3 5.5l2.5 2.5L8 5.5M2 10h7"/></svg>
+          </button>
+          <button class="btn-ico">
+            <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="3" cy="5.5" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="8" cy="9" r="1.3"/><path d="M4.2 4.8l2.6-1.8M4.2 6.2l2.6 1.8"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROWS -->
+    <div class="rows">
+
+      <!-- ROW 1: KPI Cards -->
+      <div class="r1">
+
+        <!-- Active Trends -->
+        <div class="kc">
+          <div class="kc-hdr">
+            <span class="kc-lbl">Active Trends</span>
+            <div class="kc-arr" style="color:var(--green)">↗</div>
+          </div>
+          <div class="kc-val w" id="kActiveTrends">24</div>
+          <svg class="kc-spark" viewBox="0 0 118 38" fill="none" width="118" height="38" preserveAspectRatio="none">
+            <polyline points="0,35 13,29 26,23 39,25 52,19 65,14 78,10 91,6 104,3 118,1" stroke="var(--green)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- Top Trend -->
+        <div class="kc">
+          <div class="kc-hdr">
+            <span class="kc-lbl-sm">Top Trend</span>
+          </div>
+          <div class="kc-hash" id="kTopTrend">#SlowFashion</div>
+          <div class="kc-gsub" id="kTopGrowth">+340% this week</div>
+        </div>
+
+        <!-- Opportunities -->
+        <div class="kc">
+          <div class="kc-hdr">
+            <span class="kc-lbl">Opportunities</span>
+          </div>
+          <div class="kc-val g" id="kOpps">8</div>
+          <div class="kc-sub">Hermès compatible trends</div>
+          <svg class="kc-spark" viewBox="0 0 98 38" fill="none" width="98" height="38" preserveAspectRatio="none">
+            <polyline points="0,33 11,27 22,21 33,23 44,17 55,12 66,8 77,5 88,2 98,1" stroke="var(--green)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- Expiring Soon -->
+        <div class="kc">
+          <div class="kc-hdr">
+            <span class="kc-lbl">Expiring Soon</span>
+            <span class="bdg-act">Act Now</span>
+          </div>
+          <div class="kc-val r" id="kExpiring">3</div>
+          <div class="kc-sub">Declining trends</div>
+          <svg class="kc-spark" viewBox="0 0 98 38" fill="none" width="98" height="38" preserveAspectRatio="none">
+            <polyline points="0,4 11,7 22,11 33,9 44,14 55,18 66,22 77,27 88,31 98,35" stroke="var(--red)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+      </div><!-- /r1 -->
+
+      <!-- ROW 2: Growing Hashtags + Viral Topics -->
+      <div class="r2">
+
+        <!-- Growing Hashtags -->
+        <div class="gc">
+          <div class="gc-hdr">
+            <span class="gc-title">Growing Hashtags</span>
+            <div class="gc-srch">
+              <svg width="10" height="10" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round"><circle cx="4.5" cy="4.5" r="3.2"/><path d="M7.2 7.2l2 2"/></svg>
+              <input type="text" id="hashSearch" placeholder="Search">
+            </div>
+          </div>
+          <div class="ht">
+            <div class="ht-head">
+              <span>Hashtag</span><span>Platform</span><span>Volume</span>
+              <span>Growth</span><span>Sparkline</span><span>Status</span>
+            </div>
+            <div class="ht-body" id="hashBody"></div>
+          </div>
+        </div>
+
+        <!-- Viral Topics -->
+        <div class="vc">
+          <div class="vc-title">Viral Topics — Luxury</div>
+          <div class="vt-top" id="viralTopics"></div>
+          <div class="tl-div"></div>
+          <div class="tl-rows" id="tlRows"></div>
+        </div>
+
+      </div><!-- /r2 -->
+
+      <!-- ROW 3: Trend Matcher + Weekly Brief -->
+      <div class="r3">
+
+        <!-- Trend Matcher -->
+        <div class="mc">
+          <div class="mc-title">Trend Matcher — Hermès Opportunities</div>
+          <div class="mc-rows" id="matcherRows"></div>
+        </div>
+
+        <!-- Weekly Brief -->
+        <div class="wc">
+          <div class="wc-hdr">
+            <div class="wc-hl">
+              <div class="wc-title">Weekly Brief</div>
+              <div class="wc-sub" id="wcCount">3 trends added to the brief</div>
+            </div>
+            <button class="wc-exp" onclick="exportBrief()">Export Brief</button>
+          </div>
+          <div class="wc-items" id="wcItems"></div>
+        </div>
+
+      </div><!-- /r3 -->
+
+    </div><!-- /rows -->
+
+    <!-- ACTION BAR -->
+    <div class="ab">
+      <span class="ab-txt" id="abMsg">
+        <span class="ab-bold">#HauteCouture</span> expires in 2 days — critical window of opportunity for Hermès.
+      </span>
+      <a href="reports.html" class="ab-cta">→ Action Plan.</a>
+    </div>
+
+  </div><!-- /ct -->
+</div><!-- /wrap -->
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   TRENDS — EXPANDABLE MINIMALIST DESIGN
-   ═══════════════════════════════════════════════════════════ */
+/* ─── STATE ─── */
+let pDays = 7;
 
-let trendsData = [];
-let periodVal = 30;
-let platformVal = 'all';
-let sortCol = 'growth_rate';
-let sortAsc = false;
-let briefItems = JSON.parse(localStorage.getItem('trends_brief') || '[]');
+/* ─── FALLBACK DATA ─── */
+const FB = {
+  activeTrends: 24,
+  topTrend: { hashtag: '#SlowFashion', growth: '+340%' },
+  opportunities: 8,
+  expiring: 3,
 
-// ─── TOGGLE BLOC ──────────────────────────────────────────
-function toggleBloc(id) {
-    document.getElementById(id).classList.toggle('open');
-}
+  hashtags: [
+    { hashtag:'#LuxuryFashion', platform:'Instagram', volume:'2.4M', growth:'+85%',  type:'up',   duration:'~6 days',  angle:'Heritage and Know-How' },
+    { hashtag:'#SlowFashion',   platform:'TikTok',    volume:'1.8M', growth:'+340%', type:'up',   duration:'~12 days', angle:'Sustainable Craftsmanship Angle' },
+    { hashtag:'#ParisianStyle', platform:'Instagram', volume:'980k', growth:'+62%',  type:'peak', duration:'~4 days',  angle:'Hermès Ateliers Lifestyle' },
+    { hashtag:'#HauteCouture',  platform:'Twitter',   volume:'780k', growth:'+28%',  type:'up',   duration:'~2 days',  angle:'Couture and Craftsmanship' },
+    { hashtag:'#LuxuryResale',  platform:'Reddit',    volume:'540k', growth:'+15%',  type:'peak', duration:'~1 day',   angle:'Pre-owned luxury positioning' },
+    { hashtag:'#SustainableLux',platform:'TikTok',    volume:'320k', growth:'-8%',   type:'dec',  duration:'Expired',  angle:'Sustainable materials story' },
+  ],
 
-// ─── EXTENDED FALLBACK ────────────────────────────────────
-const EXT_TRENDS = [
-    { id:'t-1',  hashtag:'#Hermès',           platform:'instagram', volume:284000, growth_rate:12.4, date:'2026-03-28', related_brand:'hermes' },
-    { id:'t-2',  hashtag:'#Chanel',            platform:'instagram', volume:312000, growth_rate:8.1,  date:'2026-03-28', related_brand:'chanel' },
-    { id:'t-3',  hashtag:'#Birkin',            platform:'tiktok',    volume:198000, growth_rate:24.6, date:'2026-03-28', related_brand:'hermes' },
-    { id:'t-4',  hashtag:'#QuietLuxury',       platform:'tiktok',    volume:156000, growth_rate:31.2, date:'2026-03-28', related_brand:null },
-    { id:'t-5',  hashtag:'#ChanelClassicFlap', platform:'instagram', volume:89000,  growth_rate:-3.2, date:'2026-03-28', related_brand:'chanel' },
-    { id:'t-6',  hashtag:'#LuxuryUnboxing',    platform:'tiktok',    volume:245000, growth_rate:18.7, date:'2026-03-28', related_brand:null },
-    { id:'t-7',  hashtag:'#SlowFashion',       platform:'instagram', volume:178000, growth_rate:22.3, date:'2026-03-27', related_brand:null },
-    { id:'t-8',  hashtag:'#ParisianStyle',     platform:'tiktok',    volume:210000, growth_rate:15.8, date:'2026-03-27', related_brand:null },
-    { id:'t-9',  hashtag:'#LuxuryResale',      platform:'twitter',   volume:134000, growth_rate:28.4, date:'2026-03-26', related_brand:null },
-    { id:'t-10', hashtag:'#Artisanat',         platform:'instagram', volume:67000,  growth_rate:35.1, date:'2026-03-26', related_brand:'hermes' },
-    { id:'t-11', hashtag:'#SavoirFaire',       platform:'instagram', volume:52000,  growth_rate:19.5, date:'2026-03-25', related_brand:'hermes' },
-    { id:'t-12', hashtag:'#DesignerBags',      platform:'tiktok',    volume:320000, growth_rate:9.4,  date:'2026-03-25', related_brand:null },
-    { id:'t-13', hashtag:'#LuxuryTravel',      platform:'instagram', volume:142000, growth_rate:11.2, date:'2026-03-24', related_brand:null },
-    { id:'t-14', hashtag:'#VintageLuxury',     platform:'twitter',   volume:88000,  growth_rate:42.0, date:'2026-03-24', related_brand:null },
-    { id:'t-15', hashtag:'#FrenchLuxury',      platform:'instagram', volume:96000,  growth_rate:16.7, date:'2026-03-23', related_brand:'hermes' },
-    { id:'t-16', hashtag:'#OldMoney',          platform:'tiktok',    volume:410000, growth_rate:7.3,  date:'2026-03-23', related_brand:null },
-    { id:'t-17', hashtag:'#Sustainability',    platform:'twitter',   volume:195000, growth_rate:13.9, date:'2026-03-22', related_brand:null },
-    { id:'t-18', hashtag:'#CraftsmanshipMatters',platform:'instagram',volume:48000, growth_rate:38.2, date:'2026-03-22', related_brand:'hermes' },
-    { id:'t-19', hashtag:'#StreetLuxury',      platform:'tiktok',    volume:275000, growth_rate:-1.5, date:'2026-03-21', related_brand:null },
-    { id:'t-20', hashtag:'#MinimalistFashion', platform:'instagram', volume:165000, growth_rate:20.1, date:'2026-03-21', related_brand:null }
-];
+  topics: [
+    { topic:'French craftsmanship',     volume:'3.2M', sentiment:'Positive', sentCls:'pos', presence:'Hermès present', presCls:'pos' },
+    { topic:'Luxury Sustainability',    volume:'1.8M', sentiment:'Mixed',    sentCls:'mix', presence:'Hermès absent',  presCls:'org' },
+    { topic:'Luxury Pre-owned',         volume:'1.4M', sentiment:'Negative', sentCls:'neg', presence:'Hermès absent',  presCls:'org' },
+    { topic:'Streetwear Collaborations',volume:'980k', sentiment:'Positive', sentCls:'pos', presence:'Hermès absent',  presCls:'org' },
+    { topic:'Parisian Craftsmanship',   volume:'760k', sentiment:'Positive', sentCls:'pos', presence:'Hermès present', presCls:'pos' },
+    { topic:'Equestrian Accessories',   volume:'540k', sentiment:'Positive', sentCls:'pos', presence:'Hermès present', presCls:'pos' },
+  ],
 
-const VIRAL_SUBJECTS = [
-    { name:'Artisanat français',       volume:12400, sentiment:'positive', trend:18.5, hermesPresent:true },
-    { name:'Durabilité luxe',          volume:9800,  sentiment:'positive', trend:24.2, hermesPresent:false },
-    { name:'Accessibilité prix',       volume:15200, sentiment:'negative', trend:31.0, hermesPresent:true },
-    { name:'Collaborations streetwear', volume:8600, sentiment:'neutral',  trend:12.8, hermesPresent:false },
-    { name:'Seconde main luxe',        volume:11300, sentiment:'positive', trend:35.6, hermesPresent:false },
-    { name:'Patrimoine & héritage',    volume:7200,  sentiment:'positive', trend:9.3,  hermesPresent:true },
-    { name:'Expérience client luxe',   volume:6800,  sentiment:'negative', trend:15.7, hermesPresent:true },
-    { name:'Luxe digital & métavers',  volume:4500,  sentiment:'neutral',  trend:-8.4, hermesPresent:false }
-];
+  timeline: [
+    { hashtag:'#SlowFashion',   w:90, color:'var(--green)',  lbl:'~12 days remaining', warn:false, act:false },
+    { hashtag:'#LuxuryFashion', w:60, color:'var(--green)',  lbl:'~6 days',            warn:false, act:false },
+    { hashtag:'#ParisianStyle', w:45, color:'var(--orange)', lbl:'~4 days',            warn:false, act:false },
+    { hashtag:'#HauteCouture',  w:25, color:'var(--red)',    lbl:'~2 days',            warn:true,  act:true  },
+    { hashtag:'#LuxuryResale',  w:12, color:'var(--red)',    lbl:'~1 day',             warn:true,  act:false },
+    { hashtag:'#SustainableLux',w:5,  color:'var(--g3)',     lbl:'Expired',            warn:false, act:true  },
+  ],
 
-const BRAND_KW_POS = ['artisanat','patrimoine','savoir','exclusif','élégance','elegance','paris','parisian','french','luxury','heritage','craftsmanship','leather','silk','timeless','iconic','atelier','handmade','bespoke','couture','maison','vintage','slow','minimal'];
-const BRAND_KW_NEG = ['fast fashion','discount','promo','accessible','low cost','cheap','mass','outlet','street'];
+  matcher: [
+    { hashtag:'#SlowFashion',   score:28, max:30, pct:93, color:'var(--green)',  sug:'Angle: craftsmanship and sustainability of materials' },
+    { hashtag:'#ParisianStyle', score:24, max:30, pct:80, color:'var(--green)',  sug:'Angle: craftsmanship and sustainability of materials' },
+    { hashtag:'#HauteCouture',  score:15, max:30, pct:50, color:'var(--orange)', sug:'Lifestyle content around Hermès workshops' },
+    { hashtag:'#SustainableLux',score:15, max:30, pct:50, color:'var(--red)',    sug:'Angle: craftsmanship and sustainability of materials' },
+  ],
 
-const SUGGESTIONS = {
-    '#SlowFashion':'Mettre en avant la durabilité des matières et le processus artisanal — angle storytelling',
-    '#LuxuryResale':"Communiquer sur l'authenticité et la valeur patrimoniale des pièces Hermès",
-    '#ParisianStyle':'Contenu lifestyle autour du savoir-faire parisien et des ateliers',
-    '#QuietLuxury':"Capitaliser sur l'ADN discret et intemporel d'Hermès — anti-logo, matières nobles",
-    '#Artisanat':'Série documentaire sur les artisans Hermès — Sellier, Cristalleries, Soieries',
-    '#SavoirFaire':'Mettre en avant les 180h nécessaires pour un Kelly — format Reel/TikTok',
-    '#VintageLuxury':"Valoriser l'aspect patrimonial : un Birkin se transmet, ne se jette pas",
-    '#Sustainability':'Angle durabilité naturel : cuir tannage végétal, réparation à vie',
-    '#CraftsmanshipMatters':'Contenu behind-the-scenes des ateliers de Pantin — artisan POV',
-    '#FrenchLuxury':'Renforcer le positionnement French luxury originel vs concurrents',
-    '#MinimalistFashion':'Pousser la gamme épurée : carrés unis, bracelets cuir, montres Arceau',
-    '#OldMoney':'Hermès EST le old money — réutiliser les contenus patrimoine existants',
-    '#LuxuryTravel':'Partenariats avec hôtels Palace, contenus voyage avec accessoires Hermès',
-    '#DesignerBags':'Comparatifs naturels — laisser le produit parler via UGC authentique',
-    '#LuxuryUnboxing':'Encourager les unboxings organiques via gifting ciblé micro-influenceurs',
-    '#Birkin':'Amplifier le contenu existant — la demande est organique',
-    '#Hermès':'Maintenir le share of voice — contenu régulier toutes plateformes'
+  defaultBrief: [
+    { hashtag:'#SlowFashion',   platform:'TikTok',    duration:'~12 days', angle:'Sustainable Craftsmanship Angle' },
+    { hashtag:'#ParisianStyle', platform:'Instagram', duration:'~4 days',  angle:'Hermès Ateliers Lifestyle' },
+    { hashtag:'#LuxuryFashion', platform:'Instagram', duration:'~6 days',  angle:'Heritage and Know-How' },
+  ]
 };
 
-// ─── DATA LOADING ─────────────────────────────────────────
-async function loadData() {
-    const start = new Date(Date.now() - periodVal * 864e5).toISOString();
-    const end = new Date().toISOString();
-    const fetchTrends = typeof getTrends === 'function' ? getTrends : async () => EXT_TRENDS;
+/* ─── SPARKLINE TEMPLATES ─── */
+const SPK = {
+  up:   `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,18 10,14 20,15 30,10 40,6 50,4 60,2" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  peak: `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,14 10,8 20,5 30,5 40,6 50,8 60,11" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  dec:  `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,3 10,5 20,9 30,7 40,11 50,14 60,18" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+};
 
-    try {
-        const tr = await fetchTrends({ platform: platformVal === 'all' ? null : platformVal, startDate: start, endDate: end });
-        trendsData = (tr && tr.length >= 6) ? tr : EXT_TRENDS;
-        if (trendsData.length < 8) trendsData = EXT_TRENDS;
-    } catch (e) {
-        trendsData = EXT_TRENDS;
-    }
+/* ─── RENDER: HASHTAGS TABLE ─── */
+function renderHashtags(filter) {
+  filter = (filter || '').toLowerCase();
+  const rows = filter
+    ? FB.hashtags.filter(h => h.hashtag.toLowerCase().includes(filter))
+    : FB.hashtags;
+  document.getElementById('hashBody').innerHTML = rows.map(h => {
+    const gCls = h.growth.startsWith('-') ? 'neg' : 'pos';
+    const bdgCls = h.type === 'up' ? 'up' : h.type === 'peak' ? 'peak' : 'dec';
+    const bdgTxt = h.type === 'up' ? 'Up' : h.type === 'peak' ? 'Peak Reached' : 'Declining';
+    return `<div class="ht-row">
+      <span class="ht-hash">${h.hashtag}</span>
+      <span class="ht-plat">${h.platform}</span>
+      <span class="ht-vol">${h.volume}</span>
+      <span class="ht-gr ${gCls}">${h.growth}</span>
+      <span>${SPK[h.type]||SPK.up}</span>
+      <span><span class="ht-bdg ${bdgCls}">${bdgTxt}</span></span>
+    </div>`;
+  }).join('');
+}
 
-    // Enrich
-    trendsData.forEach(t => {
-        if (!t.status) t.status = t.growth_rate > 10 ? 'rising' : (t.growth_rate >= -2 ? 'peak' : 'declining');
-        if (!t.sparkline) {
-            const b = t.volume * 0.7;
-            t.sparkline = Array.from({length:7}, (_, i) => {
-                const p = i / 6;
-                if (t.status === 'rising') return b + (t.volume - b) * p + Math.random() * b * 0.1;
-                if (t.status === 'peak') return t.volume * (0.9 + Math.random() * 0.2);
-                return t.volume * (1 - p * 0.4) + Math.random() * b * 0.1;
-            });
-        }
-        if (t.window === undefined) {
-            if (t.status === 'rising') t.window = 7 + Math.floor(Math.random() * 8);
-            else if (t.status === 'peak') t.window = 2 + Math.floor(Math.random() * 4);
-            else t.window = Math.floor(Math.random() * 2);
-        }
+/* ─── RENDER: VIRAL TOPICS ─── */
+function renderViralTopics() {
+  document.getElementById('viralTopics').innerHTML = FB.topics.map(t =>
+    `<div class="vt-row">
+      <span class="vt-topic">${t.topic}</span>
+      <span class="vt-vol">${t.volume}</span>
+      <span class="vt-bdg ${t.sentCls}">${t.sentiment}</span>
+      <span class="vt-bdg ${t.presCls}">${t.presence}</span>
+    </div>`
+  ).join('');
+}
+
+/* ─── RENDER: TIMELINE ─── */
+function renderTimeline() {
+  document.getElementById('tlRows').innerHTML = FB.timeline.map(t => {
+    const lblColor = (t.warn || t.lbl === 'Expired') ? 'color:var(--red)' : 'color:var(--gr)';
+    const actBadge = t.act ? `<span class="tl-act">Act Now</span>` : '';
+    const warn = t.warn ? ` ⚠️` : '';
+    return `<div class="tl-row">
+      <span class="tl-hash">${t.hashtag}</span>
+      <div class="tl-trk"><div class="tl-bar" style="width:${t.w}%;background:${t.color}"></div></div>
+      <span class="tl-lbl" style="${lblColor}">${actBadge}${t.lbl}${warn}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ─── RENDER: TREND MATCHER ─── */
+function renderMatcher() {
+  const brief = getBrief();
+  document.getElementById('matcherRows').innerHTML = FB.matcher.map(m => {
+    const inBrief = brief.some(b => b.hashtag === m.hashtag);
+    const btnCls = inBrief ? 'mc-btn done' : 'mc-btn';
+    const btnTxt = inBrief ? '✓ Added' : '+ Brief';
+    return `<div class="mc-row">
+      <div class="mc-top">
+        <span class="mc-hash">${m.hashtag}</span>
+        <span class="mc-dots">············</span>
+        <span class="mc-snum" style="color:${m.color}">${m.score}</span><span class="mc-sden">/${m.max}</span>
+        <div class="mc-btrk"><div class="mc-bfill" style="width:${m.pct}%;background:${m.color}"></div></div>
+        <button class="${btnCls}" onclick="addToBrief('${m.hashtag}')">${btnTxt}</button>
+      </div>
+      <div class="mc-sug">${m.sug}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ─── BRIEF: localStorage ─── */
+function getBrief() {
+  try { return JSON.parse(localStorage.getItem('weekly_brief') || '[]'); }
+  catch { return []; }
+}
+
+function addToBrief(hashtag) {
+  let brief = getBrief();
+  if (!brief.find(b => b.hashtag === hashtag)) {
+    const ht = FB.hashtags.find(h => h.hashtag === hashtag);
+    const mt = FB.matcher.find(m => m.hashtag === hashtag);
+    brief.push({
+      hashtag,
+      platform: ht?.platform || 'TikTok',
+      duration: ht?.duration || '~7 days',
+      angle: mt?.sug?.replace('Angle: ', '') || ht?.angle || 'Brand alignment opportunity'
     });
-
-    render();
+    localStorage.setItem('weekly_brief', JSON.stringify(brief));
+  }
+  renderMatcher();
+  renderWeeklyBrief();
 }
 
-// ─── RENDER ───────────────────────────────────────────────
-function render() {
-    renderKPIs();
-    renderHashTable();
-    renderViralSubjects();
-    renderSurfOrIgnore();
-    renderTrendMatcher();
-    renderOpportunityWindow();
-    renderBrief();
+/* ─── RENDER: WEEKLY BRIEF ─── */
+function renderWeeklyBrief() {
+  const brief = getBrief();
+  const items = brief.length ? brief : FB.defaultBrief;
+  const n = items.length;
+  document.getElementById('wcCount').textContent = `${n} trend${n === 1 ? '' : 's'} added to the brief`;
+  document.getElementById('wcItems').innerHTML = items.map(b =>
+    `<div class="wci">
+      <div class="wci-top">
+        <span class="wci-hash">${b.hashtag}</span>
+        <span class="wci-dur">${b.duration}</span>
+      </div>
+      <div class="wci-plat">${b.platform}</div>
+      <div class="wci-angle">${b.angle}</div>
+    </div>`
+  ).join('');
 }
 
-// ─── KPIs ─────────────────────────────────────────────────
-function renderKPIs() {
-    const rising = trendsData.filter(t => t.growth_rate > 0);
-    const declining = trendsData.filter(t => t.growth_rate < -2);
-    const top = [...trendsData].sort((a, b) => b.volume - a.volume)[0];
-    const opps = trendsData.filter(t => t.growth_rate > 0).map(t => matchScore(t)).filter(s => s.total > 15).length;
-
-    document.querySelector('#kpi-active .k-val').innerHTML = `<span class="v">${rising.length}</span> <span class="k-arr up">↑</span>`;
-    document.querySelector('#kpi-top .k-val').innerHTML = top
-        ? `<span class="v" style="font-size:clamp(14px,1.6vw,20px)">${top.hashtag}</span> <span class="k-arr up">+${top.growth_rate}%</span>`
-        : '<span class="v">—</span>';
-    document.querySelector('#kpi-opps .k-val').innerHTML = `<span class="v">${opps}</span>`;
-    document.querySelector('#kpi-expired .k-val').innerHTML = `<span class="v">${declining.length}</span> <span class="k-arr down">↓</span>`;
-}
-
-// ─── BLOC 1: HASHTAG TABLE ────────────────────────────────
-function renderHashTable() {
-    const search = document.getElementById('hashSearch').value.toLowerCase();
-    let filtered = trendsData.filter(t => t.hashtag.toLowerCase().includes(search));
-    filtered.sort((a, b) => {
-        let va = a[sortCol], vb = b[sortCol];
-        if (typeof va === 'string') { va = va.toLowerCase(); vb = (vb||'').toLowerCase(); }
-        return sortAsc ? (va < vb ? -1 : 1) : (va > vb ? -1 : 1);
-    });
-
-    const top20 = filtered.slice(0, 20);
-
-    // Summary
-    const topGrowth = [...trendsData].sort((a, b) => b.growth_rate - a.growth_rate)[0];
-    document.getElementById('hash-summary').textContent =
-        `${trendsData.filter(t=>t.growth_rate>0).length} hashtags détectés — Top : ${topGrowth?.hashtag || '—'} +${topGrowth?.growth_rate || 0}%`;
-
-    document.getElementById('hashBody').innerHTML = top20.map(t => {
-        const gc = t.growth_rate >= 0 ? 'var(--green)' : 'var(--accent)';
-        const ga = t.growth_rate >= 0 ? '↑' : '↓';
-        const sp = t.status === 'rising' ? '<span class="pill pill-pos">En hausse</span>'
-            : t.status === 'peak' ? '<span class="pill pill-warn">Pic atteint</span>'
-            : '<span class="pill pill-neg">En déclin</span>';
-        return `<tr>
-            <td><span class="tr-hash">${t.hashtag}</span></td>
-            <td><span class="plat-badge">${t.platform}</span></td>
-            <td>${fmtN(t.volume)}</td>
-            <td style="color:${gc};font-weight:700">${ga} ${Math.abs(t.growth_rate).toFixed(1)}%</td>
-            <td><canvas class="tr-spark" id="sp-${t.id}"></canvas></td>
-            <td>${sp}</td>
-        </tr>`;
-    }).join('');
-
-    // Sparklines
-    top20.forEach(t => drawSpark(`sp-${t.id}`, t.sparkline, 80, 24, t.growth_rate >= 0 ? '#3CB371' : '#D93636'));
-
-    // Column headers
-    document.querySelectorAll('.tr-table th').forEach(th => {
-        th.classList.remove('sorted', 'asc');
-        if (th.dataset.col === sortCol) { th.classList.add('sorted'); if (sortAsc) th.classList.add('asc'); }
-    });
-}
-
-// ─── BLOC 2: VIRAL SUBJECTS ──────────────────────────────
-function renderViralSubjects() {
-    const absent = VIRAL_SUBJECTS.filter(s => !s.hermesPresent).length;
-    document.getElementById('viral-summary').textContent =
-        `${VIRAL_SUBJECTS.length} sujets actifs — Hermès absent sur ${absent} d'entre eux`;
-
-    document.getElementById('viralList').innerHTML = VIRAL_SUBJECTS.map(s => {
-        const sent = s.sentiment === 'positive' ? '<span class="pill pill-pos">Positif</span>'
-            : s.sentiment === 'negative' ? '<span class="pill pill-neg">Négatif</span>'
-            : '<span class="pill pill-neu">Neutre</span>';
-        const pres = s.hermesPresent
-            ? '<span class="pill pill-pos">Hermès présent</span>'
-            : '<span class="pill pill-warn">Hermès absent</span>';
-        const ta = s.trend >= 0 ? `<span style="color:var(--green)">↑ ${s.trend}%</span>` : `<span style="color:var(--accent)">↓ ${Math.abs(s.trend)}%</span>`;
-        const bc = s.hermesPresent ? 'var(--green)' : 'var(--orange)';
-        return `<div class="viral-item" style="border-left-color:${bc}">
-            <div class="viral-name">${s.name}</div>
-            <div class="viral-meta"><span>${fmtN(s.volume)} mentions</span>${sent}${pres}${ta}</div>
-        </div>`;
-    }).join('');
-}
-
-// ─── BLOC 3: SURF OR IGNORE ──────────────────────────────
-function renderSurfOrIgnore() {
-    const allRising = trendsData.filter(t => t.growth_rate > 0);
-    const present = allRising.filter(t => t.related_brand === 'hermes');
-    const absent = allRising.filter(t => t.related_brand !== 'hermes');
-    const surfPct = allRising.length ? Math.round(present.length / allRising.length * 100) : 0;
-    const avgVol = allRising.reduce((s, t) => s + t.volume, 0) / (allRising.length || 1);
-
-    document.getElementById('surf-summary').innerHTML =
-        `<span style="display:inline-block;width:60px;height:6px;background:rgba(255,255,255,.1);border-radius:3px;vertical-align:middle;overflow:hidden;margin-right:6px"><span style="display:block;height:100%;width:${surfPct}%;background:var(--green);border-radius:3px"></span></span>Hermès présent sur ${surfPct}% des trends actifs`;
-
-    let html = '<div class="surf-col present"><div class="surf-col-title">Hermès présent</div>';
-    present.slice(0, 6).forEach(t => {
-        const sov = Math.round(30 + Math.random() * 40);
-        html += `<div class="surf-item"><div class="surf-item-name">${t.hashtag}</div><div class="surf-item-meta">${fmtN(t.volume)} · SOV ${sov}%</div></div>`;
-    });
-    html += '</div><div class="surf-col absent"><div class="surf-col-title">Hermès absent</div>';
-    absent.slice(0, 6).forEach(t => {
-        const opp = t.volume > avgVol ? ' <span class="pill pill-warn">Opportunité manquée</span>' : '';
-        html += `<div class="surf-item"><div class="surf-item-name">${t.hashtag}${opp}</div><div class="surf-item-meta">${fmtN(t.volume)}</div></div>`;
-    });
-    html += '</div>';
-
-    document.getElementById('surfCols').innerHTML = html;
-    const fill = document.getElementById('surfFill');
-    fill.style.width = surfPct + '%';
-    fill.style.background = surfPct > 50 ? 'var(--green)' : (surfPct > 25 ? 'var(--orange)' : 'var(--accent)');
-    document.getElementById('surfScoreLabel').textContent = `Hermès surfe sur ${surfPct}% des trends actifs`;
-}
-
-// ─── SCORE COMPUTATION ────────────────────────────────────
-function matchScore(t) {
-    const tag = (t.hashtag || '').toLowerCase();
-    let alignment = 3;
-    BRAND_KW_POS.forEach(kw => { if (tag.includes(kw)) alignment += 2; });
-    BRAND_KW_NEG.forEach(kw => { if (tag.includes(kw)) alignment -= 3; });
-    if (t.related_brand === 'hermes') alignment += 2;
-    alignment = Math.max(0, Math.min(10, alignment));
-
-    const maxVol = Math.max(...trendsData.map(x => x.volume)) || 1;
-    const potential = Math.min(10, Math.round((t.volume / maxVol) * 5 + Math.min(Math.max(t.growth_rate / 10, 0), 5)));
-    const urgency = t.window >= 10 ? 8 : (t.window >= 5 ? 6 : (t.window >= 2 ? 4 : 2));
-    return { alignment, potential, urgency, total: alignment + potential + urgency, trend: t };
-}
-
-// ─── BLOC 4: TREND MATCHER ────────────────────────────────
-function renderTrendMatcher() {
-    const scored = trendsData.filter(t => t.growth_rate > 0).map(t => matchScore(t)).sort((a, b) => b.total - a.total).slice(0, 5);
-    const opps = scored.filter(s => s.total > 15).length;
-    document.getElementById('match-summary').textContent = `${opps} opportunités détectées pour Hermès cette semaine`;
-
-    document.getElementById('matchGrid').innerHTML = scored.map(s => {
-        const t = s.trend;
-        const sug = SUGGESTIONS[t.hashtag] || `Explorer le potentiel de ${t.hashtag} pour Hermès`;
-        const inBrief = briefItems.some(b => b.hashtag === t.hashtag);
-        const sc = s.total >= 22 ? 'var(--green)' : (s.total >= 15 ? 'var(--orange)' : 'rgba(255,255,255,.4)');
-
-        return `<div class="match-card">
-            <div class="match-name">${t.hashtag}</div>
-            <div class="match-total" style="color:${sc}">${s.total}/30</div>
-            <div class="match-dims">
-                <div class="match-dim"><span style="width:60px">Alignement</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.alignment*10}%"></div></div><div class="match-dim-val">${s.alignment}</div></div>
-                <div class="match-dim"><span style="width:60px">Potentiel</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.potential*10}%"></div></div><div class="match-dim-val">${s.potential}</div></div>
-                <div class="match-dim"><span style="width:60px">Urgence</span><div class="match-dim-bar"><div class="match-dim-fill" style="width:${s.urgency*10}%;background:${s.urgency>=6?'var(--green)':'var(--orange)'}"></div></div><div class="match-dim-val">${s.urgency}</div></div>
-            </div>
-            <div class="match-sug">${sug}</div>
-            <button class="match-btn ${inBrief?'added':''}" onclick="addToBrief('${t.hashtag}',\`${sug.replace(/`/g,"'")}\`,'${t.platform}',${t.window})" ${inBrief?'disabled':''}>${inBrief?'Ajouté':'Ajouter au brief'}</button>
-        </div>`;
-    }).join('');
-}
-
-// ─── BLOC 5: OPPORTUNITY WINDOW ───────────────────────────
-function renderOpportunityWindow() {
-    const top8 = [...trendsData].sort((a, b) => b.volume - a.volume).slice(0, 8);
-    const urgent = top8.filter(t => t.window < 3 && matchScore(t).total > 20);
-
-    document.getElementById('opp-summary').textContent =
-        `${top8.filter(t => t.window <= 3 && t.window > 0).length} trends à activer dans les 3 prochains jours`;
-
-    const badge = document.getElementById('opp-urgent');
-    badge.style.display = urgent.length > 0 ? 'inline-flex' : 'none';
-
-    document.getElementById('oppRows').innerHTML = top8.map(t => {
-        const pct = Math.min((t.window / 14) * 100, 100);
-        const color = t.window >= 7 ? 'var(--green)' : (t.window >= 3 ? 'var(--orange)' : 'var(--accent)');
-        const label = t.window <= 0 ? 'Expirée' : `~${t.window}j restants`;
-        const ms = matchScore(t);
-        const alert = (ms.total > 20 && t.window < 3) ? ' <span class="pill" style="background:rgba(217,54,54,.2);color:var(--accent);font-weight:800">Agir maintenant</span>' : '';
-
-        return `<div class="opp-row">
-            <div class="opp-name">${t.hashtag}</div>
-            <div class="opp-bar"><div class="opp-fill" style="width:${pct}%;background:${color}"></div></div>
-            <canvas class="opp-spark" id="os-${t.id}"></canvas>
-            <div class="opp-label">${label}${alert}</div>
-        </div>`;
-    }).join('');
-
-    // 14-day sparklines
-    top8.forEach(t => {
-        const d = [];
-        const b = t.volume * 0.5;
-        for (let i = 0; i < 14; i++) {
-            const p = i / 13;
-            if (t.status === 'rising') d.push(b + (t.volume - b) * p * 0.8 + Math.random() * b * 0.12);
-            else if (t.status === 'peak') d.push(t.volume * (0.85 + Math.sin(i * 0.5) * 0.1 + Math.random() * 0.08));
-            else d.push(t.volume * (1 - p * 0.5) + Math.random() * b * 0.1);
-        }
-        const c = t.window >= 7 ? '#3CB371' : (t.window >= 3 ? '#E5A820' : '#D93636');
-        drawSpark(`os-${t.id}`, d, 50, 18, c);
-    });
-}
-
-// ─── BLOC 6: BRIEF ────────────────────────────────────────
-function addToBrief(hashtag, suggestion, platform, window) {
-    if (briefItems.some(b => b.hashtag === hashtag)) return;
-    briefItems.push({ hashtag, suggestion, platform, window });
-    saveBrief();
-    renderTrendMatcher();
-    renderBrief();
-}
-
-function removeFromBrief(hashtag) {
-    briefItems = briefItems.filter(b => b.hashtag !== hashtag);
-    saveBrief();
-    renderTrendMatcher();
-    renderBrief();
-}
-
-function saveBrief() {
-    localStorage.setItem('trends_brief', JSON.stringify(briefItems));
-}
-
-function renderBrief() {
-    document.getElementById('brief-summary').textContent = `${briefItems.length} trend${briefItems.length !== 1 ? 's' : ''} ajouté${briefItems.length !== 1 ? 's' : ''} au brief`;
-
-    const list = document.getElementById('briefList');
-    if (!briefItems.length) {
-        list.innerHTML = '<div class="brief-empty">Aucun trend ajouté. Utilisez "Ajouter au brief" dans le Trend Matcher.</div>';
-        return;
-    }
-
-    list.innerHTML = briefItems.map(b => {
-        const uc = b.window >= 7 ? 'var(--green)' : (b.window >= 3 ? 'var(--orange)' : 'var(--accent)');
-        return `<div class="brief-item">
-            <div class="brief-item-info">
-                <div class="brief-item-name">${b.hashtag}</div>
-                <div class="brief-item-sug">${b.suggestion}</div>
-                <div class="brief-item-meta"><span class="plat-badge">${b.platform}</span><span style="font-size:10px;color:${uc};font-weight:700">~${b.window}j</span></div>
-            </div>
-            <button class="brief-remove" onclick="removeFromBrief('${b.hashtag}')">Retirer</button>
-        </div>`;
-    }).join('');
-}
-
+/* ─── EXPORT BRIEF ─── */
 function exportBrief() {
-    if (!briefItems.length) return;
-    const now = new Date().toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
-    let md = `# Brief Trends — Hermès\n**Date :** ${now} | **Période :** ${periodVal}j\n\n---\n\n`;
-    briefItems.forEach((b, i) => {
-        md += `## ${i + 1}. ${b.hashtag}\n- **Suggestion :** ${b.suggestion}\n- **Plateforme :** ${b.platform}\n- **Fenêtre :** ~${b.window}j\n\n`;
-    });
-    md += `---\n*Brand Intelligence Dashboard*\n`;
-    navigator.clipboard.writeText(md).then(() => {
-        const el = document.getElementById('briefCopied');
-        el.style.display = 'inline';
-        setTimeout(() => el.style.display = 'none', 2500);
-    });
+  const brief = getBrief().length ? getBrief() : FB.defaultBrief;
+  const week = Math.ceil(new Date().getDate() / 7);
+  let md = `# Brief Hermès — Semaine ${week}\n\n`;
+  brief.forEach(b => { md += `## ${b.hashtag} (${b.platform} — ${b.duration})\nAngle: ${b.angle}\n\n`; });
+  navigator.clipboard.writeText(md).then(() => {
+    const btn = document.querySelector('.wc-exp');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }).catch(() => {});
 }
 
-// ─── UTILITIES ────────────────────────────────────────────
-function fmtN(n) {
-    if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
-    if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'k';
-    return n.toString();
+/* ─── ACTION BAR ─── */
+function renderActionBar() {
+  const urgent = FB.timeline.find(t => t.act && t.warn);
+  if (urgent) {
+    const days = urgent.lbl.replace('~', '').trim();
+    document.getElementById('abMsg').innerHTML =
+      `<span class="ab-bold">${urgent.hashtag}</span> expires in ${days} — critical window of opportunity for Hermès.`;
+  }
 }
 
-function drawSpark(id, data, w, h, color) {
-    const canvas = document.getElementById(id);
-    if (!canvas || !data) return;
-    const ctx = canvas.getContext('2d');
-    canvas.width = w * 2; canvas.height = h * 2;
-    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-    ctx.scale(2, 2);
-    const max = Math.max(...data), min = Math.min(...data), range = max - min || 1;
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1.5;
-    data.forEach((v, i) => {
-        const x = (i / (data.length - 1)) * w;
-        const y = h - ((v - min) / range) * (h - 4) - 2;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.stroke();
+/* ─── LOAD DATA (Supabase + fallback) ─── */
+async function loadData() {
+  try {
+    if (typeof getTrends === 'function') {
+      const startDate = new Date(Date.now() - pDays * 86400000).toISOString().split('T')[0];
+      const trends = await getTrends({ startDate });
+      if (trends && trends.length >= 3) {
+        const sorted = [...trends].sort((a, b) => (b.growth_rate || 0) - (a.growth_rate || 0));
+        const top = sorted[0];
+        const opps = trends.filter(t => (t.score || 0) > 20).length;
+        const exp  = trends.filter(t => (t.growth_rate || 0) < 0 && (t.days_remaining || 99) < 3).length;
+        document.getElementById('kActiveTrends').textContent = trends.length;
+        document.getElementById('kTopTrend').textContent     = top?.hashtag || FB.topTrend.hashtag;
+        document.getElementById('kTopGrowth').textContent    = `+${Math.round(top?.growth_rate || 340)}% this week`;
+        document.getElementById('kOpps').textContent         = opps || FB.opportunities;
+        document.getElementById('kExpiring').textContent     = exp  || FB.expiring;
+      }
+    }
+  } catch (e) { /* use fallback */ }
 }
 
-// ─── CONTROLS ─────────────────────────────────────────────
-document.querySelectorAll('#periodFilters .f-btn').forEach(b => b.onclick = () => {
-    b.parentElement.querySelectorAll('.f-btn').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
-    periodVal = parseInt(b.dataset.val);
+/* ─── PERIOD FILTERS ─── */
+['pf7','pf30','pf90'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    ['pf7','pf30','pf90'].forEach(i => document.getElementById(i).classList.remove('on'));
+    e.target.classList.add('on');
+    pDays = +e.target.dataset.v;
     loadData();
+  });
+});
+document.getElementById('btnRefresh').addEventListener('click', loadData);
+
+/* ─── SEARCH ─── */
+document.getElementById('hashSearch').addEventListener('input', function() {
+  renderHashtags(this.value);
 });
 
-document.querySelectorAll('#platformFilters .f-btn').forEach(b => b.onclick = () => {
-    b.parentElement.querySelectorAll('.f-btn').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
-    platformVal = b.dataset.val;
-    loadData();
-});
-
-document.getElementById('hashSearch').addEventListener('input', () => renderHashTable());
-
-document.querySelectorAll('.tr-table th[data-col]').forEach(th => {
-    th.onclick = (e) => {
-        e.stopPropagation();
-        const col = th.dataset.col;
-        if (sortCol === col) sortAsc = !sortAsc;
-        else { sortCol = col; sortAsc = false; }
-        renderHashTable();
-    };
-});
-
-document.getElementById('briefExport').onclick = (e) => { e.stopPropagation(); exportBrief(); };
-
-// ─── INIT ─────────────────────────────────────────────────
-(async function init() { await loadData(); })();
+/* ─── INIT ─── */
+renderHashtags();
+renderViralTopics();
+renderTimeline();
+renderMatcher();
+renderWeeklyBrief();
+renderActionBar();
+loadData();
 </script>
 </body>
 </html>
