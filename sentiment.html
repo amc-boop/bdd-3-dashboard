@@ -49,9 +49,12 @@
 
         /* ── NAVBAR ── */
         .nav {
-            height: 55px;
-            min-height: 55px;
-            background: var(--dark);
+            height: 110px;
+            min-height: 110px;
+            background: var(--bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, .04);
             display: flex;
             align-items: center;
             padding: 0 20px;
@@ -61,23 +64,30 @@
         }
 
         .nav-logo {
-            width: 34px;
-            height: 34px;
-            background: #fff;
-            border-radius: 8px;
+            background: var(--bg);
+            height: 84px;
+            min-width: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 8px;
             margin-right: 14px;
-            flex-shrink: 0
+            flex-shrink: 0;
+            padding: 0 8px;
         }
 
-        .ntab {
-            padding: 5px 14px;
+        .nav-logo img {
+            height: 72px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .tab {
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 500;
-            color: var(--gr);
+            color: rgba(0, 0, 0, .45);
             cursor: pointer;
             white-space: nowrap;
             transition: .15s;
@@ -87,11 +97,12 @@
             border: none
         }
 
-        .ntab:hover {
-            color: #ccc
+        .tab:hover {
+            background: rgba(0, 0, 0, .04);
+            color: rgba(0, 0, 0, .6)
         }
 
-        .ntab.on {
+        .tab.on {
             background: var(--red);
             color: #fff;
             font-weight: 600
@@ -104,53 +115,6 @@
             gap: 7px
         }
 
-        .nav-pill {
-            display: flex;
-            gap: 5px;
-            padding: 5px 10px;
-            border-radius: 20px;
-            background: #2D2D2D;
-            border: 1px solid rgba(255, 255, 255, .08);
-            align-items: center;
-            cursor: pointer
-        }
-
-        .nav-bell {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: #2D2D2D;
-            border: 1px solid rgba(255, 255, 255, .08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative
-        }
-
-        .nav-dot {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 7px;
-            height: 7px;
-            background: var(--red);
-            border-radius: 50%;
-            border: 2px solid var(--dark)
-        }
-
-        .nav-av {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #7B5B3A, #4A2E15);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer
-        }
-
         /* ── BODY SPLIT ── */
         .wrap {
             flex: 1;
@@ -159,45 +123,7 @@
             min-height: 0
         }
 
-        /* ── SIDEBAR ── */
-        .side {
-            width: 58px;
-            min-width: 58px;
-            background: var(--bg);
-            border-right: 1px solid rgba(0, 0, 0, .08);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 18px 0;
-            gap: 4px
-        }
 
-        .s-ico {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gr);
-            cursor: pointer;
-            transition: .15s;
-            text-decoration: none
-        }
-
-        .s-ico:hover {
-            background: rgba(0, 0, 0, .06);
-            color: #333
-        }
-
-        .s-ico.on {
-            background: rgba(0, 0, 0, .08);
-            color: var(--dark)
-        }
-
-        .s-gap {
-            flex: 1
-        }
 
         /* ── CONTENT ── */
         .ct {
@@ -1021,94 +947,16 @@
 
     <!-- NAVBAR -->
     <nav class="nav">
-        <div class="nav-logo">
-            <svg viewBox="0 0 30 30" width="24" height="24">
-                <path d="M3 26L10 4h5L7 26H3z" fill="#1A1A1A" />
-                <path d="M13 26L20 4h5L17 26h-4z" fill="#888" />
-            </svg>
-        </div>
-        <a href="index.html" class="ntab">Dashboard</a>
-        <span class="nav-sep">/</span>
-        <span class="ntab on">Sentiment</span>
-        <span class="nav-sep">/</span>
-        <a href="share-of-voice.html" class="ntab">Share of Voice</a>
-        <span class="nav-sep">/</span>
-        <a href="competitors.html" class="ntab">Competitors</a>
-        <span class="nav-sep">/</span>
-        <a href="trends.html" class="ntab">Trends</a>
-        <span class="nav-sep">/</span>
-        <a href="reports.html" class="ntab">Reports</a>
-        <div class="nav-r">
-            <div class="nav-pill">
-                <svg width="13" height="13" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5">
-                    <circle cx="6.5" cy="6.5" r="2.2" />
-                    <path
-                        d="M6.5 1.5v1M6.5 10.5v1M1.5 6.5h1M10.5 6.5h1M3.1 3.1l.7.7M9.2 9.2l.7.7M3.1 9.9l.7-.7M9.2 4.8l.7-.7" />
-                </svg>
-                <svg width="13" height="13" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5">
-                    <path d="M6.5 1.5a4 4 0 00-3.5 6c.3.5.5 1.1.5 1.7v.3h6v-.3c0-.6.2-1.2.5-1.7A4 4 0 006.5 1.5z" />
-                    <path d="M4.5 12h4" />
-                </svg>
-            </div>
-            <div class="nav-bell">
-                <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"
-                    stroke-linecap="round">
-                    <path d="M9 3.5a4 4 0 10-5.5 3.5c.3.4.5 1 .5 1.5h4.5c0-.5.2-1.1.5-1.5A4 4 0 009 3.5z" />
-                    <path d="M5 11h4" />
-                </svg>
-                <div class="nav-dot"></div>
-            </div>
-            <div class="nav-av"><svg width="16" height="16" fill="none" stroke="rgba(255,255,255,.8)"
-                    stroke-width="1.3">
-                    <circle cx="8" cy="6" r="2.5" />
-                    <path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" />
-                </svg></div>
-        </div>
+        <div class="nav-logo"><img src="hermes-logo.png" alt="Hermès"></div>
+        <a href="index.html" class="tab">Dashboard</a>
+        <a href="sentiment.html" class="tab on">Sentiment</a>
+        <a href="trends.html" class="tab">Trends</a>
+        <a href="share-of-voice.html" class="tab">Share of Voice</a>
+        <a href="competitors.html" class="tab">Competitors</a>
+        <a href="reports.html" class="tab">Reports</a>
     </nav>
-
     <div class="wrap">
         <!-- SIDEBAR -->
-        <aside class="side">
-            <a href="index.html" class="s-ico"><svg width="17" height="17" fill="none" stroke="currentColor"
-                    stroke-width="1.5" stroke-linecap="round">
-                    <path d="M2 8.5L8.5 2 15 8.5" />
-                    <path d="M4.5 6.5v8h3v-4h3v4h3v-8" />
-                </svg></a>
-            <a href="#" class="s-ico"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="2" y="2" width="5.5" height="5.5" rx="1" />
-                    <rect x="9.5" y="2" width="5.5" height="5.5" rx="1" />
-                    <rect x="2" y="9.5" width="5.5" height="5.5" rx="1" />
-                    <rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1" />
-                </svg></a>
-            <a href="#" class="s-ico"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5"
-                    stroke-linecap="round">
-                    <circle cx="8.5" cy="3.5" r="1.5" />
-                    <circle cx="3.5" cy="12" r="1.5" />
-                    <circle cx="13.5" cy="12" r="1.5" />
-                    <path d="M8.5 5v3.5l-3.5 4.5M8.5 8.5l3.5 4.5" />
-                </svg></a>
-            <a href="#" class="s-ico on"><svg width="17" height="17" fill="none" stroke="currentColor"
-                    stroke-width="1.5" stroke-linecap="round">
-                    <path d="M4.5 5c0-2.2 1.8-4 4-4s4 1.8 4 4c0 1.7-1 3.1-2.5 3.7V11h-3V8.7C5.5 8.1 4.5 6.7 4.5 5z" />
-                    <path d="M6 13h5M6.5 15.5h4" />
-                </svg></a>
-            <a href="trends.html" class="s-ico"><svg width="17" height="17" fill="none" stroke="currentColor"
-                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="2 12 6 6 10 9 15 2" />
-                </svg></a>
-            <div class="s-gap"></div>
-            <a href="reports.html" class="s-ico"><svg width="17" height="17" fill="none" stroke="currentColor"
-                    stroke-width="1.5" stroke-linecap="round">
-                    <rect x="3" y="2" width="11" height="13" rx="1.5" />
-                    <path d="M6 5.5h5M6 8h5M6 10.5h3" />
-                </svg></a>
-            <a href="#" class="s-ico"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5"
-                    stroke-linecap="round">
-                    <circle cx="8.5" cy="8.5" r="2.2" />
-                    <path
-                        d="M8.5 2v1.5M8.5 13v1.5M2 8.5h1.5M13 8.5h1.5M3.9 3.9l1 1M12.1 12.1l1 1M3.9 13.1l1-1M12.1 4.9l1-1" />
-                </svg></a>
-        </aside>
 
         <!-- CONTENT -->
         <div class="ct">

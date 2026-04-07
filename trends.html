@@ -48,9 +48,12 @@
 
     /* ── NAVBAR ── */
     .nav {
-      height: 52px;
-      min-height: 52px;
-      background: var(--dark);
+      height: 110px;
+      min-height: 110px;
+      background: var(--bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, .04);
       display: flex;
       align-items: center;
       padding: 0 16px;
@@ -60,27 +63,30 @@
     }
 
     .nav-logo {
-      width: 30px;
-      height: 30px;
-      background: #fff;
-      border-radius: 7px;
+      background: var(--bg);
+      height: 84px;
+      min-width: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 10px;
+      border-radius: 8px;
+      margin-right: 14px;
       flex-shrink: 0;
-      font-size: 13px;
-      font-weight: 900;
-      color: var(--dark);
-      letter-spacing: -1px
+      padding: 0 8px;
     }
 
-    .ntab {
+    .nav-logo img {
+      height: 72px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .tab {
       padding: 5px 11px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 500;
-      color: var(--gr);
+      color: rgba(0, 0, 0, .45);
       cursor: pointer;
       white-space: nowrap;
       transition: .15s;
@@ -90,11 +96,12 @@
       border: none
     }
 
-    .ntab:hover {
-      color: #ccc
+    .tab:hover {
+      background: rgba(0, 0, 0, .04);
+      color: rgba(0, 0, 0, .6)
     }
 
-    .ntab.on {
+    .tab.on {
       background: var(--red);
       color: #fff;
       font-weight: 600
@@ -107,38 +114,6 @@
       gap: 7px
     }
 
-    .theme-tog {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--bg);
-      border-radius: 20px;
-      padding: 4px 9px;
-      cursor: pointer;
-      flex-shrink: 0
-    }
-
-    .nav-bell {
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer
-    }
-
-    .nav-av {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7c7c7c, #4a4a4a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0
-    }
-
     /* ── LAYOUT ── */
     .wrap {
       flex: 1;
@@ -147,44 +122,7 @@
       min-height: 0
     }
 
-    .side {
-      width: 52px;
-      min-width: 52px;
-      background: var(--bg);
-      border-right: 1px solid rgba(0, 0, 0, .08);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 14px 0;
-      gap: 3px
-    }
 
-    .s-ico {
-      width: 34px;
-      height: 34px;
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gr);
-      cursor: pointer;
-      transition: .15s;
-      text-decoration: none
-    }
-
-    .s-ico:hover {
-      background: rgba(0, 0, 0, .06);
-      color: #333
-    }
-
-    .s-ico.on {
-      background: rgba(0, 0, 0, .08);
-      color: var(--dark)
-    }
-
-    .s-gap {
-      flex: 1
-    }
 
     .ct {
       flex: 1;
@@ -203,10 +141,10 @@
     }
 
     .phdr-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
+      width: 46px;
+      height: 46px;
       background: var(--dark);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1012,91 +950,18 @@
 
   <!-- NAVBAR -->
   <nav class="nav">
-    <div class="nav-logo">//</div>
-    <a href="index.html" class="ntab">Dashboard</a>
-    <span class="nav-sep">/</span>
-    <a href="sentiment.html" class="ntab">Sentiment</a>
-    <span class="nav-sep">/</span>
-    <a href="share-of-voice.html" class="ntab">Share of Voice</a>
-    <span class="nav-sep">/</span>
-    <a href="competitors.html" class="ntab">Competitors</a>
-    <span class="nav-sep">/</span>
-    <span class="ntab on">Trends</span>
-    <span class="nav-sep">/</span>
-    <a href="reports.html" class="ntab">Reports</a>
-    <div class="nav-r">
-      <div class="theme-tog">
-        <svg width="13" height="13" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round">
-          <circle cx="6.5" cy="6.5" r="2.5" />
-          <path d="M6.5 1v1M6.5 11v1M1 6.5h1M11 6.5h1M2.9 2.9l.7.7M9.4 9.4l.7.7M9.4 2.9l-.7.7M2.9 9.4l.7.7" />
-        </svg>
-        <svg width="13" height="13" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round">
-          <path d="M11 7A5 5 0 1 1 6 2 3 3 0 0 0 11 7z" />
-        </svg>
-      </div>
-      <div class="nav-bell">
-        <svg width="16" height="17" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round">
-          <path d="M8 2a4.5 4.5 0 0 1 4.5 4.5v3l1 2H2.5l1-2V6.5A4.5 4.5 0 0 1 8 2z" />
-          <path d="M6.5 14.5a1.5 1.5 0 0 0 3 0" />
-        </svg>
-      </div>
-      <div class="nav-av">
-        <svg width="17" height="17" fill="none" viewBox="0 0 17 17">
-          <circle cx="8.5" cy="6.5" r="2.8" fill="rgba(255,255,255,0.65)" />
-          <path d="M3 15c0-3 2.5-5.2 5.5-5.2S14 12 14 15" stroke="rgba(255,255,255,0.65)" stroke-width="1.5"
-            stroke-linecap="round" />
-        </svg>
-      </div>
-    </div>
+    <div class="nav-logo"><img src="hermes-logo.png" alt="Hermès"></div>
+    <a href="index.html" class="tab">Dashboard</a>
+    <a href="sentiment.html" class="tab">Sentiment</a>
+    <a href="trends.html" class="tab on">Trends</a>
+    <a href="share-of-voice.html" class="tab">Share of Voice</a>
+    <a href="competitors.html" class="tab">Competitors</a>
+    <a href="reports.html" class="tab">Reports</a>
   </nav>
-
   <!-- BODY -->
   <div class="wrap">
 
     <!-- SIDEBAR -->
-    <aside class="side">
-      <a class="s-ico" href="index.html">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <path d="M2 7L8.5 2 15 7v9H2V7z" />
-          <rect x="6" y="10" width="5" height="6" />
-        </svg>
-      </a>
-      <a class="s-ico on" href="trends.html">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <rect x="2" y="2" width="5.5" height="5.5" rx="1" />
-          <rect x="9.5" y="2" width="5.5" height="5.5" rx="1" />
-          <rect x="2" y="9.5" width="5.5" height="5.5" rx="1" />
-          <rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1" />
-        </svg>
-      </a>
-      <a class="s-ico" href="#">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <circle cx="4.5" cy="4.5" r="1.8" />
-          <circle cx="12.5" cy="4.5" r="1.8" />
-          <circle cx="8.5" cy="13" r="1.8" />
-          <path d="M6.2 4.5h3.1M6.8 6l-1 5.3M10.2 6l1 5.3" />
-        </svg>
-      </a>
-      <a class="s-ico" href="sentiment.html">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <path d="M12 8.5a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
-          <path d="M8.5 1v1.5M8.5 14v1.5M1 8.5h1.5M14 8.5h1.5" />
-        </svg>
-      </a>
-      <div class="s-gap"></div>
-      <a class="s-ico" href="#">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <circle cx="8.5" cy="8.5" r="2.5" />
-          <path
-            d="M8.5 1.5v1.5M8.5 13.5v1.5M1.5 8.5h1.5M13.5 8.5h1.5M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M11.3 3.6l-1.1 1.1M3.6 11.3l1.1 1.1" />
-        </svg>
-      </a>
-      <a class="s-ico" href="#">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <path d="M13.5 10.8a1.8 1.8 0 0 1-1.8 1.8H5L2 15V4a1.8 1.8 0 0 1 1.8-1.8h8a1.8 1.8 0 0 1 1.8 1.8z" />
-        </svg>
-      </a>
-    </aside>
 
     <!-- CONTENT -->
     <div class="ct">
@@ -1274,119 +1139,119 @@
   </div><!-- /wrap -->
 
   <script>
-/* ─── STATE ─── */
-let pDays = 7;
+    /* ─── STATE ─── */
+    let pDays = 7;
 
-/* ─── FALLBACK DATA ─── */
-const FB = {
-  activeTrends: 24,
-  topTrend: { hashtag: '#SlowFashion', growth: '+340%' },
-  opportunities: 8,
-  expiring: 3,
+    /* ─── FALLBACK DATA ─── */
+    const FB = {
+      activeTrends: 24,
+      topTrend: { hashtag: '#SlowFashion', growth: '+340%' },
+      opportunities: 8,
+      expiring: 3,
 
-  hashtags: [
-    { hashtag:'#LuxuryFashion', platform:'Instagram', volume:'2.4M', growth:'+85%',  type:'up',   duration:'~6 days',  angle:'Heritage and Know-How' },
-    { hashtag:'#SlowFashion',   platform:'TikTok',    volume:'1.8M', growth:'+340%', type:'up',   duration:'~12 days', angle:'Sustainable Craftsmanship Angle' },
-    { hashtag:'#ParisianStyle', platform:'Instagram', volume:'980k', growth:'+62%',  type:'peak', duration:'~4 days',  angle:'Hermès Ateliers Lifestyle' },
-    { hashtag:'#HauteCouture',  platform:'Twitter',   volume:'780k', growth:'+28%',  type:'up',   duration:'~2 days',  angle:'Couture and Craftsmanship' },
-    { hashtag:'#LuxuryResale',  platform:'Reddit',    volume:'540k', growth:'+15%',  type:'peak', duration:'~1 day',   angle:'Pre-owned luxury positioning' },
-    { hashtag:'#SustainableLux',platform:'TikTok',    volume:'320k', growth:'-8%',   type:'dec',  duration:'Expired',  angle:'Sustainable materials story' },
-  ],
+      hashtags: [
+        { hashtag: '#LuxuryFashion', platform: 'Instagram', volume: '2.4M', growth: '+85%', type: 'up', duration: '~6 days', angle: 'Heritage and Know-How' },
+        { hashtag: '#SlowFashion', platform: 'TikTok', volume: '1.8M', growth: '+340%', type: 'up', duration: '~12 days', angle: 'Sustainable Craftsmanship Angle' },
+        { hashtag: '#ParisianStyle', platform: 'Instagram', volume: '980k', growth: '+62%', type: 'peak', duration: '~4 days', angle: 'Hermès Ateliers Lifestyle' },
+        { hashtag: '#HauteCouture', platform: 'Twitter', volume: '780k', growth: '+28%', type: 'up', duration: '~2 days', angle: 'Couture and Craftsmanship' },
+        { hashtag: '#LuxuryResale', platform: 'Reddit', volume: '540k', growth: '+15%', type: 'peak', duration: '~1 day', angle: 'Pre-owned luxury positioning' },
+        { hashtag: '#SustainableLux', platform: 'TikTok', volume: '320k', growth: '-8%', type: 'dec', duration: 'Expired', angle: 'Sustainable materials story' },
+      ],
 
-  topics: [
-    { topic:'French craftsmanship',     volume:'3.2M', sentiment:'Positive', sentCls:'pos', presence:'Hermès present', presCls:'pos' },
-    { topic:'Luxury Sustainability',    volume:'1.8M', sentiment:'Mixed',    sentCls:'mix', presence:'Hermès absent',  presCls:'org' },
-    { topic:'Luxury Pre-owned',         volume:'1.4M', sentiment:'Negative', sentCls:'neg', presence:'Hermès absent',  presCls:'org' },
-    { topic:'Streetwear Collaborations',volume:'980k', sentiment:'Positive', sentCls:'pos', presence:'Hermès absent',  presCls:'org' },
-    { topic:'Parisian Craftsmanship',   volume:'760k', sentiment:'Positive', sentCls:'pos', presence:'Hermès present', presCls:'pos' },
-    { topic:'Equestrian Accessories',   volume:'540k', sentiment:'Positive', sentCls:'pos', presence:'Hermès present', presCls:'pos' },
-  ],
+      topics: [
+        { topic: 'French craftsmanship', volume: '3.2M', sentiment: 'Positive', sentCls: 'pos', presence: 'Hermès present', presCls: 'pos' },
+        { topic: 'Luxury Sustainability', volume: '1.8M', sentiment: 'Mixed', sentCls: 'mix', presence: 'Hermès absent', presCls: 'org' },
+        { topic: 'Luxury Pre-owned', volume: '1.4M', sentiment: 'Negative', sentCls: 'neg', presence: 'Hermès absent', presCls: 'org' },
+        { topic: 'Streetwear Collaborations', volume: '980k', sentiment: 'Positive', sentCls: 'pos', presence: 'Hermès absent', presCls: 'org' },
+        { topic: 'Parisian Craftsmanship', volume: '760k', sentiment: 'Positive', sentCls: 'pos', presence: 'Hermès present', presCls: 'pos' },
+        { topic: 'Equestrian Accessories', volume: '540k', sentiment: 'Positive', sentCls: 'pos', presence: 'Hermès present', presCls: 'pos' },
+      ],
 
-  timeline: [
-    { hashtag:'#SlowFashion',   w:90, color:'var(--green)',  lbl:'~12 days remaining', warn:false, act:false },
-    { hashtag:'#LuxuryFashion', w:60, color:'var(--green)',  lbl:'~6 days',            warn:false, act:false },
-    { hashtag:'#ParisianStyle', w:45, color:'var(--orange)', lbl:'~4 days',            warn:false, act:false },
-    { hashtag:'#HauteCouture',  w:25, color:'var(--red)',    lbl:'~2 days',            warn:true,  act:true  },
-    { hashtag:'#LuxuryResale',  w:12, color:'var(--red)',    lbl:'~1 day',             warn:true,  act:false },
-    { hashtag:'#SustainableLux',w:5,  color:'var(--g3)',     lbl:'Expired',            warn:false, act:true  },
-  ],
+      timeline: [
+        { hashtag: '#SlowFashion', w: 90, color: 'var(--green)', lbl: '~12 days remaining', warn: false, act: false },
+        { hashtag: '#LuxuryFashion', w: 60, color: 'var(--green)', lbl: '~6 days', warn: false, act: false },
+        { hashtag: '#ParisianStyle', w: 45, color: 'var(--orange)', lbl: '~4 days', warn: false, act: false },
+        { hashtag: '#HauteCouture', w: 25, color: 'var(--red)', lbl: '~2 days', warn: true, act: true },
+        { hashtag: '#LuxuryResale', w: 12, color: 'var(--red)', lbl: '~1 day', warn: true, act: false },
+        { hashtag: '#SustainableLux', w: 5, color: 'var(--g3)', lbl: 'Expired', warn: false, act: true },
+      ],
 
-  matcher: [
-    { hashtag:'#SlowFashion',   score:28, max:30, pct:93, color:'var(--green)',  sug:'Angle: craftsmanship and sustainability of materials' },
-    { hashtag:'#ParisianStyle', score:24, max:30, pct:80, color:'var(--green)',  sug:'Angle: craftsmanship and sustainability of materials' },
-    { hashtag:'#HauteCouture',  score:15, max:30, pct:50, color:'var(--orange)', sug:'Lifestyle content around Hermès workshops' },
-    { hashtag:'#SustainableLux',score:15, max:30, pct:50, color:'var(--red)',    sug:'Angle: craftsmanship and sustainability of materials' },
-  ],
+      matcher: [
+        { hashtag: '#SlowFashion', score: 28, max: 30, pct: 93, color: 'var(--green)', sug: 'Angle: craftsmanship and sustainability of materials' },
+        { hashtag: '#ParisianStyle', score: 24, max: 30, pct: 80, color: 'var(--green)', sug: 'Angle: craftsmanship and sustainability of materials' },
+        { hashtag: '#HauteCouture', score: 15, max: 30, pct: 50, color: 'var(--orange)', sug: 'Lifestyle content around Hermès workshops' },
+        { hashtag: '#SustainableLux', score: 15, max: 30, pct: 50, color: 'var(--red)', sug: 'Angle: craftsmanship and sustainability of materials' },
+      ],
 
-  defaultBrief: [
-    { hashtag:'#SlowFashion',   platform:'TikTok',    duration:'~12 days', angle:'Sustainable Craftsmanship Angle' },
-    { hashtag:'#ParisianStyle', platform:'Instagram', duration:'~4 days',  angle:'Hermès Ateliers Lifestyle' },
-    { hashtag:'#LuxuryFashion', platform:'Instagram', duration:'~6 days',  angle:'Heritage and Know-How' },
-  ]
-};
+      defaultBrief: [
+        { hashtag: '#SlowFashion', platform: 'TikTok', duration: '~12 days', angle: 'Sustainable Craftsmanship Angle' },
+        { hashtag: '#ParisianStyle', platform: 'Instagram', duration: '~4 days', angle: 'Hermès Ateliers Lifestyle' },
+        { hashtag: '#LuxuryFashion', platform: 'Instagram', duration: '~6 days', angle: 'Heritage and Know-How' },
+      ]
+    };
 
-/* ─── SPARKLINE TEMPLATES ─── */
-const SPK = {
-  up:   `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,18 10,14 20,15 30,10 40,6 50,4 60,2" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  peak: `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,14 10,8 20,5 30,5 40,6 50,8 60,11" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  dec:  `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,3 10,5 20,9 30,7 40,11 50,14 60,18" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-};
+    /* ─── SPARKLINE TEMPLATES ─── */
+    const SPK = {
+      up: `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,18 10,14 20,15 30,10 40,6 50,4 60,2" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      peak: `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,14 10,8 20,5 30,5 40,6 50,8 60,11" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      dec: `<svg viewBox="0 0 60 20" width="60" height="20" fill="none"><polyline points="0,3 10,5 20,9 30,7 40,11 50,14 60,18" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    };
 
-/* ─── RENDER: HASHTAGS TABLE ─── */
-function renderHashtags(filter) {
-  filter = (filter || '').toLowerCase();
-  const rows = filter
-    ? FB.hashtags.filter(h => h.hashtag.toLowerCase().includes(filter))
-    : FB.hashtags;
-  document.getElementById('hashBody').innerHTML = rows.map(h => {
-    const gCls = h.growth.startsWith('-') ? 'neg' : 'pos';
-    const bdgCls = h.type === 'up' ? 'up' : h.type === 'peak' ? 'peak' : 'dec';
-    const bdgTxt = h.type === 'up' ? 'Up' : h.type === 'peak' ? 'Peak Reached' : 'Declining';
-    return `<div class="ht-row">
+    /* ─── RENDER: HASHTAGS TABLE ─── */
+    function renderHashtags(filter) {
+      filter = (filter || '').toLowerCase();
+      const rows = filter
+        ? FB.hashtags.filter(h => h.hashtag.toLowerCase().includes(filter))
+        : FB.hashtags;
+      document.getElementById('hashBody').innerHTML = rows.map(h => {
+        const gCls = h.growth.startsWith('-') ? 'neg' : 'pos';
+        const bdgCls = h.type === 'up' ? 'up' : h.type === 'peak' ? 'peak' : 'dec';
+        const bdgTxt = h.type === 'up' ? 'Up' : h.type === 'peak' ? 'Peak Reached' : 'Declining';
+        return `<div class="ht-row">
       <span class="ht-hash">${h.hashtag}</span>
       <span class="ht-plat">${h.platform}</span>
       <span class="ht-vol">${h.volume}</span>
       <span class="ht-gr ${gCls}">${h.growth}</span>
-      <span>${SPK[h.type]||SPK.up}</span>
+      <span>${SPK[h.type] || SPK.up}</span>
       <span><span class="ht-bdg ${bdgCls}">${bdgTxt}</span></span>
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-/* ─── RENDER: VIRAL TOPICS ─── */
-function renderViralTopics() {
-  document.getElementById('viralTopics').innerHTML = FB.topics.map(t =>
-    `<div class="vt-row">
+    /* ─── RENDER: VIRAL TOPICS ─── */
+    function renderViralTopics() {
+      document.getElementById('viralTopics').innerHTML = FB.topics.map(t =>
+        `<div class="vt-row">
       <span class="vt-topic">${t.topic}</span>
       <span class="vt-vol">${t.volume}</span>
       <span class="vt-bdg ${t.sentCls}">${t.sentiment}</span>
       <span class="vt-bdg ${t.presCls}">${t.presence}</span>
     </div>`
-  ).join('');
-}
+      ).join('');
+    }
 
-/* ─── RENDER: TIMELINE ─── */
-function renderTimeline() {
-  document.getElementById('tlRows').innerHTML = FB.timeline.map(t => {
-    const lblColor = (t.warn || t.lbl === 'Expired') ? 'color:var(--red)' : 'color:var(--gr)';
-    const actBadge = t.act ? `<span class="tl-act">Act Now</span>` : '';
-    const warn = t.warn ? ` ⚠️` : '';
-    return `<div class="tl-row">
+    /* ─── RENDER: TIMELINE ─── */
+    function renderTimeline() {
+      document.getElementById('tlRows').innerHTML = FB.timeline.map(t => {
+        const lblColor = (t.warn || t.lbl === 'Expired') ? 'color:var(--red)' : 'color:var(--gr)';
+        const actBadge = t.act ? `<span class="tl-act">Act Now</span>` : '';
+        const warn = t.warn ? ` ⚠️` : '';
+        return `<div class="tl-row">
       <span class="tl-hash">${t.hashtag}</span>
       <div class="tl-trk"><div class="tl-bar" style="width:${t.w}%;background:${t.color}"></div></div>
       <span class="tl-lbl" style="${lblColor}">${actBadge}${t.lbl}${warn}</span>
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-/* ─── RENDER: TREND MATCHER ─── */
-function renderMatcher() {
-  const brief = getBrief();
-  document.getElementById('matcherRows').innerHTML = FB.matcher.map(m => {
-    const inBrief = brief.some(b => b.hashtag === m.hashtag);
-    const btnCls = inBrief ? 'mc-btn done' : 'mc-btn';
-    const btnTxt = inBrief ? '✓ Added' : '+ Brief';
-    return `<div class="mc-row">
+    /* ─── RENDER: TREND MATCHER ─── */
+    function renderMatcher() {
+      const brief = getBrief();
+      document.getElementById('matcherRows').innerHTML = FB.matcher.map(m => {
+        const inBrief = brief.some(b => b.hashtag === m.hashtag);
+        const btnCls = inBrief ? 'mc-btn done' : 'mc-btn';
+        const btnTxt = inBrief ? '✓ Added' : '+ Brief';
+        return `<div class="mc-row">
       <div class="mc-top">
         <span class="mc-hash">${m.hashtag}</span>
         <span class="mc-dots">············</span>
@@ -1396,40 +1261,40 @@ function renderMatcher() {
       </div>
       <div class="mc-sug">${m.sug}</div>
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-/* ─── BRIEF: localStorage ─── */
-function getBrief() {
-  try { return JSON.parse(localStorage.getItem('weekly_brief') || '[]'); }
-  catch { return []; }
-}
+    /* ─── BRIEF: localStorage ─── */
+    function getBrief() {
+      try { return JSON.parse(localStorage.getItem('weekly_brief') || '[]'); }
+      catch { return []; }
+    }
 
-function addToBrief(hashtag) {
-  let brief = getBrief();
-  if (!brief.find(b => b.hashtag === hashtag)) {
-    const ht = FB.hashtags.find(h => h.hashtag === hashtag);
-    const mt = FB.matcher.find(m => m.hashtag === hashtag);
-    brief.push({
-      hashtag,
-      platform: ht?.platform || 'TikTok',
-      duration: ht?.duration || '~7 days',
-      angle: mt?.sug?.replace('Angle: ', '') || ht?.angle || 'Brand alignment opportunity'
-    });
-    localStorage.setItem('weekly_brief', JSON.stringify(brief));
-  }
-  renderMatcher();
-  renderWeeklyBrief();
-}
+    function addToBrief(hashtag) {
+      let brief = getBrief();
+      if (!brief.find(b => b.hashtag === hashtag)) {
+        const ht = FB.hashtags.find(h => h.hashtag === hashtag);
+        const mt = FB.matcher.find(m => m.hashtag === hashtag);
+        brief.push({
+          hashtag,
+          platform: ht?.platform || 'TikTok',
+          duration: ht?.duration || '~7 days',
+          angle: mt?.sug?.replace('Angle: ', '') || ht?.angle || 'Brand alignment opportunity'
+        });
+        localStorage.setItem('weekly_brief', JSON.stringify(brief));
+      }
+      renderMatcher();
+      renderWeeklyBrief();
+    }
 
-/* ─── RENDER: WEEKLY BRIEF ─── */
-function renderWeeklyBrief() {
-  const brief = getBrief();
-  const items = brief.length ? brief : FB.defaultBrief;
-  const n = items.length;
-  document.getElementById('wcCount').textContent = `${n} trend${n === 1 ? '' : 's'} added to the brief`;
-  document.getElementById('wcItems').innerHTML = items.map(b =>
-    `<div class="wci">
+    /* ─── RENDER: WEEKLY BRIEF ─── */
+    function renderWeeklyBrief() {
+      const brief = getBrief();
+      const items = brief.length ? brief : FB.defaultBrief;
+      const n = items.length;
+      document.getElementById('wcCount').textContent = `${n} trend${n === 1 ? '' : 's'} added to the brief`;
+      document.getElementById('wcItems').innerHTML = items.map(b =>
+        `<div class="wci">
       <div class="wci-top">
         <span class="wci-hash">${b.hashtag}</span>
         <span class="wci-dur">${b.duration}</span>
@@ -1437,78 +1302,78 @@ function renderWeeklyBrief() {
       <div class="wci-plat">${b.platform}</div>
       <div class="wci-angle">${b.angle}</div>
     </div>`
-  ).join('');
-}
+      ).join('');
+    }
 
-/* ─── EXPORT BRIEF ─── */
-function exportBrief() {
-  const brief = getBrief().length ? getBrief() : FB.defaultBrief;
-  const week = Math.ceil(new Date().getDate() / 7);
-  let md = `# Brief Hermès — Semaine ${week}\n\n`;
-  brief.forEach(b => { md += `## ${b.hashtag} (${b.platform} — ${b.duration})\nAngle: ${b.angle}\n\n`; });
-  navigator.clipboard.writeText(md).then(() => {
-    const btn = document.querySelector('.wc-exp');
-    const orig = btn.textContent;
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => btn.textContent = orig, 2000);
-  }).catch(() => {});
-}
+    /* ─── EXPORT BRIEF ─── */
+    function exportBrief() {
+      const brief = getBrief().length ? getBrief() : FB.defaultBrief;
+      const week = Math.ceil(new Date().getDate() / 7);
+      let md = `# Brief Hermès — Semaine ${week}\n\n`;
+      brief.forEach(b => { md += `## ${b.hashtag} (${b.platform} — ${b.duration})\nAngle: ${b.angle}\n\n`; });
+      navigator.clipboard.writeText(md).then(() => {
+        const btn = document.querySelector('.wc-exp');
+        const orig = btn.textContent;
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => btn.textContent = orig, 2000);
+      }).catch(() => { });
+    }
 
-/* ─── ACTION BAR ─── */
-function renderActionBar() {
-  const urgent = FB.timeline.find(t => t.act && t.warn);
-  if (urgent) {
-    const days = urgent.lbl.replace('~', '').trim();
-    document.getElementById('abMsg').innerHTML =
-      `<span class="ab-bold">${urgent.hashtag}</span> expires in ${days} — critical window of opportunity for Hermès.`;
-  }
-}
-
-/* ─── LOAD DATA (Supabase + fallback) ─── */
-async function loadData() {
-  try {
-    if (typeof getTrends === 'function') {
-      const startDate = new Date(Date.now() - pDays * 86400000).toISOString().split('T')[0];
-      const trends = await getTrends({ startDate });
-      if (trends && trends.length >= 3) {
-        const sorted = [...trends].sort((a, b) => (b.growth_rate || 0) - (a.growth_rate || 0));
-        const top = sorted[0];
-        const opps = trends.filter(t => (t.score || 0) > 20).length;
-        const exp  = trends.filter(t => (t.growth_rate || 0) < 0 && (t.days_remaining || 99) < 3).length;
-        document.getElementById('kActiveTrends').textContent = trends.length;
-        document.getElementById('kTopTrend').textContent     = top?.hashtag || FB.topTrend.hashtag;
-        document.getElementById('kTopGrowth').textContent    = `+${Math.round(top?.growth_rate || 340)}% this week`;
-        document.getElementById('kOpps').textContent         = opps || FB.opportunities;
-        document.getElementById('kExpiring').textContent     = exp  || FB.expiring;
+    /* ─── ACTION BAR ─── */
+    function renderActionBar() {
+      const urgent = FB.timeline.find(t => t.act && t.warn);
+      if (urgent) {
+        const days = urgent.lbl.replace('~', '').trim();
+        document.getElementById('abMsg').innerHTML =
+          `<span class="ab-bold">${urgent.hashtag}</span> expires in ${days} — critical window of opportunity for Hermès.`;
       }
     }
-  } catch (e) { /* use fallback */ }
-}
 
-/* ─── PERIOD FILTERS ─── */
-['pf7','pf30','pf90'].forEach(id => {
-  document.getElementById(id).addEventListener('click', e => {
-    ['pf7','pf30','pf90'].forEach(i => document.getElementById(i).classList.remove('on'));
-    e.target.classList.add('on');
-    pDays = +e.target.dataset.v;
+    /* ─── LOAD DATA (Supabase + fallback) ─── */
+    async function loadData() {
+      try {
+        if (typeof getTrends === 'function') {
+          const startDate = new Date(Date.now() - pDays * 86400000).toISOString().split('T')[0];
+          const trends = await getTrends({ startDate });
+          if (trends && trends.length >= 3) {
+            const sorted = [...trends].sort((a, b) => (b.growth_rate || 0) - (a.growth_rate || 0));
+            const top = sorted[0];
+            const opps = trends.filter(t => (t.score || 0) > 20).length;
+            const exp = trends.filter(t => (t.growth_rate || 0) < 0 && (t.days_remaining || 99) < 3).length;
+            document.getElementById('kActiveTrends').textContent = trends.length;
+            document.getElementById('kTopTrend').textContent = top?.hashtag || FB.topTrend.hashtag;
+            document.getElementById('kTopGrowth').textContent = `+${Math.round(top?.growth_rate || 340)}% this week`;
+            document.getElementById('kOpps').textContent = opps || FB.opportunities;
+            document.getElementById('kExpiring').textContent = exp || FB.expiring;
+          }
+        }
+      } catch (e) { /* use fallback */ }
+    }
+
+    /* ─── PERIOD FILTERS ─── */
+    ['pf7', 'pf30', 'pf90'].forEach(id => {
+      document.getElementById(id).addEventListener('click', e => {
+        ['pf7', 'pf30', 'pf90'].forEach(i => document.getElementById(i).classList.remove('on'));
+        e.target.classList.add('on');
+        pDays = +e.target.dataset.v;
+        loadData();
+      });
+    });
+    document.getElementById('btnRefresh').addEventListener('click', loadData);
+
+    /* ─── SEARCH ─── */
+    document.getElementById('hashSearch').addEventListener('input', function () {
+      renderHashtags(this.value);
+    });
+
+    /* ─── INIT ─── */
+    renderHashtags();
+    renderViralTopics();
+    renderTimeline();
+    renderMatcher();
+    renderWeeklyBrief();
+    renderActionBar();
     loadData();
-  });
-});
-document.getElementById('btnRefresh').addEventListener('click', loadData);
-
-/* ─── SEARCH ─── */
-document.getElementById('hashSearch').addEventListener('input', function() {
-  renderHashtags(this.value);
-});
-
-/* ─── INIT ─── */
-renderHashtags();
-renderViralTopics();
-renderTimeline();
-renderMatcher();
-renderWeeklyBrief();
-renderActionBar();
-loadData();
   </script>
 </body>
 

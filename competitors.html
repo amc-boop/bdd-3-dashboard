@@ -62,54 +62,7 @@
             min-height: 100vh;
         }
 
-        /* ─── SIDEBAR ─── */
-        .side {
-            width: 56px;
-            background: transparent;
-            border-right: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 16px 0;
-            gap: 4px;
-            flex-shrink: 0;
-            z-index: 100;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-        }
 
-        .s-logo {
-            width: 30px;
-            height: 30px;
-            margin-bottom: 20px
-        }
-
-        .s-ico {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(0, 0, 0, .22);
-            cursor: pointer;
-            transition: .15s
-        }
-
-        .s-ico:hover {
-            background: rgba(0, 0, 0, .04);
-            color: rgba(0, 0, 0, .45)
-        }
-
-        .s-ico.on {
-            background: rgba(0, 0, 0, .06);
-            color: rgba(0, 0, 0, .55)
-        }
-
-        .s-gap {
-            flex: 1
-        }
 
         /* ─── MAIN ─── */
         .main {
@@ -122,8 +75,8 @@
 
         /* ─── NAV ─── */
         .nav {
-            height: 54px;
-            min-height: 54px;
+            height: 110px;
+            min-height: 110px;
             background: rgba(238, 236, 234, .88);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -139,10 +92,22 @@
         }
 
         .nav-logo {
-            margin-right: 12px;
-            width: 32px;
-            height: 32px;
-            flex-shrink: 0
+            background: var(--bg);
+            height: 84px;
+            min-width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin-right: 14px;
+            flex-shrink: 0;
+            padding: 0 8px;
+        }
+
+        .nav-logo img {
+            height: 72px;
+            width: auto;
+            object-fit: contain;
         }
 
         .ntab {
@@ -793,52 +758,11 @@
 <body>
 
     <!-- ─── SIDEBAR (identical to index.html) ─── -->
-    <aside class="side">
-        <div class="s-logo"><svg viewBox="0 0 28 28" fill="none">
-                <path d="M4 24L10 4h4L8 24H4z" fill="#D93636" />
-                <path d="M12 24L18 4h4L16 24h-4z" fill="#222" />
-            </svg></div>
-        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3.5" width="10" height="8" rx="1.5" />
-                <path d="M5.5 8v4.5h7.5v-2" />
-            </svg></div>
-        <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1" />
-                <rect x="9" y="2.5" width="4.5" height="4.5" rx="1" />
-                <rect x="2.5" y="9" width="4.5" height="4.5" rx="1" />
-                <rect x="9" y="9" width="4.5" height="4.5" rx="1" />
-            </svg></div>
-        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
-                stroke-linecap="round">
-                <circle cx="4.5" cy="8" r="2" />
-                <circle cx="11.5" cy="4" r="2" />
-                <circle cx="11.5" cy="12" r="2" />
-                <path d="M6.5 7.3L9.5 4.7M6.5 8.7L9.5 11.3" />
-            </svg></div>
-        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12c0 2 2.5 3 5 3s5-1 5-3V6.5c0-.8-.4-1.5-1.2-2L8 2.5 4.2 4.5C3.4 5 3 5.7 3 6.5V12z" />
-                <path d="M8 5.5V9" />
-            </svg></div>
-        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="8" cy="8" r="2.5" />
-                <path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7" />
-            </svg></div>
-        <div class="s-gap"></div>
-        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M10 13l4-4-4-4" />
-                <path d="M14 9H6.5a3 3 0 110-6H7" />
-            </svg></div>
-    </aside>
 
     <main class="main">
         <!-- ─── NAV (identical shell, "Competitors" tab is active) ─── -->
         <nav class="nav">
-            <div class="nav-logo"><svg viewBox="0 0 28 28" fill="none">
-                    <path d="M4 24L10 4h4L8 24H4z" fill="#D93636" />
-                    <path d="M12 24L18 4h4L16 24h-4z" fill="#D93636" />
-                </svg></div>
+            <div class="nav-logo"><img src="hermes-logo.png" alt="Hermès"></div>
             <a href="index.html" class="ntab">Dashboard</a>
             <span class="nav-sep">/</span>
             <a href="sentiment.html" class="ntab">Sentiment</a>

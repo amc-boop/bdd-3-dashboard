@@ -48,9 +48,12 @@
 
     /* ── NAVBAR ── */
     .nav {
-      height: 54px;
-      min-height: 54px;
-      background: var(--dark);
+      height: 110px;
+      min-height: 110px;
+      background: var(--bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, .04);
       display: flex;
       align-items: center;
       padding: 0 18px;
@@ -60,23 +63,30 @@
     }
 
     .nav-logo {
-      width: 32px;
-      height: 32px;
-      background: #fff;
-      border-radius: 7px;
+      background: var(--bg);
+      height: 84px;
+      min-width: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 12px;
-      flex-shrink: 0
+      border-radius: 8px;
+      margin-right: 14px;
+      flex-shrink: 0;
+      padding: 0 8px;
     }
 
-    .ntab {
+    .nav-logo img {
+      height: 72px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .tab {
       padding: 5px 12px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 500;
-      color: var(--gr);
+      color: rgba(0, 0, 0, .45);
       cursor: pointer;
       white-space: nowrap;
       transition: .15s;
@@ -86,11 +96,12 @@
       border: none
     }
 
-    .ntab:hover {
-      color: #ccc
+    .tab:hover {
+      background: rgba(0, 0, 0, .04);
+      color: rgba(0, 0, 0, .6)
     }
 
-    .ntab.on {
+    .tab.on {
       background: var(--red);
       color: #fff;
       font-weight: 600
@@ -140,45 +151,7 @@
       min-height: 0
     }
 
-    /* ── SIDEBAR ── */
-    .side {
-      width: 54px;
-      min-width: 54px;
-      background: var(--bg);
-      border-right: 1px solid rgba(0, 0, 0, .08);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px 0;
-      gap: 4px
-    }
 
-    .s-ico {
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gr);
-      cursor: pointer;
-      transition: .15s;
-      text-decoration: none
-    }
-
-    .s-ico:hover {
-      background: rgba(0, 0, 0, .06);
-      color: #333
-    }
-
-    .s-ico.on {
-      background: rgba(0, 0, 0, .08);
-      color: var(--dark)
-    }
-
-    .s-gap {
-      flex: 1
-    }
 
     /* ── CONTENT ── */
     .ct {
@@ -750,87 +723,16 @@
 
   <!-- NAVBAR -->
   <nav class="nav">
-    <div class="nav-logo">
-      <svg viewBox="0 0 28 28" width="20" height="20">
-        <path d="M3 24L9 4h4L7 24H3z" fill="#1A1A1A" />
-        <path d="M12 24L18 4h4L16 24h-4z" fill="#888" />
-      </svg>
-    </div>
-    <a href="index.html" class="ntab">Dashboard</a>
-    <span class="nav-sep">/</span>
-    <a href="sentiment.html" class="ntab">Sentiment</a>
-    <span class="nav-sep">/</span>
-    <span class="ntab on">Share of Voice</span>
-    <span class="nav-sep">/</span>
-    <a href="competitors.html" class="ntab">Competitors</a>
-    <span class="nav-sep">/</span>
-    <a href="trends.html" class="ntab">Trends</a>
-    <span class="nav-sep">/</span>
-    <a href="reports.html" class="ntab">Reports</a>
-    <div class="nav-r">
-      <button class="btn-ref" id="btnRefresh">
-        <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
-          <polyline points="1 3 4 3 4 6" />
-          <path d="M4 3A4.5 4.5 0 1 1 2 6.5" />
-        </svg>
-        Refresh
-      </button>
-      <div class="btn-ico"><svg width="12" height="12" fill="none" stroke="#fff" stroke-width="2"
-          stroke-linecap="round">
-          <path d="M2 11v-2a3.5 3.5 0 013.5-3.5h3.5m0 0l-2-2m2 2l-2 2" />
-        </svg></div>
-      <div class="btn-ico"><svg width="12" height="12" fill="none" stroke="#fff" stroke-width="2"
-          stroke-linecap="round">
-          <circle cx="3.5" cy="6" r="1.5" />
-          <circle cx="9" cy="2" r="1.5" />
-          <circle cx="9" cy="10" r="1.5" />
-          <path d="M5 5.1l2.8-2M5 6.9l2.8 2" />
-        </svg></div>
-    </div>
+    <div class="nav-logo"><img src="hermes-logo.png" alt="Hermès"></div>
+    <a href="index.html" class="tab">Dashboard</a>
+    <a href="sentiment.html" class="tab">Sentiment</a>
+    <a href="trends.html" class="tab">Trends</a>
+    <a href="share-of-voice.html" class="tab on">Share of Voice</a>
+    <a href="competitors.html" class="tab">Competitors</a>
+    <a href="reports.html" class="tab">Reports</a>
   </nav>
-
   <div class="wrap">
     <!-- SIDEBAR -->
-    <aside class="side">
-      <a href="index.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor"
-          stroke-width="1.5" stroke-linecap="round">
-          <path d="M2 7.5L8 2l6 5.5" />
-          <path d="M4 6v8h3v-4h3v4h3V6" />
-        </svg></a>
-      <a href="#" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="2" y="2" width="5" height="5" rx="1" />
-          <rect x="9" y="2" width="5" height="5" rx="1" />
-          <rect x="2" y="9" width="5" height="5" rx="1" />
-          <rect x="9" y="9" width="5" height="5" rx="1" />
-        </svg></a>
-      <a href="#" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round">
-          <circle cx="8" cy="3" r="1.5" />
-          <circle cx="3" cy="11.5" r="1.5" />
-          <circle cx="13" cy="11.5" r="1.5" />
-          <path d="M8 4.5v3l-3.5 4.5M8 7.5l3.5 4.5" />
-        </svg></a>
-      <a href="sentiment.html" class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor"
-          stroke-width="1.5" stroke-linecap="round">
-          <path d="M4 5c0-2.2 1.8-4 4-4s4 1.8 4 4c0 1.7-1 3-2.5 3.7V11h-3V8.7C5 8 4 6.7 4 5z" />
-          <path d="M6 13h4M6.5 15h3" />
-        </svg></a>
-      <a href="trends.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor"
-          stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="2 11.5 5.5 5.5 9.5 8.5 14 2" />
-        </svg></a>
-      <div class="s-gap"></div>
-      <a href="reports.html" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor"
-          stroke-width="1.5" stroke-linecap="round">
-          <rect x="3" y="2" width="10" height="12" rx="1.5" />
-          <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" />
-        </svg></a>
-      <a href="#" class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round">
-          <circle cx="8" cy="8" r="2" />
-          <path d="M8 2v1.5M8 12.5v1.5M2 8h1.5M12.5 8H14M3.8 3.8l1 1M11.2 11.2l1 1M3.8 12.2l1-1M11.2 4.8l1-1" />
-        </svg></a>
-    </aside>
 
     <!-- CONTENT -->
     <div class="ct">
