@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Competitors — Brand Intelligence</title>
+    <meta name="description"
+        content="Head-to-Head competitive analysis: Hermès vs Chanel. Share of Voice, Sentiment, Radar and Platform Dominance.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* ══════════════════════════════════════════════════════════════════
+   GLOBAL SHELL — identical to index.html
+   ══════════════════════════════════════════════════════════════════ */
+        :root {
+            --bg: #EEECEA;
+            --accent: #D93636;
+            --green: #3CB371;
+            --gap: 10px;
+            /* Competitors page tokens */
+            --hermes: #F37021;
+            --chanel: #D1D5DB;
+            --lv: #C5A039;
+            --dior: #8BA6C1;
+            --dark-bg: #e6dac6;
+            --text-dark: #18181B;
+            --card-bg: #FFFFFF;
+            --card-border: rgba(0, 0, 0, .06);
+            --r: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            height: auto;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #1a1a1a;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ─── SIDEBAR ─── */
+        .side {
+            width: 56px;
+            background: #fff;
+            border-right: 1px solid rgba(0, 0, 0, .06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            gap: 4px;
+            flex-shrink: 0;
+            z-index: 100;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .s-logo {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 20px
+        }
+
+        .s-ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(0, 0, 0, .22);
+            cursor: pointer;
+            transition: .15s
+        }
+
+        .s-ico:hover {
+            background: rgba(0, 0, 0, .04);
+            color: rgba(0, 0, 0, .45)
+        }
+
+        .s-ico.on {
+            background: rgba(0, 0, 0, .06);
+            color: rgba(0, 0, 0, .55)
+        }
+
+        .s-gap {
+            flex: 1
+        }
+
+        /* ─── MAIN ─── */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: visible;
+        }
+
+        /* ─── NAV ─── */
+        .nav {
+            height: 54px;
+            min-height: 54px;
+            background: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, .06);
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            gap: 6px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .nav-logo {
+            margin-right: 12px;
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0
+        }
+
+        .tab {
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, .45);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: .15s;
+            border: none;
+            background: none;
+            text-decoration: none
+        }
+
+        .tab:hover {
+            color: #000;
+            background: rgba(0, 0, 0, .03)
+        }
+
+        .tab.on {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600
+        }
+
+        .nav-r {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .nav-toggle {
+            display: flex;
+            gap: 3px;
+            padding: 5px 8px;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, .04);
+            cursor: pointer;
+            align-items: center
+        }
+
+        .nav-bell {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(0, 0, 0, .3);
+            position: relative
+        }
+
+        .nav-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 7px;
+            height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 2px solid #fff
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #7B5B3A, #4A2E15);
+            border: 3px solid rgba(0, 0, 0, .06);
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   COMPETITORS PAGE — DARK CONTENT AREA
+   ══════════════════════════════════════════════════════════════════ */
+        .ct {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: visible;
+            background: var(--dark-bg);
+            min-height: 100vh;
+        }
+
+        .ct-scroll {
+            width: 100%;
+            padding: 40px 32px 100px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex: 1;
+            min-height: 2500px;
+            /* Forced immense space to prevent any overlapping */
+        }
+
+        .spacer-50 {
+            height: 50px;
+            flex-shrink: 0;
+        }
+
+        .spacer-100 {
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        /* ── Page Header ── */
+        .pg-hdr {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0
+        }
+
+        .pg-hdr-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--hermes), #d45a10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(243, 112, 33, .35);
+        }
+
+        /* ─── HEADER — adapt to light background ─── */
+        .hdr-title {
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: -.03em;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .hdr-sub {
+            font-size: 14px;
+            color: rgba(24, 24, 27, .55);
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .pg-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -.02em;
+            line-height: 1.15
+        }
+
+        .pg-sub {
+            font-size: 12px;
+            color: rgba(24, 24, 27, .45);
+            font-weight: 500;
+            letter-spacing: .02em
+        }
+
+        .pg-badge {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(243, 112, 33, .12);
+            border: 1px solid rgba(243, 112, 33, .25);
+            border-radius: 999px;
+            padding: 6px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--hermes);
+            letter-spacing: .04em;
+        }
+
+        .pg-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--hermes);
+            animation: pulse-dot 1.6s ease-in-out infinite
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: .4;
+                transform: scale(.7)
+            }
+        }
+
+        /* ── Shared card ── */
+        .crd {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--r);
+            padding: 20px 24px;
+            color: var(--text-dark);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, .05);
+            transition: border-color .25s, box-shadow .25s;
+        }
+
+        .crd:hover {
+            border-color: rgba(0, 0, 0, .1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .1)
+        }
+
+        .crd-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(24, 24, 27, .45);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 16px
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   1. HEAD-TO-HEAD KPI ROW
+   ══════════════════════════════════════════════════════════════════ */
+        .h2h {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .h2h-card {
+            position: relative;
+        }
+
+        /* Removed absolute positioning from cards */
+
+        .h2h-hermes::before {
+            background: linear-gradient(90deg, var(--hermes), #ff9d57)
+        }
+
+        .h2h-chanel::before {
+            background: linear-gradient(90deg, #9CA3AF, var(--chanel))
+        }
+
+        .h2h-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px
+        }
+
+        .h2h-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .h2h-logo.hermes {
+            background: linear-gradient(135deg, var(--hermes), #d45a10)
+        }
+
+        .h2h-logo.chanel {
+            background: linear-gradient(135deg, #6B7280, #374151)
+        }
+
+        .h2h-name {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -.01em
+        }
+
+        .h2h-label {
+            font-size: 10px;
+            color: rgba(24, 24, 27, .45);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px
+        }
+
+        .kpi-item {
+            background: rgba(0, 0, 0, .03);
+            border: 1px solid rgba(0, 0, 0, .05);
+            border-radius: 12px;
+            padding: 14px 16px;
+            transition: background .2s, border-color .2s;
+        }
+
+        .kpi-item:hover {
+            background: rgba(0, 0, 0, .05);
+            border-color: rgba(0, 0, 0, .08)
+        }
+
+        .kpi-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(24, 24, 27, .45);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 8px
+        }
+
+        .kpi-val {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -.03em
+        }
+
+        .kpi-val.hermes-c {
+            color: var(--hermes)
+        }
+
+        .kpi-val.chanel-c {
+            color: var(--chanel)
+        }
+
+        .kpi-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 6px;
+            padding: 3px 8px;
+            border-radius: 6px
+        }
+
+        .kpi-trend.up {
+            color: #34D399;
+            background: rgba(52, 211, 153, .1)
+        }
+
+        .kpi-trend.down {
+            color: #F87171;
+            background: rgba(248, 113, 113, .1)
+        }
+
+        .kpi-trend.flat {
+            color: #FCD34D;
+            background: rgba(252, 211, 77, .1)
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   2 & 3. MIDDLE ROW — two charts side by side
+   ══════════════════════════════════════════════════════════════════ */
+        .mid-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            /* Fixed height for children to prevent collapse */
+        }
+
+        .chart-wrap canvas {
+            width: 100% !important;
+            height: 100% !important
+        }
+
+        /* Legend dots */
+        .legend {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(24, 24, 27, .5)
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   4. PLATFORM DOMINANCE — bottom row
+   ══════════════════════════════════════════════════════════════════ */
+        .chart-platform {
+            width: 100%;
+            height: 600px;
+            /* Generous height for platform chart */
+        }
+
+        .mt-10 {
+            margin-top: 40px !important;
+        }
+
+        .spacer-50 {
+            height: 50px;
+        }
+
+        .spacer-100 {
+            height: 100px;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   5. ACTIONABLE INSIGHT BANNER
+   ══════════════════════════════════════════════════════════════════ */
+        .banner {
+            flex-shrink: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, .05);
+            color: var(--text-dark);
+        }
+
+        .banner-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #DC2626, #F87171);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            animation: banner-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes banner-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, .4)
+            }
+
+            50% {
+                box-shadow: 0 0 0 8px rgba(220, 38, 38, 0)
+            }
+        }
+
+        .banner p {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(24, 24, 27, .65);
+            flex: 1;
+            line-height: 1.55
+        }
+
+        .banner a {
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            background: var(--hermes);
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            transition: background .2s
+        }
+
+        .banner a:hover {
+            background: #d45a10
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   GLOBAL FILTER BAR
+   ══════════════════════════════════════════════════════════════════ */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .06);
+            border-radius: 14px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, .04);
+            border: 1px solid rgba(0, 0, 0, .06);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background .2s, border-color .2s;
+            user-select: none;
+        }
+
+        .filter-item:hover {
+            background: rgba(0, 0, 0, .07);
+            border-color: rgba(0, 0, 0, .1);
+        }
+
+        .filter-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, .05);
+            flex-shrink: 0;
+            color: rgba(24, 24, 27, .4);
+        }
+
+        .filter-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(24, 24, 27, .4);
+            letter-spacing: .02em;
+            white-space: nowrap;
+        }
+
+        .filter-value {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(24, 24, 27, .85);
+            white-space: nowrap;
+        }
+
+        .filter-chevron {
+            color: rgba(24, 24, 27, .3);
+            flex-shrink: 0;
+            margin-left: 2px;
+        }
+
+        .filter-sep {
+            width: 1px;
+            height: 28px;
+            background: rgba(0, 0, 0, .06);
+            flex-shrink: 0;
+        }
+
+        .filter-btn {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            background: transparent;
+            border: 1px solid rgba(243, 112, 33, .35);
+            border-radius: 10px;
+            color: var(--hermes);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s, border-color .2s, color .2s;
+            letter-spacing: .02em;
+        }
+
+        .filter-btn:hover {
+            background: rgba(243, 112, 33, .12);
+            border-color: var(--hermes);
+            color: #fff;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+   COMPETITOR LIST ROWS (inside KPI cards)
+   ══════════════════════════════════════════════════════════════════ */
+        .comp-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .comp-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, .04);
+        }
+
+        .comp-row:last-child {
+            border-bottom: none;
+        }
+
+        .comp-name {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(24, 24, 27, .55);
+        }
+
+        .comp-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .comp-val {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: .01em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ─── SIDEBAR (identical to index.html) ─── -->
+    <aside class="side">
+        <div class="s-logo"><svg viewBox="0 0 28 28" fill="none">
+                <path d="M4 24L10 4h4L8 24H4z" fill="#D93636" />
+                <path d="M12 24L18 4h4L16 24h-4z" fill="#222" />
+            </svg></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3.5" width="10" height="8" rx="1.5" />
+                <path d="M5.5 8v4.5h7.5v-2" />
+            </svg></div>
+        <div class="s-ico on"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1" />
+                <rect x="9" y="2.5" width="4.5" height="4.5" rx="1" />
+                <rect x="2.5" y="9" width="4.5" height="4.5" rx="1" />
+                <rect x="9" y="9" width="4.5" height="4.5" rx="1" />
+            </svg></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round">
+                <circle cx="4.5" cy="8" r="2" />
+                <circle cx="11.5" cy="4" r="2" />
+                <circle cx="11.5" cy="12" r="2" />
+                <path d="M6.5 7.3L9.5 4.7M6.5 8.7L9.5 11.3" />
+            </svg></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12c0 2 2.5 3 5 3s5-1 5-3V6.5c0-.8-.4-1.5-1.2-2L8 2.5 4.2 4.5C3.4 5 3 5.7 3 6.5V12z" />
+                <path d="M8 5.5V9" />
+            </svg></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="2.5" />
+                <path d="M8 3v1M8 12v1M3 8h1M12 8h1M4.8 4.8l.7.7M10.5 10.5l.7.7M4.8 11.2l.7-.7M10.5 5.5l.7-.7" />
+            </svg></div>
+        <div class="s-gap"></div>
+        <div class="s-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13l4-4-4-4" />
+                <path d="M14 9H6.5a3 3 0 110-6H7" />
+            </svg></div>
+    </aside>
+
+    <main class="main">
+        <!-- ─── NAV (identical shell, "Competitors" tab is active) ─── -->
+        <nav class="nav">
+            <div class="nav-logo"><svg viewBox="0 0 28 28" fill="none">
+                    <path d="M4 24L10 4h4L8 24H4z" fill="#D93636" />
+                    <path d="M12 24L18 4h4L16 24h-4z" fill="#D93636" />
+                </svg></div>
+            <a href="index.html" class="tab" style="text-decoration:none">Dashboard</a>
+            <a href="sentiment.html" class="tab" style="text-decoration:none">Sentiment</a>
+            <a href="trends.html" class="tab" style="text-decoration:none">Trends</a>
+            <a href="#" class="tab">Share of Voice</a>
+            <div class="tab on">Competitors</div>
+            <a href="#" class="tab">Crisis Alert</a>
+            <a href="reports.html" class="tab" style="text-decoration:none">Reports</a>
+            <div class="nav-r">
+                <div class="nav-toggle"><svg width="13" height="13" fill="none" stroke="currentColor"
+                        stroke-width="1.4">
+                        <circle cx="6.5" cy="6.5" r="2.5" />
+                        <path
+                            d="M6.5 1.5v1M6.5 11v1M1.5 6.5h1M11 6.5h1M3.5 3.5l.6.6M9.4 9.4l.6.6M3.5 9.5l.6-.6M9.4 3.6l.6-.6" />
+                    </svg><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4"
+                        stroke-linecap="round">
+                        <path d="M11 6.5a5 5 0 01-6.6 4.7A5 5 0 008.6 1.7 5 5 0 0011 6.5z" />
+                    </svg></div>
+                <div class="nav-bell"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round">
+                        <path d="M10.5 4a4 4 0 10-6 3.5c.3.4.5 1 .5 1.5h5c0-.5.2-1.1.5-1.5a4 4 0 00-2-3.5z" />
+                        <path d="M5.5 12h4" />
+                    </svg>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="avatar"><svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)"
+                        stroke-width="1.3">
+                        <circle cx="9" cy="6.5" r="2.8" />
+                        <path d="M3.5 15.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5" />
+                    </svg></div>
+            </div>
+        </nav>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+       COMPETITORS CONTENT
+       ═══════════════════════════════════════════════════════════════ -->
+        <div class="ct">
+            <div class="ct-scroll" style="min-height:2500px">
+
+                <!-- ── ROW 1 & 2: Header & KPIs ── -->
+                <div class="block-1" style="display:flex; flex-direction:column; gap:24px;">
+                    <div class="pg-hdr">
+                        <div class="pg-hdr-icon">
+                            <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 9L10 4 16 9" />
+                                <path d="M6 8v7h3v-4h2v4h3V8" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="pg-title">Hermès vs Chanel</div>
+                            <div class="pg-sub">Head-to-Head Competitive Intelligence · Mars 2026 · 3 358 datapoints
+                            </div>
+                        </div>
+                        <div class="pg-badge"><span class="pg-badge-dot"></span> LIVE MONITORING</div>
+                    </div>
+
+                    <!-- ── ROW 1.5: Global Filter Bar ── -->
+                    <div class="filter-bar">
+                        <!-- Period -->
+                        <div class="filter-item" id="filter-period">
+                            <div class="filter-icon">
+                                <svg width="12" height="12" fill="none" stroke="rgba(24, 24, 27, .45)"
+                                    stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="1.5" y="2" width="9" height="8.5" rx="1.5" />
+                                    <path d="M1.5 5h9M4 1v2M8 1v2" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="filter-label">Date Range</div>
+                                <div class="filter-value">Last 30 Days</div>
+                            </div>
+                            <svg class="filter-chevron" width="10" height="10" fill="none" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round">
+                                <path d="M3 4l2 2 2-2" />
+                            </svg>
+                        </div>
+
+                        <div class="filter-sep"></div>
+
+                        <!-- Region -->
+                        <div class="filter-item" id="filter-region">
+                            <div class="filter-icon">
+                                <svg width="12" height="12" fill="none" stroke="rgba(24, 24, 27, .45)"
+                                    stroke-width="1.3" stroke-linecap="round">
+                                    <circle cx="6" cy="6" r="4.5" />
+                                    <path d="M1.5 6h9M6 1.5c-1.8 2-1.8 7 0 9M6 1.5c1.8 2 1.8 7 0 9" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="filter-label">Region</div>
+                                <div class="filter-value">Global</div>
+                            </div>
+                            <svg class="filter-chevron" width="10" height="10" fill="none" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round">
+                                <path d="M3 4l2 2 2-2" />
+                            </svg>
+                        </div>
+
+                        <div class="filter-sep"></div>
+
+                        <!-- Sentiment -->
+                        <div class="filter-item" id="filter-sentiment">
+                            <div class="filter-icon">
+                                <svg width="12" height="12" fill="none" stroke="rgba(24, 24, 27, .45)"
+                                    stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10.5 5.5H7l-1 2-2-4-1 2H1.5" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="filter-label">Sentiment</div>
+                                <div class="filter-value">All</div>
+                            </div>
+                            <svg class="filter-chevron" width="10" height="10" fill="none" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round">
+                                <path d="M3 4l2 2 2-2" />
+                            </svg>
+                        </div>
+
+                        <!-- Update View Button -->
+                        <button class="filter-btn" id="filter-apply">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 6a5 5 0 019.2-2.5M11 6a5 5 0 01-9.2 2.5" />
+                                <path d="M1 1v3h3M11 11v-3H8" />
+                            </svg>
+                            Update View
+                        </button>
+                    </div>
+
+                    <div class="h2h">
+                        <!-- HERMÈS block -->
+                        <div class="crd h2h-card">
+                            <div class="h2h-brand">
+                                <div class="h2h-logo hermes">H</div>
+                                <div>
+                                    <div class="h2h-name" style="color:var(--hermes)">Hermès</div>
+                                    <div class="h2h-label">Primary Brand</div>
+                                </div>
+                            </div>
+                            <div class="kpi-grid">
+                                <div class="kpi-item">
+                                    <div class="kpi-label">Share of Voice</div>
+                                    <div class="kpi-val hermes-c">28.0%</div>
+                                    <div class="kpi-trend down">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round">
+                                            <path d="M2 3l3 4 3-4" />
+                                        </svg>
+                                        -2.1pp
+                                    </div>
+                                </div>
+                                <div class="kpi-item">
+                                    <div class="kpi-label">Net Sentiment</div>
+                                    <div class="kpi-val hermes-c" id="kpi-hermes-sentiment">68%</div>
+                                    <div class="kpi-trend up">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round">
+                                            <path d="M2 7l3-4 3 4" />
+                                        </svg>
+                                        +3.2pp
+                                    </div>
+                                </div>
+                                <div class="kpi-item">
+                                    <div class="kpi-label">Engagement / Mention</div>
+                                    <div class="kpi-val hermes-c" style="font-size:20px;margin-top:4px">Low</div>
+                                    <div class="kpi-trend flat">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round">
+                                            <path d="M2 5h6" />
+                                        </svg>
+                                        Stable
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- COMPETITORS LANDSCAPE block -->
+                        <div class="crd h2h-card">
+                            <div class="h2h-brand">
+                                <div class="h2h-logo"
+                                    style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1)">
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="7" cy="7" r="5.5" />
+                                        <path d="M4.5 7h5M7 4.5v5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="h2h-name" style="color:rgba(255,255,255,.85)">Competitors Landscape
+                                    </div>
+                                    <div class="h2h-label">Chanel · Louis Vuitton · Dior</div>
+                                </div>
+                            </div>
+                            <div class="kpi-grid">
+                                <!-- SoV -->
+                                <div class="kpi-item">
+                                    <div class="kpi-label">Share of Voice</div>
+                                    <div class="comp-list">
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--chanel)"></span>Chanel</span><span
+                                                class="comp-val">35.0%</span></div>
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--lv)"></span>Louis Vuitton</span><span
+                                                class="comp-val">22.0%</span></div>
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--dior)"></span>Dior</span><span
+                                                class="comp-val">15.0%</span></div>
+                                    </div>
+                                </div>
+                                <!-- Net Sentiment -->
+                                <div class="kpi-item">
+                                    <div class="kpi-label">Net Sentiment</div>
+                                    <div class="comp-list" id="kpi-competitors-sentiment">
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--chanel)"></span>Chanel</span><span
+                                                class="comp-val">74%</span></div>
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--lv)"></span>Louis Vuitton</span><span
+                                                class="comp-val">68%</span></div>
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--dior)"></span>Dior</span><span
+                                                class="comp-val">71%</span></div>
+                                    </div>
+                                </div>
+                                <!-- Engagement -->
+                                <div class="kpi-item">
+                                    <div class="kpi-label">Engagement / Mention</div>
+                                    <div class="comp-list">
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--chanel)"></span>Chanel</span><span
+                                                class="comp-val">High</span></div>
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--lv)"></span>Louis Vuitton</span><span
+                                                class="comp-val">Med</span></div>
+                                        <div class="comp-row"><span class="comp-name"><span class="comp-dot"
+                                                    style="background:var(--dior)"></span>Dior</span><span
+                                                class="comp-val">High</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spacer-50"></div>
+
+                <!-- ── ROW 3: 2-Column Grid (Charts) ── -->
+                <div class="mid-row">
+                    <!-- 2. Share of Voice Evolution -->
+                    <div class="crd" style="min-height:550px">
+                        <div class="crd-title">Share of Voice Evolution</div>
+                        <div class="legend">
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--hermes)"></span>
+                                Hermès</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--chanel)"></span>
+                                Chanel</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--lv)"></span>
+                                Louis Vuitton</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--dior)"></span>
+                                Dior</div>
+                            <div class="legend-item"
+                                style="margin-left:auto;font-size:10px;color:rgba(255,255,255,.25)">12-month rolling
+                            </div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="sovChart"></canvas></div>
+                    </div>
+
+                    <!-- 3. Strategic Battleground (Radar) -->
+                    <div class="crd" style="min-height:550px">
+                        <div class="crd-title">Strategic Battleground</div>
+                        <div class="legend">
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--hermes)"></span>
+                                Hermès</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--chanel)"></span>
+                                Chanel</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--lv)"></span>
+                                Louis Vuitton</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:var(--dior)"></span>
+                                Dior</div>
+                        </div>
+                        <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="spacer-100"></div>
+
+                <!-- ── ROW 4: Platform Dominance (Full Width) ── -->
+                <div class="crd">
+                    <div class="crd-title">Platform Dominance</div>
+                    <div class="legend" style="margin-bottom:8px">
+                        <div class="legend-item"><span class="legend-dot" style="background:var(--hermes)"></span>
+                            Hermès</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:var(--chanel)"></span>
+                            Chanel</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:var(--lv)"></span>
+                            Louis Vuitton</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:var(--dior)"></span>
+                            Dior</div>
+                        <div class="legend-item" style="margin-left:auto;font-size:10px;color:rgba(255,255,255,.25)">%
+                            of total brand conversation per platform</div>
+                    </div>
+                    <div class="chart-platform"><canvas id="platformChart"></canvas></div>
+                </div>
+
+                <div class="spacer-100"></div>
+
+                <!-- ── ROW 5: Alert Banner (Bottom) ── -->
+                <div class="banner">
+                    <div class="banner-icon">⚡</div>
+                    <p>
+                        <strong style="color:#DC2626">Alert:</strong> Chanel's Share of Voice on TikTok has grown by
+                        <strong style="color:var(--text-dark)">+15%</strong> this quarter, capturing Gen-Z prescription.
+                        ⚡ <strong style="color:rgba(24, 24, 27, .85)">Recommendation:</strong> Counter-attack by
+                        activating an <em>'Art de Vivre &amp; Horology'</em> digital campaign.
+                    </p>
+                    <a href="#">👉 View Action Plan</a>
+                </div>
+
+            </div><!-- /ct-scroll -->
+        </div><!-- /ct -->
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+     CHARTS — Chart.js
+     ═══════════════════════════════════════════════════════════════ -->
+    <script>
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.font.size = 10;
+        Chart.defaults.color = 'rgba(255,255,255,.35)';
+
+        /* ── helper: gradient fill ── */
+        function makeGrad(ctx, chart, color, a1, a2) {
+            const g = ctx.createLinearGradient(0, 0, 0, chart.height);
+            g.addColorStop(0, color.replace(')', ',' + a1 + ')').replace('rgb', 'rgba'));
+            g.addColorStop(1, color.replace(')', ',' + a2 + ')').replace('rgb', 'rgba'));
+            return g;
+        }
+
+        /* ══════════════════════════════════════════════════
+           2. SHARE OF VOICE EVOLUTION — 4 lines
+           ══════════════════════════════════════════════════ */
+        const sovCtx = document.getElementById('sovChart');
+        const sovChart = new Chart(sovCtx, {
+            type: 'line',
+            data: {
+                labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+                datasets: [
+                    {
+                        label: 'Hermès',
+                        data: [28, 29, 27, 28, 30, 29, 28, 29, 27, 29, 30, 29.5],
+                        borderColor: '#F37021',
+                        backgroundColor: function (c) {
+                            const g = c.chart.ctx.createLinearGradient(0, 0, 0, c.chart.chartArea?.bottom || 250);
+                            g.addColorStop(0, 'rgba(243,112,33,.15)');
+                            g.addColorStop(1, 'rgba(243,112,33,.01)');
+                            return g;
+                        },
+                        borderWidth: 3.5,
+                        fill: true,
+                        tension: .4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#F37021',
+                        order: 0,
+                    },
+                    {
+                        label: 'Chanel',
+                        data: [32, 33, 34, 35, 34, 36, 37, 40, 44, 38, 36, 35.2],
+                        borderColor: '#D1D5DB',
+                        backgroundColor: 'transparent',
+                        borderWidth: 1.8,
+                        fill: false,
+                        tension: .4,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#D1D5DB',
+                        order: 1,
+                    },
+                    {
+                        label: 'Louis Vuitton',
+                        data: [22, 21, 22, 20, 19, 18, 19, 17, 16, 18, 19, 20.1],
+                        borderColor: '#C5A039',
+                        backgroundColor: 'transparent',
+                        borderWidth: 1.8,
+                        fill: false,
+                        tension: .4,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#C5A039',
+                        borderDash: [6, 3],
+                        order: 2,
+                    },
+                    {
+                        label: 'Dior',
+                        data: [18, 17, 17, 17, 17, 17, 16, 14, 13, 15, 15, 15.2],
+                        borderColor: '#8BA6C1',
+                        backgroundColor: 'transparent',
+                        borderWidth: 1.8,
+                        fill: false,
+                        tension: .4,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#8BA6C1',
+                        borderDash: [6, 3],
+                        order: 3,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                layout: { padding: { top: 6, right: 12 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(24,24,27,.95)',
+                        borderColor: 'rgba(255,255,255,.08)',
+                        borderWidth: 1,
+                        titleFont: { weight: 700, size: 11 },
+                        bodyFont: { size: 11 },
+                        padding: 10,
+                        cornerRadius: 10,
+                        callbacks: {
+                            label: function (c) { return c.dataset.label + ': ' + c.parsed.y + '%'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(0, 0, 0, .05)', drawBorder: false },
+                        border: { display: false },
+                        ticks: { color: 'rgba(24, 24, 27, .45)', font: { size: 10 } }
+                    },
+                    y: {
+                        min: 0,
+                        max: 55,
+                        grid: { color: 'rgba(0, 0, 0, .05)', drawBorder: false },
+                        border: { display: false },
+                        ticks: {
+                            stepSize: 10,
+                            color: 'rgba(24, 24, 27, .45)',
+                            font: { size: 10 },
+                            callback: v => v + '%'
+                        }
+                    }
+                }
+            },
+            plugins: [{
+                afterDatasetsDraw(chart) {
+                    const meta = chart.getDatasetMeta(1); // Chanel
+                    const pt = meta.data[8]; // Dec peak = 44
+                    if (!pt) return;
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    const txt = '↑ Digital Campaign Peak';
+                    ctx.font = '600 9px Inter';
+                    const tw = ctx.measureText(txt).width;
+                    const bw = tw + 14, bh = 20;
+                    const bx = pt.x - bw / 2, by = pt.y - 28;
+                    ctx.fillStyle = 'rgba(0, 0, 0, .05)';
+                    ctx.beginPath();
+                    ctx.roundRect(bx, by, bw, bh, 8);
+                    ctx.fill();
+                    ctx.fillStyle = 'var(--text-dark)';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(txt, pt.x, by + bh / 2);
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 0, 0, .1)';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
+                    ctx.fillStyle = 'var(--text-dark)';
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }]
+        });
+
+        /* ══════════════════════════════════════════════════
+           3. STRATEGIC BATTLEGROUND — 4-brand radar chart
+           ══════════════════════════════════════════════════ */
+        const radarCtx = document.getElementById('radarChart');
+        const radarChart = new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Product\nQuality', 'Innovation', 'Boutique\nExperience', 'Customer\nService', 'Pricing\nPower'],
+                datasets: [
+                    {
+                        label: 'Hermès',
+                        data: [95, 45, 72, 38, 93],
+                        borderColor: '#F37021',
+                        backgroundColor: 'rgba(243,112,33,.15)',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#F37021',
+                        pointBorderColor: '#F37021',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                    },
+                    {
+                        label: 'Chanel',
+                        data: [78, 82, 80, 85, 65],
+                        borderColor: '#D1D5DB',
+                        backgroundColor: 'rgba(209,213,219,.15)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#D1D5DB',
+                        pointBorderColor: '#D1D5DB',
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                    },
+                    {
+                        label: 'Louis Vuitton',
+                        data: [70, 90, 68, 72, 88],
+                        borderColor: '#C5A039',
+                        backgroundColor: 'rgba(197,160,57,.15)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#C5A039',
+                        pointBorderColor: '#C5A039',
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                    },
+                    {
+                        label: 'Dior',
+                        data: [74, 76, 92, 80, 58],
+                        borderColor: '#8BA6C1',
+                        backgroundColor: 'rgba(139,166,193,.15)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#8BA6C1',
+                        pointBorderColor: '#8BA6C1',
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { top: 4, bottom: 4 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(24,24,27,.95)',
+                        borderColor: 'rgba(255,255,255,.08)',
+                        borderWidth: 1,
+                        titleFont: { weight: 700, size: 11 },
+                        bodyFont: { size: 11 },
+                        padding: 10,
+                        cornerRadius: 10,
+                        callbacks: {
+                            label: function (c) { return c.dataset.label + ': ' + c.parsed.r + '/100'; }
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            stepSize: 25,
+                            showLabelBackdrop: false,
+                            color: 'rgba(24, 24, 27, .3)',
+                            font: { size: 8 }
+                        },
+                        grid: { color: 'rgba(0, 0, 0, .08)' },
+                        angleLines: { color: 'rgba(0, 0, 0, .08)' },
+                        pointLabels: {
+                            color: 'rgba(24, 24, 27, .65)',
+                            font: { size: 10, weight: 600 },
+                            padding: 12
+                        }
+                    }
+                }
+            }
+        });
+
+        /* ══════════════════════════════════════════════════
+           4. PLATFORM DOMINANCE — 4-brand 100% stacked bar
+           ══════════════════════════════════════════════════ */
+        const platCtx = document.getElementById('platformChart');
+        const platChart = new Chart(platCtx, {
+            type: 'bar',
+            data: {
+                labels: ['TikTok', 'Instagram', 'X (Twitter)', 'LinkedIn', 'Forums'],
+                datasets: [
+                    {
+                        label: 'Hermès',
+                        data: [12, 22, 30, 40, 35],
+                        backgroundColor: '#F37021',
+                        borderRadius: { topLeft: 6, bottomLeft: 6, topRight: 0, bottomRight: 0 },
+                        borderSkipped: false,
+                        barPercentage: .55,
+                        categoryPercentage: .8,
+                    },
+                    {
+                        label: 'Chanel',
+                        data: [38, 30, 25, 20, 20],
+                        backgroundColor: '#D1D5DB',
+                        borderRadius: 0,
+                        borderSkipped: false,
+                        barPercentage: .55,
+                        categoryPercentage: .8,
+                    },
+                    {
+                        label: 'Louis Vuitton',
+                        data: [28, 28, 25, 22, 25],
+                        backgroundColor: '#C5A059',
+                        borderRadius: 0,
+                        borderSkipped: false,
+                        barPercentage: .55,
+                        categoryPercentage: .8,
+                    },
+                    {
+                        label: 'Dior',
+                        data: [22, 20, 20, 18, 20],
+                        backgroundColor: '#8BA6C1',
+                        borderRadius: { topLeft: 0, bottomLeft: 0, topRight: 6, bottomRight: 6 },
+                        borderSkipped: false,
+                        barPercentage: .55,
+                        categoryPercentage: .8,
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { right: 10 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(24,24,27,.95)',
+                        borderColor: 'rgba(255,255,255,.08)',
+                        borderWidth: 1,
+                        titleFont: { weight: 700, size: 11 },
+                        bodyFont: { size: 11 },
+                        padding: 10,
+                        cornerRadius: 10,
+                        callbacks: {
+                            label: function (c) { return c.dataset.label + ': ' + c.parsed.x + '%'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        max: 100,
+                        grid: { color: 'rgba(0, 0, 0, .05)', drawBorder: false },
+                        border: { display: false },
+                        ticks: {
+                            color: 'rgba(24, 24, 27, .4)',
+                            font: { size: 10 },
+                            callback: v => v + '%'
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: { display: false },
+                        border: { display: false },
+                        ticks: {
+                            color: 'rgba(24, 24, 27, .65)',
+                            font: { size: 12, weight: 600 },
+                            padding: 8
+                        }
+                    }
+                }
+            },
+            plugins: [{}]
+        });
+
+        /* ── Nav tab click ── */
+        document.querySelectorAll('.tab').forEach(t => {
+            if (t.tagName === 'A') return;
+            t.onclick = () => {
+                document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+                t.classList.add('on');
+            };
+        });
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+     FILTER INTERACTIVITY
+     ═══════════════════════════════════════════════════════════════ -->
+    <script>
+        (function () {
+            /* ── Mock data states ── */
+            const STATES = {
+                all: {
+                    hermesSentiment: '68%',
+                    hermesTrend: { text: '+3.2pp', cls: 'up', icon: 'M2 7l3-4 3 4' },
+                    compSentiment: { chanel: '74%', lv: '68%', dior: '71%' },
+                    radar: {
+                        hermes: [95, 45, 72, 38, 93],
+                        chanel: [78, 82, 80, 85, 65],
+                        lv: [70, 90, 68, 72, 88],
+                        dior: [74, 76, 92, 80, 58]
+                    },
+                    platform: {
+                        hermes: [12, 22, 30, 40, 35],
+                        chanel: [38, 30, 25, 20, 20],
+                        lv: [28, 28, 25, 22, 25],
+                        dior: [22, 20, 20, 18, 20]
+                    }
+                },
+                negative: {
+                    hermesSentiment: '22%',
+                    hermesTrend: { text: '-46pp', cls: 'down', icon: 'M2 3l3 4 3-4' },
+                    compSentiment: { chanel: '15%', lv: '12%', dior: '18%' },
+                    radar: {
+                        hermes: [35, 30, 40, 88, 50],
+                        chanel: [28, 35, 32, 92, 30],
+                        lv: [32, 40, 28, 85, 42],
+                        dior: [30, 38, 35, 90, 25]
+                    },
+                    platform: {
+                        hermes: [8, 15, 35, 48, 42],
+                        chanel: [42, 35, 22, 15, 15],
+                        lv: [30, 30, 23, 20, 22],
+                        dior: [20, 20, 20, 17, 21]
+                    }
+                }
+            };
+
+            let currentFilter = 'all';
+
+            /* ── DOM refs ── */
+            const sentimentFilter = document.getElementById('filter-sentiment');
+            const applyBtn = document.getElementById('filter-apply');
+            const hermesSentEl = document.getElementById('kpi-hermes-sentiment');
+            const compSentEl = document.getElementById('kpi-competitors-sentiment');
+            const hermesTrendEl = hermesSentEl?.closest('.kpi-item')?.querySelector('.kpi-trend');
+            const sentValueEl = sentimentFilter?.querySelector('.filter-value');
+
+            /* ── Sentiment dropdown toggle ── */
+            sentimentFilter?.addEventListener('click', function () {
+                if (currentFilter === 'all') {
+                    currentFilter = 'negative';
+                    sentValueEl.textContent = 'Negative';
+                    sentimentFilter.style.borderColor = 'rgba(248,113,113,.4)';
+                    sentimentFilter.style.background = 'rgba(248,113,113,.08)';
+                } else {
+                    currentFilter = 'all';
+                    sentValueEl.textContent = 'All';
+                    sentimentFilter.style.borderColor = '';
+                    sentimentFilter.style.background = '';
+                }
+            });
+
+            /* ── Apply button with spinner ── */
+            applyBtn?.addEventListener('click', function () {
+                const origHTML = applyBtn.innerHTML;
+                applyBtn.disabled = true;
+                applyBtn.innerHTML = `
+                <svg class="spinner" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M7 1a6 6 0 014.9 9.5" />
+                </svg>
+                Updating…`;
+                applyBtn.style.opacity = '.6';
+
+                setTimeout(function () {
+                    applyFilter(STATES[currentFilter]);
+                    applyBtn.innerHTML = origHTML;
+                    applyBtn.disabled = false;
+                    applyBtn.style.opacity = '';
+
+                    if (currentFilter === 'negative') {
+                        applyBtn.style.background = 'rgba(243,112,33,.15)';
+                        applyBtn.style.borderColor = 'var(--hermes)';
+                        applyBtn.style.color = '#fff';
+                    } else {
+                        applyBtn.style.background = '';
+                        applyBtn.style.borderColor = '';
+                        applyBtn.style.color = '';
+                    }
+                }, 500);
+            });
+
+            /* ── Apply the selected state ── */
+            function applyFilter(state) {
+                /* Hermès KPI */
+                if (hermesSentEl) hermesSentEl.textContent = state.hermesSentiment;
+                if (hermesTrendEl) {
+                    hermesTrendEl.className = 'kpi-trend ' + state.hermesTrend.cls;
+                    hermesTrendEl.innerHTML = `<svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="${state.hermesTrend.icon}" /></svg> ${state.hermesTrend.text}`;
+                }
+
+                /* Competitors Sentiment List */
+                if (compSentEl) {
+                    const rows = compSentEl.querySelectorAll('.comp-val');
+                    if (rows[0]) rows[0].textContent = state.compSentiment.chanel;
+                    if (rows[1]) rows[1].textContent = state.compSentiment.lv;
+                    if (rows[2]) rows[2].textContent = state.compSentiment.dior;
+                }
+
+                /* Radar Chart */
+                if (typeof radarChart !== 'undefined') {
+                    radarChart.data.datasets[0].data = state.radar.hermes;
+                    radarChart.data.datasets[1].data = state.radar.chanel;
+                    radarChart.data.datasets[2].data = state.radar.lv;
+                    radarChart.data.datasets[3].data = state.radar.dior;
+                    radarChart.update('active');
+                }
+
+                /* Platform Dominance Chart */
+                if (typeof platChart !== 'undefined') {
+                    platChart.data.datasets[0].data = state.platform.hermes;
+                    platChart.data.datasets[1].data = state.platform.chanel;
+                    platChart.data.datasets[2].data = state.platform.lv;
+                    platChart.data.datasets[3].data = state.platform.dior;
+                    platChart.update('active');
+                }
+            }
+
+            /* ── Spinner CSS ── */
+            const spinStyle = document.createElement('style');
+            spinStyle.textContent = `
+            @keyframes filter-spin { to { transform: rotate(360deg) } }
+            .spinner { animation: filter-spin .6s linear infinite; }
+            .filter-item.active {
+                border-color: rgba(248,113,113,.4) !important;
+                background: rgba(248,113,113,.08) !important;
+            }
+        `;
+            document.head.appendChild(spinStyle);
+        })();
+    </script>
+</body>
+
+</html>
