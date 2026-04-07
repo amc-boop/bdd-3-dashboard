@@ -1,388 +1,1279 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Trends | Brand Intelligence Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="supabase-config.js"></script>
-<style>
-:root{
-  --bg:#F0EFEB;
-  --dark:#1A1A1A;
-  --card:#2D2D2D;
-  --g2:#3A3A3A;
-  --g3:#444444;
-  --green:#22C55E;
-  --orange:#F59E0B;
-  --red:#E8383D;
-  --gr:#999999;
-  --t1:#FFFFFF;
-  --r:16px;
-  --gap:12px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);display:flex;flex-direction:column;height:100vh}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Trends | Brand Intelligence Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <style>
+    :root {
+      --bg: #F0EFEB;
+      --dark: #1A1A1A;
+      --card: #2D2D2D;
+      --g2: #3A3A3A;
+      --g3: #444444;
+      --green: #22C55E;
+      --orange: #F59E0B;
+      --red: #E8383D;
+      --gr: #999999;
+      --t1: #FFFFFF;
+      --r: 16px;
+      --gap: 12px;
+    }
 
-/* ── NAVBAR ── */
-.nav{height:52px;min-height:52px;background:var(--dark);display:flex;align-items:center;padding:0 16px;gap:1px;flex-shrink:0;z-index:100}
-.nav-logo{width:30px;height:30px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-right:10px;flex-shrink:0;font-size:13px;font-weight:900;color:var(--dark);letter-spacing:-1px}
-.ntab{padding:5px 11px;border-radius:20px;font-size:13px;font-weight:500;color:var(--gr);cursor:pointer;white-space:nowrap;transition:.15s;text-decoration:none;font-family:inherit;background:none;border:none}
-.ntab:hover{color:#ccc}
-.ntab.on{background:var(--red);color:#fff;font-weight:600}
-.nav-r{margin-left:auto;display:flex;align-items:center;gap:7px}
-.theme-tog{display:flex;align-items:center;gap:4px;background:var(--bg);border-radius:20px;padding:4px 9px;cursor:pointer;flex-shrink:0}
-.nav-bell{width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c7c7c,#4a4a4a);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-/* ── LAYOUT ── */
-.wrap{flex:1;display:flex;overflow:hidden;min-height:0}
-.side{width:52px;min-width:52px;background:var(--bg);border-right:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:3px}
-.s-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--gr);cursor:pointer;transition:.15s;text-decoration:none}
-.s-ico:hover{background:rgba(0,0,0,.06);color:#333}
-.s-ico.on{background:rgba(0,0,0,.08);color:var(--dark)}
-.s-gap{flex:1}
-.ct{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    html,
+    body {
+      height: 100%;
+      overflow: hidden
+    }
 
-/* ── PAGE HEADER ── */
-.phdr{padding:12px 20px 8px;display:flex;align-items:center;gap:12px;flex-shrink:0}
-.phdr-icon{width:44px;height:44px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.phdr-info{flex:1}
-.phdr-title{font-size:32px;font-weight:700;color:var(--dark);letter-spacing:-.025em;line-height:1}
-.phdr-sub{font-size:12.5px;color:var(--gr);margin-top:2px}
-.phdr-r{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
-.pf-row{display:flex;align-items:center;gap:2px}
-.pf-sep{color:var(--gr);font-size:13px;padding:0 2px}
-.pf-btn{padding:3px 5px;font-size:13px;font-weight:500;color:var(--gr);cursor:pointer;background:none;border:none;font-family:inherit;transition:.15s}
-.pf-btn:hover{color:var(--dark)}
-.pf-btn.on{color:var(--dark);font-weight:700}
-.phdr-btns{display:flex;gap:5px;align-items:center}
-.btn-ref{display:flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;background:var(--dark);color:#fff;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit;white-space:nowrap}
-.btn-ico{width:30px;height:30px;border-radius:50%;background:var(--dark);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      height: 100vh
+    }
 
-/* ── ROWS CONTAINER ── */
-.rows{flex:1;display:flex;flex-direction:column;gap:var(--gap);padding:0 20px 12px;overflow:hidden;min-height:0}
+    /* ── NAVBAR ── */
+    .nav {
+      height: 52px;
+      min-height: 52px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 1px;
+      flex-shrink: 0;
+      z-index: 100
+    }
 
-/* ── ROW 1 — KPI Cards ── */
-.r1{display:grid;grid-template-columns:1fr 1.45fr 1fr 1fr;gap:var(--gap);height:122px;flex-shrink:0}
-.kc{background:var(--card);border-radius:var(--r);padding:12px 16px;display:flex;flex-direction:column;position:relative;overflow:hidden}
-.kc-hdr{display:flex;align-items:center;justify-content:space-between}
-.kc-lbl{font-size:12.5px;font-weight:500;color:var(--t1)}
-.kc-lbl-sm{font-size:10px;font-weight:600;color:var(--gr);letter-spacing:.06em;text-transform:uppercase}
-.kc-arr{width:24px;height:24px;border-radius:50%;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.kc-val{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-top:3px}
-.kc-val.w{color:var(--t1)}
-.kc-val.g{color:var(--green)}
-.kc-val.r{color:var(--red)}
-.kc-hash{font-size:26px;font-weight:800;color:var(--green);letter-spacing:-.02em;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kc-gsub{font-size:13px;font-weight:600;color:var(--green);margin-top:2px}
-.kc-sub{font-size:11px;color:var(--gr);margin-top:2px}
-.kc-spark{position:absolute;bottom:9px;right:10px;pointer-events:none}
-.bdg-act{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;color:#fff;background:var(--red);white-space:nowrap;flex-shrink:0}
+    .nav-logo {
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      flex-shrink: 0;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--dark);
+      letter-spacing: -1px
+    }
 
-/* ── ROW 2 ── */
-.r2{display:grid;grid-template-columns:52% 1fr;gap:var(--gap);flex:1;min-height:0;overflow:hidden}
+    .ntab {
+      padding: 5px 11px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gr);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: .15s;
+      text-decoration: none;
+      font-family: inherit;
+      background: none;
+      border: none
+    }
 
-/* Growing Hashtags card */
-.gc{background:var(--card);border-radius:var(--r);padding:12px 15px;display:flex;flex-direction:column;overflow:hidden}
-.gc-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;flex-shrink:0}
-.gc-title{font-size:14px;font-weight:600;color:var(--t1)}
-.gc-srch{display:flex;align-items:center;gap:5px;background:var(--g2);border-radius:8px;padding:4px 9px}
-.gc-srch input{background:none;border:none;outline:none;color:var(--t1);font-size:12px;font-family:'Inter',sans-serif;width:80px}
-.gc-srch input::placeholder{color:var(--gr)}
-.ht{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
-.ht-head{display:grid;grid-template-columns:1fr 68px 50px 50px 64px 84px;gap:2px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
-.ht-head span{font-size:8.5px;font-weight:600;color:var(--gr);letter-spacing:.08em;text-transform:uppercase}
-.ht-body{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;min-height:0}
-.ht-row{display:grid;grid-template-columns:1fr 68px 50px 50px 64px 84px;gap:2px;align-items:center;border-bottom:1px solid rgba(255,255,255,.04)}
-.ht-row:last-child{border-bottom:none}
-.ht-hash{font-size:12px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ht-plat{font-size:11px;color:var(--gr)}
-.ht-vol{font-size:11px;color:var(--t1)}
-.ht-gr{font-size:11px;font-weight:700}
-.ht-gr.pos{color:var(--green)}
-.ht-gr.neg{color:var(--red)}
-.ht-bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:9.5px;font-weight:600;color:#fff;white-space:nowrap}
-.ht-bdg.up{background:var(--green)}
-.ht-bdg.peak{background:var(--orange)}
-.ht-bdg.dec{background:var(--red)}
+    .ntab:hover {
+      color: #ccc
+    }
 
-/* Viral Topics card */
-.vc{background:var(--card);border-radius:var(--r);padding:12px 15px;display:flex;flex-direction:column;overflow:hidden}
-.vc-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:5px;flex-shrink:0}
-.vt-top{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;min-height:0}
-.vt-row{display:grid;grid-template-columns:1fr 40px auto auto;align-items:center;gap:4px;border-bottom:1px solid rgba(255,255,255,.04)}
-.vt-row:last-child{border-bottom:none}
-.vt-topic{font-size:11px;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vt-vol{font-size:10.5px;color:var(--gr);text-align:right}
-.vt-bdg{display:inline-flex;align-items:center;padding:1.5px 7px;border-radius:20px;font-size:9px;font-weight:600;color:#fff;white-space:nowrap}
-.vt-bdg.pos{background:var(--green)}
-.vt-bdg.mix{background:#6B7280}
-.vt-bdg.neg{background:var(--red)}
-.vt-bdg.org{background:var(--orange)}
-.tl-div{height:1px;background:rgba(255,255,255,.08);margin:4px 0;flex-shrink:0}
-.tl-rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;min-height:0}
-.tl-row{display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:6px}
-.tl-hash{font-size:11px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tl-trk{background:var(--g3);border-radius:3px;overflow:hidden;height:5px}
-.tl-bar{height:100%;border-radius:3px}
-.tl-lbl{font-size:9.5px;white-space:nowrap;display:flex;align-items:center;gap:3px;justify-content:flex-end;min-width:90px}
-.tl-act{display:inline-flex;padding:1px 6px;border-radius:20px;font-size:9px;font-weight:600;color:#fff;background:var(--red);flex-shrink:0}
+    .ntab.on {
+      background: var(--red);
+      color: #fff;
+      font-weight: 600
+    }
 
-/* ── ROW 3 ── */
-.r3{display:grid;grid-template-columns:52% 1fr;gap:var(--gap);flex:1;min-height:0;overflow:hidden}
+    .nav-r {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
 
-/* Trend Matcher */
-.mc{background:var(--card);border-radius:var(--r);padding:12px 15px;display:flex;flex-direction:column;overflow:hidden}
-.mc-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:7px;flex-shrink:0}
-.mc-rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;overflow:hidden;min-height:0}
-.mc-row{display:flex;flex-direction:column;gap:3px}
-.mc-top{display:flex;align-items:center;gap:5px}
-.mc-hash{font-size:13px;font-weight:700;color:var(--t1);white-space:nowrap;flex-shrink:0}
-.mc-dots{flex:1;font-size:12px;color:#4a4a4a;letter-spacing:2px;overflow:hidden;white-space:nowrap;min-width:10px}
-.mc-snum{font-size:13px;font-weight:800;white-space:nowrap;flex-shrink:0}
-.mc-sden{font-size:12px;color:var(--gr);font-weight:400;flex-shrink:0}
-.mc-btrk{width:130px;background:var(--g3);border-radius:3px;overflow:hidden;height:5px;flex-shrink:0}
-.mc-bfill{height:100%;border-radius:3px}
-.mc-btn{padding:4px 10px;border-radius:8px;background:var(--g2);color:var(--t1);font-size:11px;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;transition:.15s}
-.mc-btn:hover{background:var(--g3)}
-.mc-btn.done{background:#1b3d24;color:var(--green);cursor:default}
-.mc-sug{font-size:11px;color:var(--gr);font-style:italic}
+    .theme-tog {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg);
+      border-radius: 20px;
+      padding: 4px 9px;
+      cursor: pointer;
+      flex-shrink: 0
+    }
 
-/* Weekly Brief */
-.wc{background:var(--card);border-radius:var(--r);padding:12px 15px;display:flex;flex-direction:column;overflow:hidden}
-.wc-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;flex-shrink:0}
-.wc-hl{display:flex;flex-direction:column;gap:2px}
-.wc-title{font-size:15px;font-weight:700;color:var(--t1)}
-.wc-sub{font-size:11px;color:var(--gr)}
-.wc-exp{padding:6px 12px;border-radius:9px;background:var(--dark);color:var(--t1);font-size:11.5px;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:.15s;flex-shrink:0}
-.wc-exp:hover{background:#333}
-.wc-items{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1;min-height:0;overflow:hidden}
-.wci{background:var(--g2);border-radius:10px;padding:9px 11px;display:flex;flex-direction:column;gap:3px;overflow:hidden;min-height:0}
-.wci-top{display:flex;align-items:center;justify-content:space-between;gap:3px}
-.wci-hash{font-size:12.5px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wci-dur{font-size:10.5px;color:var(--gr);white-space:nowrap;flex-shrink:0}
-.wci-plat{font-size:10.5px;color:var(--gr)}
-.wci-angle{font-size:10.5px;color:var(--gr);line-height:1.35}
+    .nav-bell {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer
+    }
 
-/* ── ACTION BAR ── */
-.ab{height:44px;min-height:44px;background:var(--red);display:flex;align-items:center;padding:0 22px;gap:10px;flex-shrink:0}
-.ab-txt{flex:1;font-size:13px;color:#fff}
-.ab-bold{font-weight:700}
-.ab-cta{font-size:13px;font-weight:700;color:#fff;cursor:pointer;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
-.ab-cta:hover{opacity:.85}
-</style>
+    .nav-av {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7c7c7c, #4a4a4a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0
+    }
+
+    /* ── LAYOUT ── */
+    .wrap {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    .side {
+      width: 52px;
+      min-width: 52px;
+      background: var(--bg);
+      border-right: 1px solid rgba(0, 0, 0, .08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 0;
+      gap: 3px
+    }
+
+    .s-ico {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gr);
+      cursor: pointer;
+      transition: .15s;
+      text-decoration: none
+    }
+
+    .s-ico:hover {
+      background: rgba(0, 0, 0, .06);
+      color: #333
+    }
+
+    .s-ico.on {
+      background: rgba(0, 0, 0, .08);
+      color: var(--dark)
+    }
+
+    .s-gap {
+      flex: 1
+    }
+
+    .ct {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    /* ── PAGE HEADER ── */
+    .phdr {
+      padding: 12px 20px 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0
+    }
+
+    .phdr-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .phdr-info {
+      flex: 1
+    }
+
+    .phdr-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -.025em;
+      line-height: 1
+    }
+
+    .phdr-sub {
+      font-size: 12.5px;
+      color: var(--gr);
+      margin-top: 2px
+    }
+
+    .phdr-r {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+      flex-shrink: 0
+    }
+
+    .pf-row {
+      display: flex;
+      align-items: center;
+      gap: 2px
+    }
+
+    .pf-sep {
+      color: var(--gr);
+      font-size: 13px;
+      padding: 0 2px
+    }
+
+    .pf-btn {
+      padding: 3px 5px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gr);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      transition: .15s
+    }
+
+    .pf-btn:hover {
+      color: var(--dark)
+    }
+
+    .pf-btn.on {
+      color: var(--dark);
+      font-weight: 700
+    }
+
+    .phdr-btns {
+      display: flex;
+      gap: 5px;
+      align-items: center
+    }
+
+    .btn-ref {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 13px;
+      border-radius: 20px;
+      background: var(--dark);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      white-space: nowrap
+    }
+
+    .btn-ico {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--dark);
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer
+    }
+
+    /* ── ROWS CONTAINER ── */
+    .rows {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      padding: 0 20px 12px;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    /* ── ROW 1 — KPI Cards ── */
+    .r1 {
+      display: grid;
+      grid-template-columns: 1fr 1.45fr 1fr 1fr;
+      gap: var(--gap);
+      height: 122px;
+      flex-shrink: 0
+    }
+
+    .kc {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden
+    }
+
+    .kc-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .kc-lbl {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--t1)
+    }
+
+    .kc-lbl-sm {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gr);
+      letter-spacing: .06em;
+      text-transform: uppercase
+    }
+
+    .kc-arr {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--g2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0
+    }
+
+    .kc-val {
+      font-size: 46px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1;
+      margin-top: 3px
+    }
+
+    .kc-val.w {
+      color: var(--t1)
+    }
+
+    .kc-val.g {
+      color: var(--green)
+    }
+
+    .kc-val.r {
+      color: var(--red)
+    }
+
+    .kc-hash {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -.02em;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .kc-gsub {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+      margin-top: 2px
+    }
+
+    .kc-sub {
+      font-size: 11px;
+      color: var(--gr);
+      margin-top: 2px
+    }
+
+    .kc-spark {
+      position: absolute;
+      bottom: 9px;
+      right: 10px;
+      pointer-events: none
+    }
+
+    .bdg-act {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--red);
+      white-space: nowrap;
+      flex-shrink: 0
+    }
+
+    /* ── ROW 2 ── */
+    .r2 {
+      display: grid;
+      grid-template-columns: 52% 1fr;
+      gap: var(--gap);
+      flex: 1;
+      min-height: 0;
+      overflow: hidden
+    }
+
+    /* Growing Hashtags card */
+    .gc {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 12px 15px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    .gc-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      flex-shrink: 0
+    }
+
+    .gc-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t1)
+    }
+
+    .gc-srch {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--g2);
+      border-radius: 8px;
+      padding: 4px 9px
+    }
+
+    .gc-srch input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--t1);
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      width: 80px
+    }
+
+    .gc-srch input::placeholder {
+      color: var(--gr)
+    }
+
+    .ht {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 0
+    }
+
+    .ht-head {
+      display: grid;
+      grid-template-columns: 1fr 68px 50px 50px 64px 84px;
+      gap: 2px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(255, 255, 255, .07);
+      flex-shrink: 0
+    }
+
+    .ht-head span {
+      font-size: 8.5px;
+      font-weight: 600;
+      color: var(--gr);
+      letter-spacing: .08em;
+      text-transform: uppercase
+    }
+
+    .ht-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    .ht-row {
+      display: grid;
+      grid-template-columns: 1fr 68px 50px 50px 64px 84px;
+      gap: 2px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, .04)
+    }
+
+    .ht-row:last-child {
+      border-bottom: none
+    }
+
+    .ht-hash {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--t1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .ht-plat {
+      font-size: 11px;
+      color: var(--gr)
+    }
+
+    .ht-vol {
+      font-size: 11px;
+      color: var(--t1)
+    }
+
+    .ht-gr {
+      font-size: 11px;
+      font-weight: 700
+    }
+
+    .ht-gr.pos {
+      color: var(--green)
+    }
+
+    .ht-gr.neg {
+      color: var(--red)
+    }
+
+    .ht-bdg {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 9.5px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap
+    }
+
+    .ht-bdg.up {
+      background: var(--green)
+    }
+
+    .ht-bdg.peak {
+      background: var(--orange)
+    }
+
+    .ht-bdg.dec {
+      background: var(--red)
+    }
+
+    /* Viral Topics card */
+    .vc {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 12px 15px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    .vc-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 5px;
+      flex-shrink: 0
+    }
+
+    .vt-top {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    .vt-row {
+      display: grid;
+      grid-template-columns: 1fr 40px auto auto;
+      align-items: center;
+      gap: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, .04)
+    }
+
+    .vt-row:last-child {
+      border-bottom: none
+    }
+
+    .vt-topic {
+      font-size: 11px;
+      color: var(--t1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .vt-vol {
+      font-size: 10.5px;
+      color: var(--gr);
+      text-align: right
+    }
+
+    .vt-bdg {
+      display: inline-flex;
+      align-items: center;
+      padding: 1.5px 7px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap
+    }
+
+    .vt-bdg.pos {
+      background: var(--green)
+    }
+
+    .vt-bdg.mix {
+      background: #6B7280
+    }
+
+    .vt-bdg.neg {
+      background: var(--red)
+    }
+
+    .vt-bdg.org {
+      background: var(--orange)
+    }
+
+    .tl-div {
+      height: 1px;
+      background: rgba(255, 255, 255, .08);
+      margin: 4px 0;
+      flex-shrink: 0
+    }
+
+    .tl-rows {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    .tl-row {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      align-items: center;
+      gap: 6px
+    }
+
+    .tl-hash {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--t1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .tl-trk {
+      background: var(--g3);
+      border-radius: 3px;
+      overflow: hidden;
+      height: 5px
+    }
+
+    .tl-bar {
+      height: 100%;
+      border-radius: 3px
+    }
+
+    .tl-lbl {
+      font-size: 9.5px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      justify-content: flex-end;
+      min-width: 90px
+    }
+
+    .tl-act {
+      display: inline-flex;
+      padding: 1px 6px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--red);
+      flex-shrink: 0
+    }
+
+    /* ── ROW 3 ── */
+    .r3 {
+      display: grid;
+      grid-template-columns: 52% 1fr;
+      gap: var(--gap);
+      flex: 1;
+      min-height: 0;
+      overflow: hidden
+    }
+
+    /* Trend Matcher */
+    .mc {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 12px 15px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    .mc-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 7px;
+      flex-shrink: 0
+    }
+
+    .mc-rows {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    .mc-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px
+    }
+
+    .mc-top {
+      display: flex;
+      align-items: center;
+      gap: 5px
+    }
+
+    .mc-hash {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--t1);
+      white-space: nowrap;
+      flex-shrink: 0
+    }
+
+    .mc-dots {
+      flex: 1;
+      font-size: 12px;
+      color: #4a4a4a;
+      letter-spacing: 2px;
+      overflow: hidden;
+      white-space: nowrap;
+      min-width: 10px
+    }
+
+    .mc-snum {
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      flex-shrink: 0
+    }
+
+    .mc-sden {
+      font-size: 12px;
+      color: var(--gr);
+      font-weight: 400;
+      flex-shrink: 0
+    }
+
+    .mc-btrk {
+      width: 130px;
+      background: var(--g3);
+      border-radius: 3px;
+      overflow: hidden;
+      height: 5px;
+      flex-shrink: 0
+    }
+
+    .mc-bfill {
+      height: 100%;
+      border-radius: 3px
+    }
+
+    .mc-btn {
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: var(--g2);
+      color: var(--t1);
+      font-size: 11px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: .15s
+    }
+
+    .mc-btn:hover {
+      background: var(--g3)
+    }
+
+    .mc-btn.done {
+      background: #1b3d24;
+      color: var(--green);
+      cursor: default
+    }
+
+    .mc-sug {
+      font-size: 11px;
+      color: var(--gr);
+      font-style: italic
+    }
+
+    /* Weekly Brief */
+    .wc {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 12px 15px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    .wc-hdr {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      flex-shrink: 0
+    }
+
+    .wc-hl {
+      display: flex;
+      flex-direction: column;
+      gap: 2px
+    }
+
+    .wc-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--t1)
+    }
+
+    .wc-sub {
+      font-size: 11px;
+      color: var(--gr)
+    }
+
+    .wc-exp {
+      padding: 6px 12px;
+      border-radius: 9px;
+      background: var(--dark);
+      color: var(--t1);
+      font-size: 11.5px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      transition: .15s;
+      flex-shrink: 0
+    }
+
+    .wc-exp:hover {
+      background: #333
+    }
+
+    .wc-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden
+    }
+
+    .wci {
+      background: var(--g2);
+      border-radius: 10px;
+      padding: 9px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    .wci-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3px
+    }
+
+    .wci-hash {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--t1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .wci-dur {
+      font-size: 10.5px;
+      color: var(--gr);
+      white-space: nowrap;
+      flex-shrink: 0
+    }
+
+    .wci-plat {
+      font-size: 10.5px;
+      color: var(--gr)
+    }
+
+    .wci-angle {
+      font-size: 10.5px;
+      color: var(--gr);
+      line-height: 1.35
+    }
+
+    /* ── ACTION BAR ── */
+    .ab {
+      height: 44px;
+      min-height: 44px;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      gap: 10px;
+      flex-shrink: 0
+    }
+
+    .ab-txt {
+      flex: 1;
+      font-size: 13px;
+      color: #fff
+    }
+
+    .ab-bold {
+      font-weight: 700
+    }
+
+    .ab-cta {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      white-space: nowrap
+    }
+
+    .ab-cta:hover {
+      opacity: .85
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav class="nav">
-  <div class="nav-logo">//</div>
-  <a href="index.html" class="ntab">Dashboard</a>
-  <button class="ntab">Suppliers</button>
-  <button class="ntab on">Trends</button>
-  <a href="sentiment.html" class="ntab">Sentiments</a>
-  <button class="ntab">Contracts</button>
-  <button class="ntab">Contact</button>
-  <div class="nav-r">
-    <div class="theme-tog">
-      <svg width="13" height="13" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="2.5"/><path d="M6.5 1v1M6.5 11v1M1 6.5h1M11 6.5h1M2.9 2.9l.7.7M9.4 9.4l.7.7M9.4 2.9l-.7.7M2.9 9.4l.7.7"/></svg>
-      <svg width="13" height="13" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round"><path d="M11 7A5 5 0 1 1 6 2 3 3 0 0 0 11 7z"/></svg>
-    </div>
-    <div class="nav-bell">
-      <svg width="16" height="17" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round"><path d="M8 2a4.5 4.5 0 0 1 4.5 4.5v3l1 2H2.5l1-2V6.5A4.5 4.5 0 0 1 8 2z"/><path d="M6.5 14.5a1.5 1.5 0 0 0 3 0"/></svg>
-    </div>
-    <div class="nav-av">
-      <svg width="17" height="17" fill="none" viewBox="0 0 17 17"><circle cx="8.5" cy="6.5" r="2.8" fill="rgba(255,255,255,0.65)"/><path d="M3 15c0-3 2.5-5.2 5.5-5.2S14 12 14 15" stroke="rgba(255,255,255,0.65)" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </div>
-  </div>
-</nav>
-
-<!-- BODY -->
-<div class="wrap">
-
-  <!-- SIDEBAR -->
-  <aside class="side">
-    <a class="s-ico" href="index.html">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 7L8.5 2 15 7v9H2V7z"/><rect x="6" y="10" width="5" height="6"/></svg>
-    </a>
-    <a class="s-ico on" href="trends.html">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="2" width="5.5" height="5.5" rx="1"/><rect x="9.5" y="2" width="5.5" height="5.5" rx="1"/><rect x="2" y="9.5" width="5.5" height="5.5" rx="1"/><rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1"/></svg>
-    </a>
-    <a class="s-ico" href="#">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="4.5" cy="4.5" r="1.8"/><circle cx="12.5" cy="4.5" r="1.8"/><circle cx="8.5" cy="13" r="1.8"/><path d="M6.2 4.5h3.1M6.8 6l-1 5.3M10.2 6l1 5.3"/></svg>
-    </a>
-    <a class="s-ico" href="sentiment.html">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 8.5a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M8.5 1v1.5M8.5 14v1.5M1 8.5h1.5M14 8.5h1.5"/></svg>
-    </a>
-    <div class="s-gap"></div>
-    <a class="s-ico" href="#">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="2.5"/><path d="M8.5 1.5v1.5M8.5 13.5v1.5M1.5 8.5h1.5M13.5 8.5h1.5M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M11.3 3.6l-1.1 1.1M3.6 11.3l1.1 1.1"/></svg>
-    </a>
-    <a class="s-ico" href="#">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M13.5 10.8a1.8 1.8 0 0 1-1.8 1.8H5L2 15V4a1.8 1.8 0 0 1 1.8-1.8h8a1.8 1.8 0 0 1 1.8 1.8z"/></svg>
-    </a>
-  </aside>
-
-  <!-- CONTENT -->
-  <div class="ct">
-
-    <!-- PAGE HEADER -->
-    <div class="phdr">
-      <div class="phdr-icon">
-        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M14 14l3 3"/></svg>
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="nav-logo">//</div>
+    <a href="index.html" class="ntab">Dashboard</a>
+    <span class="nav-sep">/</span>
+    <a href="sentiment.html" class="ntab">Sentiment</a>
+    <span class="nav-sep">/</span>
+    <a href="share-of-voice.html" class="ntab">Share of Voice</a>
+    <span class="nav-sep">/</span>
+    <a href="competitors.html" class="ntab">Competitors</a>
+    <span class="nav-sep">/</span>
+    <span class="ntab on">Trends</span>
+    <span class="nav-sep">/</span>
+    <a href="reports.html" class="ntab">Reports</a>
+    <div class="nav-r">
+      <div class="theme-tog">
+        <svg width="13" height="13" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round">
+          <circle cx="6.5" cy="6.5" r="2.5" />
+          <path d="M6.5 1v1M6.5 11v1M1 6.5h1M11 6.5h1M2.9 2.9l.7.7M9.4 9.4l.7.7M9.4 2.9l-.7.7M2.9 9.4l.7.7" />
+        </svg>
+        <svg width="13" height="13" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round">
+          <path d="M11 7A5 5 0 1 1 6 2 3 3 0 0 0 11 7z" />
+        </svg>
       </div>
-      <div class="phdr-info">
-        <div class="phdr-title">Trends</div>
-        <div class="phdr-sub">Emerging Trends — Luxury Sector</div>
+      <div class="nav-bell">
+        <svg width="16" height="17" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round">
+          <path d="M8 2a4.5 4.5 0 0 1 4.5 4.5v3l1 2H2.5l1-2V6.5A4.5 4.5 0 0 1 8 2z" />
+          <path d="M6.5 14.5a1.5 1.5 0 0 0 3 0" />
+        </svg>
       </div>
-      <div class="phdr-r">
-        <div class="pf-row">
-          <button class="pf-btn on" data-v="7" id="pf7">7 days</button>
-          <span class="pf-sep">/</span>
-          <button class="pf-btn" data-v="30" id="pf30">30 days</button>
-          <span class="pf-sep">/</span>
-          <button class="pf-btn" data-v="90" id="pf90">90 days</button>
-        </div>
-        <div class="phdr-btns">
-          <button class="btn-ref" id="btnRefresh">
-            <svg width="10" height="10" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><polyline points="1 3 3.5 3 3.5 5.5"/><path d="M3.5 3A4 4 0 1 1 2 5.5"/></svg>
-            Refresh
-          </button>
-          <button class="btn-ico">
-            <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5.5 1v7M3 5.5l2.5 2.5L8 5.5M2 10h7"/></svg>
-          </button>
-          <button class="btn-ico">
-            <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="3" cy="5.5" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="8" cy="9" r="1.3"/><path d="M4.2 4.8l2.6-1.8M4.2 6.2l2.6 1.8"/></svg>
-          </button>
-        </div>
+      <div class="nav-av">
+        <svg width="17" height="17" fill="none" viewBox="0 0 17 17">
+          <circle cx="8.5" cy="6.5" r="2.8" fill="rgba(255,255,255,0.65)" />
+          <path d="M3 15c0-3 2.5-5.2 5.5-5.2S14 12 14 15" stroke="rgba(255,255,255,0.65)" stroke-width="1.5"
+            stroke-linecap="round" />
+        </svg>
       </div>
     </div>
+  </nav>
 
-    <!-- ROWS -->
-    <div class="rows">
+  <!-- BODY -->
+  <div class="wrap">
 
-      <!-- ROW 1: KPI Cards -->
-      <div class="r1">
+    <!-- SIDEBAR -->
+    <aside class="side">
+      <a class="s-ico" href="index.html">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M2 7L8.5 2 15 7v9H2V7z" />
+          <rect x="6" y="10" width="5" height="6" />
+        </svg>
+      </a>
+      <a class="s-ico on" href="trends.html">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <rect x="2" y="2" width="5.5" height="5.5" rx="1" />
+          <rect x="9.5" y="2" width="5.5" height="5.5" rx="1" />
+          <rect x="2" y="9.5" width="5.5" height="5.5" rx="1" />
+          <rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1" />
+        </svg>
+      </a>
+      <a class="s-ico" href="#">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="4.5" cy="4.5" r="1.8" />
+          <circle cx="12.5" cy="4.5" r="1.8" />
+          <circle cx="8.5" cy="13" r="1.8" />
+          <path d="M6.2 4.5h3.1M6.8 6l-1 5.3M10.2 6l1 5.3" />
+        </svg>
+      </a>
+      <a class="s-ico" href="sentiment.html">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M12 8.5a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
+          <path d="M8.5 1v1.5M8.5 14v1.5M1 8.5h1.5M14 8.5h1.5" />
+        </svg>
+      </a>
+      <div class="s-gap"></div>
+      <a class="s-ico" href="#">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="8.5" cy="8.5" r="2.5" />
+          <path
+            d="M8.5 1.5v1.5M8.5 13.5v1.5M1.5 8.5h1.5M13.5 8.5h1.5M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M11.3 3.6l-1.1 1.1M3.6 11.3l1.1 1.1" />
+        </svg>
+      </a>
+      <a class="s-ico" href="#">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M13.5 10.8a1.8 1.8 0 0 1-1.8 1.8H5L2 15V4a1.8 1.8 0 0 1 1.8-1.8h8a1.8 1.8 0 0 1 1.8 1.8z" />
+        </svg>
+      </a>
+    </aside>
 
-        <!-- Active Trends -->
-        <div class="kc">
-          <div class="kc-hdr">
-            <span class="kc-lbl">Active Trends</span>
-            <div class="kc-arr" style="color:var(--green)">↗</div>
-          </div>
-          <div class="kc-val w" id="kActiveTrends">24</div>
-          <svg class="kc-spark" viewBox="0 0 118 38" fill="none" width="118" height="38" preserveAspectRatio="none">
-            <polyline points="0,35 13,29 26,23 39,25 52,19 65,14 78,10 91,6 104,3 118,1" stroke="var(--green)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- CONTENT -->
+    <div class="ct">
+
+      <!-- PAGE HEADER -->
+      <div class="phdr">
+        <div class="phdr-icon">
+          <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+            <circle cx="8.5" cy="8.5" r="5.5" />
+            <path d="M14 14l3 3" />
           </svg>
         </div>
-
-        <!-- Top Trend -->
-        <div class="kc">
-          <div class="kc-hdr">
-            <span class="kc-lbl-sm">Top Trend</span>
-          </div>
-          <div class="kc-hash" id="kTopTrend">#SlowFashion</div>
-          <div class="kc-gsub" id="kTopGrowth">+340% this week</div>
+        <div class="phdr-info">
+          <div class="phdr-title">Trends</div>
+          <div class="phdr-sub">Emerging Trends — Luxury Sector</div>
         </div>
-
-        <!-- Opportunities -->
-        <div class="kc">
-          <div class="kc-hdr">
-            <span class="kc-lbl">Opportunities</span>
+        <div class="phdr-r">
+          <div class="pf-row">
+            <button class="pf-btn on" data-v="7" id="pf7">7 days</button>
+            <span class="pf-sep">/</span>
+            <button class="pf-btn" data-v="30" id="pf30">30 days</button>
+            <span class="pf-sep">/</span>
+            <button class="pf-btn" data-v="90" id="pf90">90 days</button>
           </div>
-          <div class="kc-val g" id="kOpps">8</div>
-          <div class="kc-sub">Hermès compatible trends</div>
-          <svg class="kc-spark" viewBox="0 0 98 38" fill="none" width="98" height="38" preserveAspectRatio="none">
-            <polyline points="0,33 11,27 22,21 33,23 44,17 55,12 66,8 77,5 88,2 98,1" stroke="var(--green)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-
-        <!-- Expiring Soon -->
-        <div class="kc">
-          <div class="kc-hdr">
-            <span class="kc-lbl">Expiring Soon</span>
-            <span class="bdg-act">Act Now</span>
+          <div class="phdr-btns">
+            <button class="btn-ref" id="btnRefresh">
+              <svg width="10" height="10" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+                <polyline points="1 3 3.5 3 3.5 5.5" />
+                <path d="M3.5 3A4 4 0 1 1 2 5.5" />
+              </svg>
+              Refresh
+            </button>
+            <button class="btn-ico">
+              <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+                <path d="M5.5 1v7M3 5.5l2.5 2.5L8 5.5M2 10h7" />
+              </svg>
+            </button>
+            <button class="btn-ico">
+              <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+                <circle cx="3" cy="5.5" r="1.3" />
+                <circle cx="8" cy="2" r="1.3" />
+                <circle cx="8" cy="9" r="1.3" />
+                <path d="M4.2 4.8l2.6-1.8M4.2 6.2l2.6 1.8" />
+              </svg>
+            </button>
           </div>
-          <div class="kc-val r" id="kExpiring">3</div>
-          <div class="kc-sub">Declining trends</div>
-          <svg class="kc-spark" viewBox="0 0 98 38" fill="none" width="98" height="38" preserveAspectRatio="none">
-            <polyline points="0,4 11,7 22,11 33,9 44,14 55,18 66,22 77,27 88,31 98,35" stroke="var(--red)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
         </div>
+      </div>
 
-      </div><!-- /r1 -->
+      <!-- ROWS -->
+      <div class="rows">
 
-      <!-- ROW 2: Growing Hashtags + Viral Topics -->
-      <div class="r2">
+        <!-- ROW 1: KPI Cards -->
+        <div class="r1">
 
-        <!-- Growing Hashtags -->
-        <div class="gc">
-          <div class="gc-hdr">
-            <span class="gc-title">Growing Hashtags</span>
-            <div class="gc-srch">
-              <svg width="10" height="10" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round"><circle cx="4.5" cy="4.5" r="3.2"/><path d="M7.2 7.2l2 2"/></svg>
-              <input type="text" id="hashSearch" placeholder="Search">
+          <!-- Active Trends -->
+          <div class="kc">
+            <div class="kc-hdr">
+              <span class="kc-lbl">Active Trends</span>
+              <div class="kc-arr" style="color:var(--green)">↗</div>
+            </div>
+            <div class="kc-val w" id="kActiveTrends">24</div>
+            <svg class="kc-spark" viewBox="0 0 118 38" fill="none" width="118" height="38" preserveAspectRatio="none">
+              <polyline points="0,35 13,29 26,23 39,25 52,19 65,14 78,10 91,6 104,3 118,1" stroke="var(--green)"
+                stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <!-- Top Trend -->
+          <div class="kc">
+            <div class="kc-hdr">
+              <span class="kc-lbl-sm">Top Trend</span>
+            </div>
+            <div class="kc-hash" id="kTopTrend">#SlowFashion</div>
+            <div class="kc-gsub" id="kTopGrowth">+340% this week</div>
+          </div>
+
+          <!-- Opportunities -->
+          <div class="kc">
+            <div class="kc-hdr">
+              <span class="kc-lbl">Opportunities</span>
+            </div>
+            <div class="kc-val g" id="kOpps">8</div>
+            <div class="kc-sub">Hermès compatible trends</div>
+            <svg class="kc-spark" viewBox="0 0 98 38" fill="none" width="98" height="38" preserveAspectRatio="none">
+              <polyline points="0,33 11,27 22,21 33,23 44,17 55,12 66,8 77,5 88,2 98,1" stroke="var(--green)"
+                stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <!-- Expiring Soon -->
+          <div class="kc">
+            <div class="kc-hdr">
+              <span class="kc-lbl">Expiring Soon</span>
+              <span class="bdg-act">Act Now</span>
+            </div>
+            <div class="kc-val r" id="kExpiring">3</div>
+            <div class="kc-sub">Declining trends</div>
+            <svg class="kc-spark" viewBox="0 0 98 38" fill="none" width="98" height="38" preserveAspectRatio="none">
+              <polyline points="0,4 11,7 22,11 33,9 44,14 55,18 66,22 77,27 88,31 98,35" stroke="var(--red)"
+                stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+
+        </div><!-- /r1 -->
+
+        <!-- ROW 2: Growing Hashtags + Viral Topics -->
+        <div class="r2">
+
+          <!-- Growing Hashtags -->
+          <div class="gc">
+            <div class="gc-hdr">
+              <span class="gc-title">Growing Hashtags</span>
+              <div class="gc-srch">
+                <svg width="10" height="10" fill="none" stroke="var(--gr)" stroke-width="1.8" stroke-linecap="round">
+                  <circle cx="4.5" cy="4.5" r="3.2" />
+                  <path d="M7.2 7.2l2 2" />
+                </svg>
+                <input type="text" id="hashSearch" placeholder="Search">
+              </div>
+            </div>
+            <div class="ht">
+              <div class="ht-head">
+                <span>Hashtag</span><span>Platform</span><span>Volume</span>
+                <span>Growth</span><span>Sparkline</span><span>Status</span>
+              </div>
+              <div class="ht-body" id="hashBody"></div>
             </div>
           </div>
-          <div class="ht">
-            <div class="ht-head">
-              <span>Hashtag</span><span>Platform</span><span>Volume</span>
-              <span>Growth</span><span>Sparkline</span><span>Status</span>
-            </div>
-            <div class="ht-body" id="hashBody"></div>
+
+          <!-- Viral Topics -->
+          <div class="vc">
+            <div class="vc-title">Viral Topics — Luxury</div>
+            <div class="vt-top" id="viralTopics"></div>
+            <div class="tl-div"></div>
+            <div class="tl-rows" id="tlRows"></div>
           </div>
-        </div>
 
-        <!-- Viral Topics -->
-        <div class="vc">
-          <div class="vc-title">Viral Topics — Luxury</div>
-          <div class="vt-top" id="viralTopics"></div>
-          <div class="tl-div"></div>
-          <div class="tl-rows" id="tlRows"></div>
-        </div>
+        </div><!-- /r2 -->
 
-      </div><!-- /r2 -->
+        <!-- ROW 3: Trend Matcher + Weekly Brief -->
+        <div class="r3">
 
-      <!-- ROW 3: Trend Matcher + Weekly Brief -->
-      <div class="r3">
-
-        <!-- Trend Matcher -->
-        <div class="mc">
-          <div class="mc-title">Trend Matcher — Hermès Opportunities</div>
-          <div class="mc-rows" id="matcherRows"></div>
-        </div>
-
-        <!-- Weekly Brief -->
-        <div class="wc">
-          <div class="wc-hdr">
-            <div class="wc-hl">
-              <div class="wc-title">Weekly Brief</div>
-              <div class="wc-sub" id="wcCount">3 trends added to the brief</div>
-            </div>
-            <button class="wc-exp" onclick="exportBrief()">Export Brief</button>
+          <!-- Trend Matcher -->
+          <div class="mc">
+            <div class="mc-title">Trend Matcher — Hermès Opportunities</div>
+            <div class="mc-rows" id="matcherRows"></div>
           </div>
-          <div class="wc-items" id="wcItems"></div>
-        </div>
 
-      </div><!-- /r3 -->
+          <!-- Weekly Brief -->
+          <div class="wc">
+            <div class="wc-hdr">
+              <div class="wc-hl">
+                <div class="wc-title">Weekly Brief</div>
+                <div class="wc-sub" id="wcCount">3 trends added to the brief</div>
+              </div>
+              <button class="wc-exp" onclick="exportBrief()">Export Brief</button>
+            </div>
+            <div class="wc-items" id="wcItems"></div>
+          </div>
 
-    </div><!-- /rows -->
+        </div><!-- /r3 -->
 
-    <!-- ACTION BAR -->
-    <div class="ab">
-      <span class="ab-txt" id="abMsg">
-        <span class="ab-bold">#HauteCouture</span> expires in 2 days — critical window of opportunity for Hermès.
-      </span>
-      <a href="reports.html" class="ab-cta">→ Action Plan.</a>
-    </div>
+      </div><!-- /rows -->
 
-  </div><!-- /ct -->
-</div><!-- /wrap -->
+      <!-- ACTION BAR -->
+      <div class="ab">
+        <span class="ab-txt" id="abMsg">
+          <span class="ab-bold">#HauteCouture</span> expires in 2 days — critical window of opportunity for Hermès.
+        </span>
+        <a href="reports.html" class="ab-cta">→ Action Plan.</a>
+      </div>
 
-<script>
+    </div><!-- /ct -->
+  </div><!-- /wrap -->
+
+  <script>
 /* ─── STATE ─── */
 let pDays = 7;
 
@@ -618,6 +1509,7 @@ renderMatcher();
 renderWeeklyBrief();
 renderActionBar();
 loadData();
-</script>
+  </script>
 </body>
+
 </html>

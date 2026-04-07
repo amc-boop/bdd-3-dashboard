@@ -1,777 +1,1780 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Reports | Brand Intelligence Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Georgia&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="supabase-config.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<style>
-:root{
-  --bg:#F5F0E8;
-  --dark:#1A1A1A;
-  --card:#2D2D2D;
-  --g2:#3A3A3A;
-  --g3:#444444;
-  --green:#22C55E;
-  --orange:#F59E0B;
-  --red:#E8383D;
-  --gr:#999999;
-  --t1:#FFFFFF;
-  --r:16px;
-  --r2:12px;
-  --gap:13px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);display:flex;flex-direction:column;height:100vh}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reports | Brand Intelligence Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Georgia&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #F5F0E8;
+      --dark: #1A1A1A;
+      --card: #2D2D2D;
+      --g2: #3A3A3A;
+      --g3: #444444;
+      --green: #22C55E;
+      --orange: #F59E0B;
+      --red: #E8383D;
+      --gr: #999999;
+      --t1: #FFFFFF;
+      --r: 16px;
+      --r2: 12px;
+      --gap: 13px;
+    }
 
-/* ── NAVBAR ── */
-.nav{height:60px;min-height:60px;background:var(--bg);display:flex;align-items:center;padding:0 20px;gap:0;flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.06);z-index:100}
-.nav-logo{width:36px;height:36px;display:flex;align-items:center;justify-content:center;margin-right:18px;flex-shrink:0}
-.nav-sep{color:var(--gr);font-size:14px;margin:0 2px;font-weight:300}
-.ntab{padding:6px 14px;border-radius:20px;font-size:14px;font-weight:500;color:var(--dark);cursor:pointer;white-space:nowrap;transition:.15s;text-decoration:none;font-family:'Inter',sans-serif;background:none;border:none}
-.ntab:hover{background:rgba(0,0,0,.04)}
-.ntab.on{background:var(--red);color:#fff;font-weight:600}
-.nav-r{margin-left:auto;display:flex;align-items:center;gap:8px}
-.nav-toggle{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.06);border-radius:20px;padding:6px 12px;cursor:pointer;flex-shrink:0}
-.nav-toggle svg{color:var(--dark)}
-.nav-bell{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;color:var(--dark)}
-.nav-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--bg)}
-.nav-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(145deg,#7B5B3A,#4A2E15);overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-/* ── BODY ── */
-.wrap{flex:1;display:flex;overflow:hidden;min-height:0}
+    html,
+    body {
+      height: 100%;
+      overflow: hidden
+    }
 
-/* ── SIDEBAR ── */
-.side{width:60px;min-width:60px;background:var(--bg);border-right:1px solid rgba(0,0,0,.07);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px}
-.s-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gr);cursor:pointer;transition:.15s;text-decoration:none}
-.s-ico:hover{background:rgba(0,0,0,.06);color:#555}
-.s-ico.on{background:rgba(0,0,0,.08);color:var(--dark)}
-.s-gap{flex:1}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      height: 100vh
+    }
 
-/* ── CONTENT ── */
-.ct{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+    /* ── NAVBAR ── */
+    .nav {
+      height: 60px;
+      min-height: 60px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 0;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(0, 0, 0, .06);
+      z-index: 100
+    }
 
-/* ── PAGE HEADER ── */
-.phdr{padding:16px 28px 12px 22px;display:flex;align-items:center;gap:14px;flex-shrink:0}
-.phdr-icon{width:50px;height:50px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.phdr-info{flex:1;min-width:0}
-.phdr-title{font-size:40px;font-weight:700;font-family:'Georgia',serif;color:var(--dark);letter-spacing:-.02em;line-height:1}
-.phdr-sub{font-size:13px;color:var(--gr);margin-top:2px;font-family:'Inter',sans-serif}
-.phdr-r{display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0}
-.pf-row{display:flex;align-items:center;gap:1px}
-.pf-sep{color:var(--gr);font-size:14px;padding:0 4px}
-.pf-btn{padding:4px 6px;font-size:14px;font-weight:400;color:var(--gr);cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;transition:.15s}
-.pf-btn:hover{color:var(--dark)}
-.pf-btn.on{color:var(--dark);font-weight:700}
-.phdr-btns{display:flex;gap:7px;align-items:center}
-.btn-new{display:flex;align-items:center;gap:6px;padding:8px 20px;border-radius:20px;background:var(--red);color:#fff;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;white-space:nowrap;transition:.15s}
-.btn-new:hover{opacity:.88}
-.btn-circle{width:36px;height:36px;border-radius:50%;background:var(--bg);border:1px solid #ccc;color:var(--dark);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.15s}
-.btn-circle:hover{background:#ebe6de}
+    .nav-logo {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 18px;
+      flex-shrink: 0
+    }
 
-/* ── ROWS CONTAINER ── */
-.rows{flex:1;display:flex;flex-direction:column;gap:var(--gap);padding:0 28px 0 22px;overflow:hidden;min-height:0}
+    .nav-sep {
+      color: var(--gr);
+      font-size: 14px;
+      margin: 0 2px;
+      font-weight: 300
+    }
 
-/* ── ROW 1 — 4 KPI cards ── */
-.r1{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:var(--gap);height:132px;flex-shrink:0}
-.kc{background:var(--card);border-radius:var(--r);padding:18px 22px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-.kc-lbl{font-size:13px;font-weight:500;color:var(--t1)}
-.kc-body{display:flex;align-items:flex-end;gap:8px;flex:1;margin-top:4px}
-.kc-val{font-size:52px;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--t1)}
-.kc-val.g{color:var(--green)}
-.kc-arr{font-size:22px;font-weight:700;margin-bottom:4px}
-.kc-arr.g{color:var(--green)}
-.kc-sub{font-size:12px;color:var(--gr);margin-bottom:6px;flex:1;line-height:1.3}
-.kc-spark{position:absolute;bottom:14px;right:14px;pointer-events:none}
-.kc-prog-wrap{position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--g3);border-radius:0 0 var(--r) var(--r);overflow:hidden}
-.kc-prog{height:100%;background:var(--green);border-radius:0 0 var(--r) var(--r)}
-.kc-val-row{display:flex;align-items:baseline;gap:3px}
-.kc-val-suffix{font-size:28px;font-weight:700;color:var(--t1)}
+    .ntab {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dark);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: .15s;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      background: none;
+      border: none
+    }
 
-/* ── ROW 2 ── */
-.r2{display:grid;grid-template-columns:22% 1fr 19% 19%;gap:var(--gap);height:226px;flex-shrink:0}
-.card{background:var(--card);border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;overflow:hidden;position:relative}
-.card-title{font-size:15px;font-weight:600;color:var(--t1);flex-shrink:0}
-.card-hdr{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-shrink:0}
+    .ntab:hover {
+      background: rgba(0, 0, 0, .04)
+    }
 
-/* Create Report */
-.cf-lbl{font-size:11px;color:var(--gr);margin-bottom:3px}
-.cf-input{background:var(--g2);border:none;border-radius:8px;padding:7px 10px;font-size:12px;color:var(--t1);font-family:'Inter',sans-serif;outline:none;width:100%}
-.cf-input::placeholder{color:#666}
-.cf-type{display:flex;gap:2px;background:var(--g2);border-radius:8px;padding:3px;margin-bottom:8px}
-.cf-type-btn{flex:1;padding:4px 6px;border-radius:6px;font-size:11px;font-weight:500;color:var(--gr);cursor:pointer;border:none;font-family:'Inter',sans-serif;background:none;transition:.15s;text-align:center;white-space:nowrap}
-.cf-type-btn.on{background:#fff;color:var(--dark);font-weight:600}
-.cf-period{display:flex;gap:6px;margin-bottom:8px}
-.cf-period input{flex:1;background:var(--g2);border:none;border-radius:8px;padding:6px 8px;font-size:11px;color:#888;font-family:'Inter',sans-serif;outline:none}
-.cf-checks{display:flex;flex-direction:column;gap:3px;margin-bottom:10px;flex:1}
-.cf-check{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t1);cursor:pointer;line-height:1}
-.cf-check input[type=checkbox]{width:14px;height:14px;accent-color:var(--green);cursor:pointer;flex-shrink:0}
-.cf-check input[type=checkbox]:not(:checked){accent-color:var(--g3)}
-.btn-gen{width:100%;padding:10px;border-radius:10px;background:var(--red);color:#fff;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:.15s;flex-shrink:0}
-.btn-gen:hover{opacity:.88}
-.btn-gen:disabled{opacity:.5;cursor:default}
+    .ntab.on {
+      background: var(--red);
+      color: #fff;
+      font-weight: 600
+    }
 
-/* COMEX */
-.auto-badge{background:var(--g2);color:var(--gr);border-radius:20px;padding:3px 10px;font-size:11px;flex-shrink:0}
-.comex-list{flex:1;display:flex;flex-direction:column;gap:5px;overflow:hidden;min-height:0}
-.comex-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--t1);line-height:1.4;overflow:hidden}
-.comex-num{width:20px;height:20px;border-radius:50%;background:var(--g2);color:var(--t1);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.comex-text{flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.comex-text b{color:var(--t1)}
-.btn-copy{background:var(--g2);color:var(--t1);border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;align-self:flex-end;margin-top:6px;transition:.15s}
-.btn-copy:hover{background:#4a4a4a}
+    .nav-r {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
 
-/* KPIs Overview */
-.kpi-ov-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.kpi-ov-row:last-child{border-bottom:none}
-.kpi-ov-lbl{font-size:12px;color:var(--gr);flex:1}
-.kpi-ov-val{font-size:13px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:4px}
-.kpi-ov-val.g{color:var(--green)}
-.kpi-ov-arr{font-size:12px}
+    .nav-toggle {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0, 0, 0, .06);
+      border-radius: 20px;
+      padding: 6px 12px;
+      cursor: pointer;
+      flex-shrink: 0
+    }
 
-/* Execution Score Detail */
-.gauge-wrap{display:flex;align-items:center;gap:14px;margin-bottom:10px;flex-shrink:0}
-.gauge-svg-wrap{position:relative;width:88px;height:88px;flex-shrink:0}
-.gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.gauge-val{font-size:24px;font-weight:700;color:var(--green);line-height:1}
-.gauge-sub{font-size:9px;color:var(--gr);line-height:1.2;margin-top:2px}
-.week-bars{flex:1;display:flex;flex-direction:column;gap:5px}
-.wb-row{display:flex;align-items:center;gap:6px}
-.wb-lbl{font-size:10px;color:var(--gr);min-width:38px}
-.wb-track{flex:1;height:6px;background:var(--g3);border-radius:3px;overflow:hidden}
-.wb-fill{height:100%;border-radius:3px}
-.wb-val{font-size:10px;color:var(--t1);min-width:42px;text-align:right}
-.exec-comment{font-size:10px;color:var(--green);font-style:italic;margin-top:auto;padding-top:4px}
+    .nav-toggle svg {
+      color: var(--dark)
+    }
 
-/* ── ROW 3 ── */
-.r3{display:grid;grid-template-columns:52% 1fr;gap:var(--gap);flex:1;min-height:0;overflow:hidden}
+    .nav-bell {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      color: var(--dark)
+    }
 
-/* Recommendations */
-.reco-rows{flex:1;display:flex;flex-direction:column;gap:4px;overflow:hidden;min-height:0;justify-content:space-evenly}
-.reco-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.reco-row:last-child{border-bottom:none}
-.reco-badge{padding:2px 7px;border-radius:6px;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
-.reco-badge.h{background:var(--red)}
-.reco-badge.m{background:var(--orange)}
-.reco-badge.l{background:#6B7280}
-.reco-txt{flex:1;font-size:12px;color:var(--t1);line-height:1.3;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.reco-chk-wrap{display:flex;align-items:center;gap:5px;flex-shrink:0;min-width:60px}
-.reco-chk-wrap input[type=checkbox]{width:14px;height:14px;accent-color:var(--green);cursor:pointer}
-.reco-chk-lbl{font-size:11px;cursor:pointer}
-.reco-chk-lbl.done{color:var(--green)}
-.reco-chk-lbl.todo{color:var(--gr)}
+    .nav-dot {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 8px;
+      height: 8px;
+      background: var(--red);
+      border-radius: 50%;
+      border: 2px solid var(--bg)
+    }
 
-/* Reports table */
-.rpt-counter{background:var(--g2);color:var(--t1);border-radius:20px;padding:3px 10px;font-size:11px}
-.rpt-tbl{width:100%;border-collapse:collapse;font-size:11px}
-.rpt-tbl th{text-align:left;font-size:9px;font-weight:600;color:var(--gr);letter-spacing:.1em;text-transform:uppercase;padding:4px 4px 6px;border-bottom:1px solid rgba(255,255,255,.06)}
-.rpt-tbl td{padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.75);vertical-align:middle}
-.rpt-tbl tr:last-child td{border-bottom:none}
-.rpt-title{font-size:12px;color:var(--t1);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:block}
-.rpt-type{font-size:11px;color:var(--t1)}
-.rpt-badges{display:flex;gap:3px;flex-wrap:wrap}
-.rpt-tag{font-size:9px;padding:2px 5px;border-radius:5px;background:var(--g2);color:rgba(255,255,255,.6);font-weight:500}
-.rpt-btn{font-size:10px;padding:3px 9px;border-radius:6px;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:var(--g2);color:var(--t1);font-family:'Inter',sans-serif;transition:.15s;margin-right:3px;white-space:nowrap}
-.rpt-btn:hover{background:#4a4a4a}
-.rpt-table-wrap{flex:1;overflow-y:auto;min-height:0}
-.rpt-table-wrap::-webkit-scrollbar{width:4px}
-.rpt-table-wrap::-webkit-scrollbar-thumb{background:var(--g2);border-radius:2px}
+    .nav-av {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #7B5B3A, #4A2E15);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0
+    }
 
-/* ── ACTION BAR ── */
-.action-bar{height:48px;min-height:48px;background:var(--red);display:flex;align-items:center;padding:0 28px 0 22px;gap:6px;flex-shrink:0}
-.ab-msg{font-size:13px;color:#fff;font-weight:400}
-.ab-cta{font-size:13px;color:#fff;font-weight:700;cursor:pointer;text-decoration:underline;white-space:nowrap}
+    /* ── BODY ── */
+    .wrap {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      min-height: 0
+    }
 
-/* ── SPIN LOADER ── */
-.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-.gen-loader{display:none;align-items:center;gap:6px;font-size:11px;color:var(--gr);position:absolute;bottom:8px;left:20px}
-.gen-loader.active{display:flex}
-</style>
+    /* ── SIDEBAR ── */
+    .side {
+      width: 60px;
+      min-width: 60px;
+      background: var(--bg);
+      border-right: 1px solid rgba(0, 0, 0, .07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 4px
+    }
+
+    .s-ico {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gr);
+      cursor: pointer;
+      transition: .15s;
+      text-decoration: none
+    }
+
+    .s-ico:hover {
+      background: rgba(0, 0, 0, .06);
+      color: #555
+    }
+
+    .s-ico.on {
+      background: rgba(0, 0, 0, .08);
+      color: var(--dark)
+    }
+
+    .s-gap {
+      flex: 1
+    }
+
+    /* ── CONTENT ── */
+    .ct {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    /* ── PAGE HEADER ── */
+    .phdr {
+      padding: 16px 28px 12px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0
+    }
+
+    .phdr-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .phdr-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .phdr-title {
+      font-size: 40px;
+      font-weight: 700;
+      font-family: 'Georgia', serif;
+      color: var(--dark);
+      letter-spacing: -.02em;
+      line-height: 1
+    }
+
+    .phdr-sub {
+      font-size: 13px;
+      color: var(--gr);
+      margin-top: 2px;
+      font-family: 'Inter', sans-serif
+    }
+
+    .phdr-r {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+      flex-shrink: 0
+    }
+
+    .pf-row {
+      display: flex;
+      align-items: center;
+      gap: 1px
+    }
+
+    .pf-sep {
+      color: var(--gr);
+      font-size: 14px;
+      padding: 0 4px
+    }
+
+    .pf-btn {
+      padding: 4px 6px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gr);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      transition: .15s
+    }
+
+    .pf-btn:hover {
+      color: var(--dark)
+    }
+
+    .pf-btn.on {
+      color: var(--dark);
+      font-weight: 700
+    }
+
+    .phdr-btns {
+      display: flex;
+      gap: 7px;
+      align-items: center
+    }
+
+    .btn-new {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 20px;
+      border-radius: 20px;
+      background: var(--red);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      transition: .15s
+    }
+
+    .btn-new:hover {
+      opacity: .88
+    }
+
+    .btn-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid #ccc;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: .15s
+    }
+
+    .btn-circle:hover {
+      background: #ebe6de
+    }
+
+    /* ── ROWS CONTAINER ── */
+    .rows {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      padding: 0 28px 0 22px;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    /* ── ROW 1 — 4 KPI cards ── */
+    .r1 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: var(--gap);
+      height: 132px;
+      flex-shrink: 0
+    }
+
+    .kc {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden
+    }
+
+    .kc-lbl {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--t1)
+    }
+
+    .kc-body {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      flex: 1;
+      margin-top: 4px
+    }
+
+    .kc-val {
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      line-height: 1;
+      color: var(--t1)
+    }
+
+    .kc-val.g {
+      color: var(--green)
+    }
+
+    .kc-arr {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .kc-arr.g {
+      color: var(--green)
+    }
+
+    .kc-sub {
+      font-size: 12px;
+      color: var(--gr);
+      margin-bottom: 6px;
+      flex: 1;
+      line-height: 1.3
+    }
+
+    .kc-spark {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      pointer-events: none
+    }
+
+    .kc-prog-wrap {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--g3);
+      border-radius: 0 0 var(--r) var(--r);
+      overflow: hidden
+    }
+
+    .kc-prog {
+      height: 100%;
+      background: var(--green);
+      border-radius: 0 0 var(--r) var(--r)
+    }
+
+    .kc-val-row {
+      display: flex;
+      align-items: baseline;
+      gap: 3px
+    }
+
+    .kc-val-suffix {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--t1)
+    }
+
+    /* ── ROW 2 ── */
+    .r2 {
+      display: grid;
+      grid-template-columns: 22% 1fr 19% 19%;
+      gap: var(--gap);
+      height: 226px;
+      flex-shrink: 0
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--t1);
+      flex-shrink: 0
+    }
+
+    .card-hdr {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-shrink: 0
+    }
+
+    /* Create Report */
+    .cf-lbl {
+      font-size: 11px;
+      color: var(--gr);
+      margin-bottom: 3px
+    }
+
+    .cf-input {
+      background: var(--g2);
+      border: none;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: var(--t1);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      width: 100%
+    }
+
+    .cf-input::placeholder {
+      color: #666
+    }
+
+    .cf-type {
+      display: flex;
+      gap: 2px;
+      background: var(--g2);
+      border-radius: 8px;
+      padding: 3px;
+      margin-bottom: 8px
+    }
+
+    .cf-type-btn {
+      flex: 1;
+      padding: 4px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gr);
+      cursor: pointer;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      background: none;
+      transition: .15s;
+      text-align: center;
+      white-space: nowrap
+    }
+
+    .cf-type-btn.on {
+      background: #fff;
+      color: var(--dark);
+      font-weight: 600
+    }
+
+    .cf-period {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px
+    }
+
+    .cf-period input {
+      flex: 1;
+      background: var(--g2);
+      border: none;
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 11px;
+      color: #888;
+      font-family: 'Inter', sans-serif;
+      outline: none
+    }
+
+    .cf-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 10px;
+      flex: 1
+    }
+
+    .cf-check {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--t1);
+      cursor: pointer;
+      line-height: 1
+    }
+
+    .cf-check input[type=checkbox] {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex-shrink: 0
+    }
+
+    .cf-check input[type=checkbox]:not(:checked) {
+      accent-color: var(--g3)
+    }
+
+    .btn-gen {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--red);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      transition: .15s;
+      flex-shrink: 0
+    }
+
+    .btn-gen:hover {
+      opacity: .88
+    }
+
+    .btn-gen:disabled {
+      opacity: .5;
+      cursor: default
+    }
+
+    /* COMEX */
+    .auto-badge {
+      background: var(--g2);
+      color: var(--gr);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      flex-shrink: 0
+    }
+
+    .comex-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    .comex-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--t1);
+      line-height: 1.4;
+      overflow: hidden
+    }
+
+    .comex-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--g2);
+      color: var(--t1);
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .comex-text {
+      flex: 1;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden
+    }
+
+    .comex-text b {
+      color: var(--t1)
+    }
+
+    .btn-copy {
+      background: var(--g2);
+      color: var(--t1);
+      border: none;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      flex-shrink: 0;
+      align-self: flex-end;
+      margin-top: 6px;
+      transition: .15s
+    }
+
+    .btn-copy:hover {
+      background: #4a4a4a
+    }
+
+    /* KPIs Overview */
+    .kpi-ov-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .05)
+    }
+
+    .kpi-ov-row:last-child {
+      border-bottom: none
+    }
+
+    .kpi-ov-lbl {
+      font-size: 12px;
+      color: var(--gr);
+      flex: 1
+    }
+
+    .kpi-ov-val {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .kpi-ov-val.g {
+      color: var(--green)
+    }
+
+    .kpi-ov-arr {
+      font-size: 12px
+    }
+
+    /* Execution Score Detail */
+    .gauge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 10px;
+      flex-shrink: 0
+    }
+
+    .gauge-svg-wrap {
+      position: relative;
+      width: 88px;
+      height: 88px;
+      flex-shrink: 0
+    }
+
+    .gauge-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center
+    }
+
+    .gauge-val {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1
+    }
+
+    .gauge-sub {
+      font-size: 9px;
+      color: var(--gr);
+      line-height: 1.2;
+      margin-top: 2px
+    }
+
+    .week-bars {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px
+    }
+
+    .wb-row {
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .wb-lbl {
+      font-size: 10px;
+      color: var(--gr);
+      min-width: 38px
+    }
+
+    .wb-track {
+      flex: 1;
+      height: 6px;
+      background: var(--g3);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .wb-fill {
+      height: 100%;
+      border-radius: 3px
+    }
+
+    .wb-val {
+      font-size: 10px;
+      color: var(--t1);
+      min-width: 42px;
+      text-align: right
+    }
+
+    .exec-comment {
+      font-size: 10px;
+      color: var(--green);
+      font-style: italic;
+      margin-top: auto;
+      padding-top: 4px
+    }
+
+    /* ── ROW 3 ── */
+    .r3 {
+      display: grid;
+      grid-template-columns: 52% 1fr;
+      gap: var(--gap);
+      flex: 1;
+      min-height: 0;
+      overflow: hidden
+    }
+
+    /* Recommendations */
+    .reco-rows {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow: hidden;
+      min-height: 0;
+      justify-content: space-evenly
+    }
+
+    .reco-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .05)
+    }
+
+    .reco-row:last-child {
+      border-bottom: none
+    }
+
+    .reco-badge {
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0
+    }
+
+    .reco-badge.h {
+      background: var(--red)
+    }
+
+    .reco-badge.m {
+      background: var(--orange)
+    }
+
+    .reco-badge.l {
+      background: #6B7280
+    }
+
+    .reco-txt {
+      flex: 1;
+      font-size: 12px;
+      color: var(--t1);
+      line-height: 1.3;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis
+    }
+
+    .reco-chk-wrap {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+      min-width: 60px
+    }
+
+    .reco-chk-wrap input[type=checkbox] {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--green);
+      cursor: pointer
+    }
+
+    .reco-chk-lbl {
+      font-size: 11px;
+      cursor: pointer
+    }
+
+    .reco-chk-lbl.done {
+      color: var(--green)
+    }
+
+    .reco-chk-lbl.todo {
+      color: var(--gr)
+    }
+
+    /* Reports table */
+    .rpt-counter {
+      background: var(--g2);
+      color: var(--t1);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px
+    }
+
+    .rpt-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px
+    }
+
+    .rpt-tbl th {
+      text-align: left;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--gr);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 4px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, .06)
+    }
+
+    .rpt-tbl td {
+      padding: 6px 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, .04);
+      color: rgba(255, 255, 255, .75);
+      vertical-align: middle
+    }
+
+    .rpt-tbl tr:last-child td {
+      border-bottom: none
+    }
+
+    .rpt-title {
+      font-size: 12px;
+      color: var(--t1);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+      display: block
+    }
+
+    .rpt-type {
+      font-size: 11px;
+      color: var(--t1)
+    }
+
+    .rpt-badges {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap
+    }
+
+    .rpt-tag {
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 5px;
+      background: var(--g2);
+      color: rgba(255, 255, 255, .6);
+      font-weight: 500
+    }
+
+    .rpt-btn {
+      font-size: 10px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: var(--g2);
+      color: var(--t1);
+      font-family: 'Inter', sans-serif;
+      transition: .15s;
+      margin-right: 3px;
+      white-space: nowrap
+    }
+
+    .rpt-btn:hover {
+      background: #4a4a4a
+    }
+
+    .rpt-table-wrap {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0
+    }
+
+    .rpt-table-wrap::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .rpt-table-wrap::-webkit-scrollbar-thumb {
+      background: var(--g2);
+      border-radius: 2px
+    }
+
+    /* ── ACTION BAR ── */
+    .action-bar {
+      height: 48px;
+      min-height: 48px;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      padding: 0 28px 0 22px;
+      gap: 6px;
+      flex-shrink: 0
+    }
+
+    .ab-msg {
+      font-size: 13px;
+      color: #fff;
+      font-weight: 400
+    }
+
+    .ab-cta {
+      font-size: 13px;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+      white-space: nowrap
+    }
+
+    /* ── SPIN LOADER ── */
+    .spin {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, .2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: inline-block
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .gen-loader {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--gr);
+      position: absolute;
+      bottom: 8px;
+      left: 20px
+    }
+
+    .gen-loader.active {
+      display: flex
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ── NAVBAR ── -->
-<nav class="nav">
-  <div class="nav-logo">
-    <svg viewBox="0 0 32 32" fill="none" width="32" height="32">
-      <path d="M6 26L13 6h4L11 26H6z" fill="#1A1A1A"/>
-      <path d="M14 26L21 6h4L19 26h-5z" fill="#1A1A1A" opacity=".35"/>
-    </svg>
-  </div>
-  <a href="index.html" class="ntab">Dashboard</a>
-  <span class="nav-sep">/</span>
-  <a href="sentiment.html" class="ntab">Sentiment</a>
-  <span class="nav-sep">/</span>
-  <a href="share-of-voice.html" class="ntab">Share of Voice</a>
-  <span class="nav-sep">/</span>
-  <a href="#" class="ntab">Competitors</a>
-  <span class="nav-sep">/</span>
-  <a href="#" class="ntab">Crisis Alert</a>
-  <span class="nav-sep">/</span>
-  <a href="trends.html" class="ntab">Trends</a>
-  <span class="nav-sep">/</span>
-  <span class="ntab on">Reports</span>
-  <div class="nav-r">
-    <div class="nav-toggle">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2.5"/><path d="M7 2v1M7 11v1M2 7h1M11 7h1M3.8 3.8l.7.7M9.5 9.5l.7.7M3.8 10.2l.7-.7M9.5 4.5l.7-.7" stroke-linecap="round"/></svg>
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 12a7 7 0 01-7-7 5 5 0 10 7 7z" stroke-linecap="round"/></svg>
+  <!-- ── NAVBAR ── -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none" width="32" height="32">
+        <path d="M6 26L13 6h4L11 26H6z" fill="#1A1A1A" />
+        <path d="M14 26L21 6h4L19 26h-5z" fill="#1A1A1A" opacity=".35" />
+      </svg>
     </div>
-    <div class="nav-bell">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 3a5 5 0 015 5c0 4 1.5 5 1.5 5h-13S4 12 4 8a5 5 0 015-5z"/><path d="M7 16a2 2 0 004 0"/></svg>
-      <div class="nav-dot"></div>
-    </div>
-    <div class="nav-av">
-      <svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.4"><circle cx="9" cy="7" r="3"/><path d="M3.5 17c0-3 2.5-4.5 5.5-4.5s5.5 1.5 5.5 4.5"/></svg>
-    </div>
-  </div>
-</nav>
-
-<div class="wrap">
-  <!-- ── SIDEBAR ── -->
-  <aside class="side">
-    <a href="index.html" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9L9 3l6 6"/><path d="M5 7v8h4v-4h4v4h4V7"/></svg></a>
-    <a href="sentiment.html" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="11" width="3" height="4"/><rect x="7.5" y="7" width="3" height="8"/><rect x="12" y="3" width="3" height="12"/></svg></a>
-    <a href="share-of-voice.html" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="9" r="6"/><path d="M9 3v6l4 2" stroke-linecap="round"/></svg></a>
-    <a href="#" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M12 12l4 4M5 11a6 6 0 100-6"/><circle cx="9" cy="8" r="5"/></svg></a>
-    <a href="#" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.5a7 7 0 11-6.8 8.5"/><path d="M10 3.5V8l3 2"/></svg></a>
-    <a href="trends.html" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 13 7 5 11 10 15 3"/></svg></a>
-    <div class="s-ico on"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h10v14H4z"/><path d="M7 2v2M11 2v2M4 9h10"/></svg></div>
-    <div class="s-gap"></div>
-    <div class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.2 3.2l1.4 1.4M13.4 13.4l1.4 1.4M3.2 14.8l1.4-1.4M13.4 4.6l1.4-1.4"/></svg></div>
-    <div class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M15 13l-5-5 5-5"/><path d="M5 4v10"/></svg></div>
-  </aside>
-
-  <!-- ── MAIN CONTENT ── -->
-  <div class="ct">
-
-    <!-- PAGE HEADER -->
-    <div class="phdr">
-      <div class="phdr-icon">
-        <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="M15 15l4 4"/></svg>
+    <a href="index.html" class="ntab">Dashboard</a>
+    <span class="nav-sep">/</span>
+    <a href="sentiment.html" class="ntab">Sentiment</a>
+    <span class="nav-sep">/</span>
+    <a href="share-of-voice.html" class="ntab">Share of Voice</a>
+    <span class="nav-sep">/</span>
+    <a href="competitors.html" class="ntab">Competitors</a>
+    <span class="nav-sep">/</span>
+    <a href="#" class="ntab">Crisis Alert</a>
+    <span class="nav-sep">/</span>
+    <a href="trends.html" class="ntab">Trends</a>
+    <span class="nav-sep">/</span>
+    <span class="ntab on">Reports</span>
+    <div class="nav-r">
+      <div class="nav-toggle">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4">
+          <circle cx="7" cy="7" r="2.5" />
+          <path d="M7 2v1M7 11v1M2 7h1M11 7h1M3.8 3.8l.7.7M9.5 9.5l.7.7M3.8 10.2l.7-.7M9.5 4.5l.7-.7"
+            stroke-linecap="round" />
+        </svg>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M12 12a7 7 0 01-7-7 5 5 0 10 7 7z" stroke-linecap="round" />
+        </svg>
       </div>
-      <div class="phdr-info">
-        <div class="phdr-title">Reports</div>
-        <div class="phdr-sub">Strategic Summaries — Hermès</div>
+      <div class="nav-bell">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M9 3a5 5 0 015 5c0 4 1.5 5 1.5 5h-13S4 12 4 8a5 5 0 015-5z" />
+          <path d="M7 16a2 2 0 004 0" />
+        </svg>
+        <div class="nav-dot"></div>
       </div>
-      <div class="phdr-r">
-        <div class="pf-row">
-          <button class="pf-btn on" data-val="7" onclick="setPeriod(this)">This week</button>
-          <span class="pf-sep">/</span>
-          <button class="pf-btn" data-val="30" onclick="setPeriod(this)">This month</button>
-          <span class="pf-sep">/</span>
-          <button class="pf-btn" data-val="90" onclick="setPeriod(this)">This quarter</button>
-        </div>
-        <div class="phdr-btns">
-          <button class="btn-new" onclick="document.getElementById('cf-title').focus()">New Report</button>
-          <div class="btn-circle" title="Refresh" onclick="loadData()">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4a7 7 0 0111.9-1.5M1 4V1M1 4h3"/><path d="M13 10a7 7 0 01-11.9 1.5M13 10v3M13 10h-3"/></svg>
-          </div>
-          <div class="btn-circle" title="Download" onclick="exportLastPDF()">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1v8M4 6l3 3 3-3M1 11v2h12v-2"/></svg>
-          </div>
-          <div class="btn-circle" title="Share">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="3" r="2"/><circle cx="3" cy="7" r="2"/><circle cx="11" cy="11" r="2"/><path d="M5 6l4.5-2M5 8l4.5 2"/></svg>
-          </div>
-        </div>
+      <div class="nav-av">
+        <svg width="18" height="18" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.4">
+          <circle cx="9" cy="7" r="3" />
+          <path d="M3.5 17c0-3 2.5-4.5 5.5-4.5s5.5 1.5 5.5 4.5" />
+        </svg>
       </div>
     </div>
+  </nav>
 
-    <!-- ROWS -->
-    <div class="rows">
+  <div class="wrap">
+    <!-- ── SIDEBAR ── -->
+    <aside class="side">
+      <a href="index.html" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor"
+          stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9L9 3l6 6" />
+          <path d="M5 7v8h4v-4h4v4h4V7" />
+        </svg></a>
+      <a href="sentiment.html" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor"
+          stroke-width="1.4" stroke-linecap="round">
+          <rect x="3" y="11" width="3" height="4" />
+          <rect x="7.5" y="7" width="3" height="8" />
+          <rect x="12" y="3" width="3" height="12" />
+        </svg></a>
+      <a href="share-of-voice.html" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor"
+          stroke-width="1.4">
+          <circle cx="9" cy="9" r="6" />
+          <path d="M9 3v6l4 2" stroke-linecap="round" />
+        </svg></a>
+      <a href="#" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round">
+          <path d="M12 12l4 4M5 11a6 6 0 100-6" />
+          <circle cx="9" cy="8" r="5" />
+        </svg></a>
+      <a href="#" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.3 3.5a7 7 0 11-6.8 8.5" />
+          <path d="M10 3.5V8l3 2" />
+        </svg></a>
+      <a href="trends.html" class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor"
+          stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 13 7 5 11 10 15 3" />
+        </svg></a>
+      <div class="s-ico on"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h10v14H4z" />
+          <path d="M7 2v2M11 2v2M4 9h10" />
+        </svg></div>
+      <div class="s-gap"></div>
+      <div class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="9" r="3" />
+          <path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.2 3.2l1.4 1.4M13.4 13.4l1.4 1.4M3.2 14.8l1.4-1.4M13.4 4.6l1.4-1.4" />
+        </svg></div>
+      <div class="s-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round">
+          <path d="M15 13l-5-5 5-5" />
+          <path d="M5 4v10" />
+        </svg></div>
+    </aside>
 
-      <!-- ROW 1 — KPI cards -->
-      <div class="r1">
+    <!-- ── MAIN CONTENT ── -->
+    <div class="ct">
 
-        <!-- Reports Generated -->
-        <div class="kc">
-          <div class="kc-lbl">Reports Generated</div>
-          <div class="kc-body">
-            <div class="kc-val" id="kc-count">12</div>
-            <div class="kc-arr g">↗</div>
-          </div>
-          <div class="kc-spark">
-            <svg viewBox="0 0 140 40" width="140" height="40" fill="none">
-              <polyline points="0,38 20,30 40,32 60,22 80,16 100,10 120,6 140,3" stroke="#22C55E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+      <!-- PAGE HEADER -->
+      <div class="phdr">
+        <div class="phdr-icon">
+          <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <circle cx="10" cy="10" r="6" />
+            <path d="M15 15l4 4" />
+          </svg>
         </div>
-
-        <!-- Last Report -->
-        <div class="kc">
-          <div class="kc-lbl">Last Report</div>
-          <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
-            <div class="kc-val" style="font-size:36px" id="kc-last">2 days ago</div>
-            <div class="kc-sub" id="kc-last-name" style="margin-top:4px">Weekly Hermès Report</div>
-          </div>
+        <div class="phdr-info">
+          <div class="phdr-title">Reports</div>
+          <div class="phdr-sub">Strategic Summaries — Hermès</div>
         </div>
-
-        <!-- Execution Score -->
-        <div class="kc">
-          <div class="kc-lbl">Execution Score</div>
-          <div class="kc-body" style="align-items:center;gap:10px">
-            <div class="kc-val g" id="kc-exec-pct">74%</div>
-            <div class="kc-sub" style="margin-bottom:0">recommendations<br>followed</div>
+        <div class="phdr-r">
+          <div class="pf-row">
+            <button class="pf-btn on" data-val="7" onclick="setPeriod(this)">This week</button>
+            <span class="pf-sep">/</span>
+            <button class="pf-btn" data-val="30" onclick="setPeriod(this)">This month</button>
+            <span class="pf-sep">/</span>
+            <button class="pf-btn" data-val="90" onclick="setPeriod(this)">This quarter</button>
           </div>
-          <div class="kc-prog-wrap"><div class="kc-prog" id="kc-exec-bar" style="width:74%"></div></div>
-        </div>
-
-        <!-- Brand Health -->
-        <div class="kc">
-          <div class="kc-lbl">Brand Health</div>
-          <div class="kc-body">
-            <div class="kc-val-row">
-              <div class="kc-val" id="kc-health">78</div>
-              <div class="kc-val-suffix">/100</div>
-            </div>
-            <div class="kc-arr g">↗</div>
-          </div>
-          <div class="kc-spark">
-            <svg viewBox="0 0 140 40" width="140" height="40" fill="none">
-              <polyline points="0,35 20,28 40,30 60,20 80,18 100,12 120,8 140,5" stroke="#22C55E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-
-      </div><!-- /r1 -->
-
-      <!-- ROW 2 -->
-      <div class="r2">
-
-        <!-- Create Report -->
-        <div class="card" style="padding:16px 18px">
-          <div class="card-title" style="margin-bottom:10px">Create Report</div>
-          <div class="cf-lbl">Title</div>
-          <input class="cf-input" id="cf-title" placeholder="Report title..." style="margin-bottom:8px">
-          <div class="cf-lbl">Type</div>
-          <div class="cf-type">
-            <button class="cf-type-btn on" onclick="selectType(this)">Weekly</button>
-            <button class="cf-type-btn" onclick="selectType(this)">Monthly</button>
-            <button class="cf-type-btn" onclick="selectType(this)">Quarterly</button>
-            <button class="cf-type-btn" onclick="selectType(this)">Ad hoc</button>
-          </div>
-          <div class="cf-lbl">Period</div>
-          <div class="cf-period">
-            <input type="date" id="cf-start" placeholder="From" style="color:#888">
-            <input type="date" id="cf-end" placeholder="To" style="color:#888">
-          </div>
-          <div class="cf-checks">
-            <label class="cf-check"><input type="checkbox" value="comex" checked> COMEX Summary</label>
-            <label class="cf-check"><input type="checkbox" value="kpis" checked> KPIs Overview</label>
-            <label class="cf-check"><input type="checkbox" value="recos" checked> Recommendations</label>
-            <label class="cf-check"><input type="checkbox" value="brief" checked> Creative Brief</label>
-            <label class="cf-check"><input type="checkbox" value="exec"> Execution Score</label>
-          </div>
-          <button class="btn-gen" id="generateBtn" onclick="generateReport()">Generate Report</button>
-          <div class="gen-loader" id="genLoader"><div class="spin"></div> Generating report...</div>
-        </div>
-
-        <!-- COMEX Summary -->
-        <div class="card">
-          <div class="card-hdr">
-            <div class="card-title">COMEX Summary</div>
-            <div class="auto-badge">Auto-generated</div>
-          </div>
-          <div class="comex-list" id="comex-list">
-            <div class="comex-item"><div class="comex-num">1</div><div class="comex-text"><b>Sentiment:</b> Hermès shows <span id="cx-pos">68%</span> positive sentiment, up +4pts vs previous period.</div></div>
-            <div class="comex-item"><div class="comex-num">2</div><div class="comex-text"><b>Competition:</b> Hermès holds <span id="cx-sov-h">41.2%</span> SOV vs Chanel <span id="cx-sov-c">35.8%</span>. Hermès dominates.</div></div>
-            <div class="comex-item"><div class="comex-num">3</div><div class="comex-text"><b>Trends:</b> <span id="cx-trends">24</span> active trends detected. Hermès present on <span id="cx-trends-h">8</span>. Top opportunity: <span id="cx-top-trend">#SlowFashion</span>.</div></div>
-            <div class="comex-item"><div class="comex-num">4</div><div class="comex-text"><b>Alert:</b> <span id="cx-alert">No critical alert this week. Negative spike on TikTok monitored.</span></div></div>
-            <div class="comex-item"><div class="comex-num">5</div><div class="comex-text"><b>"Priority:</b> <span id="cx-priority">Activate #SlowFashion before expires in 2 days — craftsmanship angle."</span></div></div>
-          </div>
-          <button class="btn-copy" id="copySummaryBtn" onclick="copySummary()">Copy Summary</button>
-        </div>
-
-        <!-- KPIs Overview -->
-        <div class="card">
-          <div class="card-title" style="margin-bottom:10px">KPIs Overview</div>
-          <div style="flex:1;display:flex;flex-direction:column;justify-content:space-evenly">
-            <div class="kpi-ov-row">
-              <div class="kpi-ov-lbl">Brand Health Score</div>
-              <div class="kpi-ov-val g"><span id="ov-health">78/100</span><span class="kpi-ov-arr">↗</span></div>
-            </div>
-            <div class="kpi-ov-row">
-              <div class="kpi-ov-lbl">Total Mentions</div>
-              <div class="kpi-ov-val g"><span id="ov-mentions">23.4k</span><span class="kpi-ov-arr">↗</span></div>
-            </div>
-            <div class="kpi-ov-row">
-              <div class="kpi-ov-lbl">Positive Sentiment</div>
-              <div class="kpi-ov-val g"><span id="ov-pos">68%</span><span class="kpi-ov-arr">↗</span></div>
-            </div>
-            <div class="kpi-ov-row">
-              <div class="kpi-ov-lbl">SOV Hermès</div>
-              <div class="kpi-ov-val g"><span id="ov-sov">41.2%</span><span class="kpi-ov-arr">↗</span></div>
-            </div>
-            <div class="kpi-ov-row">
-              <div class="kpi-ov-lbl">Active Alerts</div>
-              <div class="kpi-ov-val g"><span id="ov-alerts">0</span> <span style="color:#22C55E;font-size:14px">✓</span></div>
-            </div>
-            <div class="kpi-ov-row">
-              <div class="kpi-ov-lbl">Top Platform</div>
-              <div class="kpi-ov-val"><span id="ov-platform">Instagram</span></div>
-            </div>
-            <div class="kpi-ov-row">
-              <div class="kpi-ov-lbl">Avg Engagement</div>
-              <div class="kpi-ov-val"><span id="ov-eng">4.2%</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Execution Score Detail -->
-        <div class="card">
-          <div class="card-title" style="margin-bottom:8px">Execution Score</div>
-          <div class="gauge-wrap">
-            <div class="gauge-svg-wrap">
-              <svg viewBox="0 0 88 88" width="88" height="88">
-                <circle cx="44" cy="44" r="34" stroke="#444" stroke-width="6" fill="none"/>
-                <circle cx="44" cy="44" r="34" stroke="#22C55E" stroke-width="6" fill="none"
-                  stroke-dasharray="213.6" id="gauge-circle"
-                  stroke-dashoffset="55.5" stroke-linecap="round"
-                  transform="rotate(-90 44 44)"/>
+          <div class="phdr-btns">
+            <button class="btn-new" onclick="document.getElementById('cf-title').focus()">New Report</button>
+            <div class="btn-circle" title="Refresh" onclick="loadData()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M1 4a7 7 0 0111.9-1.5M1 4V1M1 4h3" />
+                <path d="M13 10a7 7 0 01-11.9 1.5M13 10v3M13 10h-3" />
               </svg>
-              <div class="gauge-center">
-                <div class="gauge-val" id="gauge-pct">74%</div>
-                <div class="gauge-sub">recommendations<br>followed</div>
-              </div>
             </div>
-            <div class="week-bars">
-              <div class="wb-row"><div class="wb-lbl">Week 1</div><div class="wb-track"><div class="wb-fill" style="width:60%;background:var(--orange)"></div></div><div class="wb-val">60%</div></div>
-              <div class="wb-row"><div class="wb-lbl">Week 2</div><div class="wb-track"><div class="wb-fill" style="width:65%;background:var(--orange)"></div></div><div class="wb-val">65%</div></div>
-              <div class="wb-row"><div class="wb-lbl">Week 3</div><div class="wb-track"><div class="wb-fill" style="width:70%;background:var(--green)"></div></div><div class="wb-val">70%</div></div>
-              <div class="wb-row"><div class="wb-lbl">Week 4</div><div class="wb-track"><div class="wb-fill" id="gauge-w4-bar" style="width:74%;background:var(--green)"></div></div><div class="wb-val" id="gauge-w4-val">74% week</div></div>
+            <div class="btn-circle" title="Download" onclick="exportLastPDF()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M7 1v8M4 6l3 3 3-3M1 11v2h12v-2" />
+              </svg>
             </div>
-          </div>
-          <div class="exec-comment" id="exec-comment">Good follow-through — keep the momentum</div>
-        </div>
-
-      </div><!-- /r2 -->
-
-      <!-- ROW 3 -->
-      <div class="r3">
-
-        <!-- Recommendations -->
-        <div class="card">
-          <div class="card-title" style="margin-bottom:10px">Recommendations</div>
-          <div class="reco-rows" id="reco-rows">
-            <div class="reco-row">
-              <div class="reco-badge h">HIGH</div>
-              <div class="reco-txt">Activate #SlowFashion on TikTok — 2 days</div>
-              <div class="reco-chk-wrap">
-                <input type="checkbox" checked onchange="toggleRecoFallback(this)">
-                <label class="reco-chk-lbl done">= Done</label>
-              </div>
-            </div>
-            <div class="reco-row">
-              <div class="reco-badge h">HIGH</div>
-              <div class="reco-txt">Address negative spike on Trustpilot</div>
-              <div class="reco-chk-wrap">
-                <input type="checkbox" onchange="toggleRecoFallback(this)">
-                <label class="reco-chk-lbl todo">= to do</label>
-              </div>
-            </div>
-            <div class="reco-row">
-              <div class="reco-badge m">MED</div>
-              <div class="reco-txt">Reinforce SOV on Twitter — Chanel gaining</div>
-              <div class="reco-chk-wrap">
-                <input type="checkbox" onchange="toggleRecoFallback(this)">
-                <label class="reco-chk-lbl todo">= to do</label>
-              </div>
-            </div>
-            <div class="reco-row">
-              <div class="reco-badge m">MED</div>
-              <div class="reco-txt">Leverage #ParisianStyle — 4-day window</div>
-              <div class="reco-chk-wrap">
-                <input type="checkbox" onchange="toggleRecoFallback(this)">
-                <label class="reco-chk-lbl todo">= to do</label>
-              </div>
-            </div>
-            <div class="reco-row">
-              <div class="reco-badge l">LOW</div>
-              <div class="reco-txt">Update creative brief for Q2</div>
-              <div class="reco-chk-wrap">
-                <input type="checkbox" onchange="toggleRecoFallback(this)">
-                <label class="reco-chk-lbl todo">= to do</label>
-              </div>
+            <div class="btn-circle" title="Share">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="11" cy="3" r="2" />
+                <circle cx="3" cy="7" r="2" />
+                <circle cx="11" cy="11" r="2" />
+                <path d="M5 6l4.5-2M5 8l4.5 2" />
+              </svg>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Reports Table -->
-        <div class="card">
-          <div class="card-hdr">
-            <div class="card-title" style="flex:1">Reports Generated</div>
-            <div class="rpt-counter" id="rpt-counter">12 reports</div>
+      <!-- ROWS -->
+      <div class="rows">
+
+        <!-- ROW 1 — KPI cards -->
+        <div class="r1">
+
+          <!-- Reports Generated -->
+          <div class="kc">
+            <div class="kc-lbl">Reports Generated</div>
+            <div class="kc-body">
+              <div class="kc-val" id="kc-count">12</div>
+              <div class="kc-arr g">↗</div>
+            </div>
+            <div class="kc-spark">
+              <svg viewBox="0 0 140 40" width="140" height="40" fill="none">
+                <polyline points="0,38 20,30 40,32 60,22 80,16 100,10 120,6 140,3" stroke="#22C55E" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
           </div>
-          <div class="rpt-table-wrap">
-            <table class="rpt-tbl">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Type</th>
-                  <th>Period</th>
-                  <th>Date</th>
-                  <th>Sections</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="rpt-tbody">
-                <tr>
-                  <td><span class="rpt-title">Weekly Hermès Report — Week 14</span></td>
-                  <td><span class="rpt-type">Weekly</span></td>
-                  <td style="color:var(--gr)">Apr 1-7</td>
-                  <td style="color:var(--gr)">2 days ago</td>
-                  <td><div class="rpt-badges"><span class="rpt-tag">Summary</span><span class="rpt-tag">KPIs</span><span class="rpt-tag">Reco</span><span class="rpt-tag">Brief</span></div></td>
-                  <td><button class="rpt-btn">View</button><button class="rpt-btn">Export PDF</button></td>
-                </tr>
-                <tr>
-                  <td><span class="rpt-title">Monthly Brand Review — March</span></td>
-                  <td><span class="rpt-type">Monthly</span></td>
-                  <td style="color:var(--gr)">Mar 1-31</td>
-                  <td style="color:var(--gr)">8 days ago</td>
-                  <td><div class="rpt-badges"><span class="rpt-tag">Summary</span><span class="rpt-tag">KPIs</span></div></td>
-                  <td><button class="rpt-btn">View</button><button class="rpt-btn">Export PDF</button></td>
-                </tr>
-                <tr>
-                  <td><span class="rpt-title">Crisis Report — TikTok Spike</span></td>
-                  <td><span class="rpt-type">Ad hoc</span></td>
-                  <td style="color:var(--gr)">Mar 15</td>
-                  <td style="color:var(--gr)">22 days ago</td>
-                  <td><div class="rpt-badges"><span class="rpt-tag">Crisis</span><span class="rpt-tag">KPIs</span><span class="rpt-tag">Reco</span><span class="rpt-tag">Brief</span><span class="rpt-tag">Buttons</span></div></td>
-                  <td><button class="rpt-btn">View</button><button class="rpt-btn">Export PDF</button></td>
-                </tr>
-              </tbody>
-            </table>
+
+          <!-- Last Report -->
+          <div class="kc">
+            <div class="kc-lbl">Last Report</div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+              <div class="kc-val" style="font-size:36px" id="kc-last">2 days ago</div>
+              <div class="kc-sub" id="kc-last-name" style="margin-top:4px">Weekly Hermès Report</div>
+            </div>
           </div>
-        </div>
 
-      </div><!-- /r3 -->
+          <!-- Execution Score -->
+          <div class="kc">
+            <div class="kc-lbl">Execution Score</div>
+            <div class="kc-body" style="align-items:center;gap:10px">
+              <div class="kc-val g" id="kc-exec-pct">74%</div>
+              <div class="kc-sub" style="margin-bottom:0">recommendations<br>followed</div>
+            </div>
+            <div class="kc-prog-wrap">
+              <div class="kc-prog" id="kc-exec-bar" style="width:74%"></div>
+            </div>
+          </div>
 
-    </div><!-- /rows -->
+          <!-- Brand Health -->
+          <div class="kc">
+            <div class="kc-lbl">Brand Health</div>
+            <div class="kc-body">
+              <div class="kc-val-row">
+                <div class="kc-val" id="kc-health">78</div>
+                <div class="kc-val-suffix">/100</div>
+              </div>
+              <div class="kc-arr g">↗</div>
+            </div>
+            <div class="kc-spark">
+              <svg viewBox="0 0 140 40" width="140" height="40" fill="none">
+                <polyline points="0,35 20,28 40,30 60,20 80,18 100,12 120,8 140,5" stroke="#22C55E" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+          </div>
 
-    <!-- ACTION BAR -->
-    <div class="action-bar">
-      <div class="ab-msg" id="ab-msg">New weekly report ready to generate. Data updated 2 hours ago.</div>
-      <div class="ab-cta" onclick="document.getElementById('cf-title').focus()">&nbsp;→ Generate Now.</div>
-    </div>
+        </div><!-- /r1 -->
 
-  </div><!-- /ct -->
-</div><!-- /wrap -->
+        <!-- ROW 2 -->
+        <div class="r2">
 
-<script>
-/* ================================================================
-   REPORTS — DATA & LOGIC
-   ================================================================ */
+          <!-- Create Report -->
+          <div class="card" style="padding:16px 18px">
+            <div class="card-title" style="margin-bottom:10px">Create Report</div>
+            <div class="cf-lbl">Title</div>
+            <input class="cf-input" id="cf-title" placeholder="Report title..." style="margin-bottom:8px">
+            <div class="cf-lbl">Type</div>
+            <div class="cf-type">
+              <button class="cf-type-btn on" onclick="selectType(this)">Weekly</button>
+              <button class="cf-type-btn" onclick="selectType(this)">Monthly</button>
+              <button class="cf-type-btn" onclick="selectType(this)">Quarterly</button>
+              <button class="cf-type-btn" onclick="selectType(this)">Ad hoc</button>
+            </div>
+            <div class="cf-lbl">Period</div>
+            <div class="cf-period">
+              <input type="date" id="cf-start" placeholder="From" style="color:#888">
+              <input type="date" id="cf-end" placeholder="To" style="color:#888">
+            </div>
+            <div class="cf-checks">
+              <label class="cf-check"><input type="checkbox" value="comex" checked> COMEX Summary</label>
+              <label class="cf-check"><input type="checkbox" value="kpis" checked> KPIs Overview</label>
+              <label class="cf-check"><input type="checkbox" value="recos" checked> Recommendations</label>
+              <label class="cf-check"><input type="checkbox" value="brief" checked> Creative Brief</label>
+              <label class="cf-check"><input type="checkbox" value="exec"> Execution Score</label>
+            </div>
+            <button class="btn-gen" id="generateBtn" onclick="generateReport()">Generate Report</button>
+            <div class="gen-loader" id="genLoader">
+              <div class="spin"></div> Generating report...
+            </div>
+          </div>
 
-let periodVal = 7;
-let cachedData = null;
-let reportsList = JSON.parse(localStorage.getItem('reports_list') || '[]');
-let recoStatuses = JSON.parse(localStorage.getItem('reco_statuses') || '{}');
+          <!-- COMEX Summary -->
+          <div class="card">
+            <div class="card-hdr">
+              <div class="card-title">COMEX Summary</div>
+              <div class="auto-badge">Auto-generated</div>
+            </div>
+            <div class="comex-list" id="comex-list">
+              <div class="comex-item">
+                <div class="comex-num">1</div>
+                <div class="comex-text"><b>Sentiment:</b> Hermès shows <span id="cx-pos">68%</span> positive sentiment,
+                  up +4pts vs previous period.</div>
+              </div>
+              <div class="comex-item">
+                <div class="comex-num">2</div>
+                <div class="comex-text"><b>Competition:</b> Hermès holds <span id="cx-sov-h">41.2%</span> SOV vs Chanel
+                  <span id="cx-sov-c">35.8%</span>. Hermès dominates.</div>
+              </div>
+              <div class="comex-item">
+                <div class="comex-num">3</div>
+                <div class="comex-text"><b>Trends:</b> <span id="cx-trends">24</span> active trends detected. Hermès
+                  present on <span id="cx-trends-h">8</span>. Top opportunity: <span
+                    id="cx-top-trend">#SlowFashion</span>.</div>
+              </div>
+              <div class="comex-item">
+                <div class="comex-num">4</div>
+                <div class="comex-text"><b>Alert:</b> <span id="cx-alert">No critical alert this week. Negative spike on
+                    TikTok monitored.</span></div>
+              </div>
+              <div class="comex-item">
+                <div class="comex-num">5</div>
+                <div class="comex-text"><b>"Priority:</b> <span id="cx-priority">Activate #SlowFashion before expires in
+                    2 days — craftsmanship angle."</span></div>
+              </div>
+            </div>
+            <button class="btn-copy" id="copySummaryBtn" onclick="copySummary()">Copy Summary</button>
+          </div>
 
-// ─── PERIOD ───────────────────────────────────────────────────
-function setPeriod(btn) {
-  document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  periodVal = +btn.dataset.val;
-  setDefaultDates();
-  loadData();
-}
+          <!-- KPIs Overview -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom:10px">KPIs Overview</div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:space-evenly">
+              <div class="kpi-ov-row">
+                <div class="kpi-ov-lbl">Brand Health Score</div>
+                <div class="kpi-ov-val g"><span id="ov-health">78/100</span><span class="kpi-ov-arr">↗</span></div>
+              </div>
+              <div class="kpi-ov-row">
+                <div class="kpi-ov-lbl">Total Mentions</div>
+                <div class="kpi-ov-val g"><span id="ov-mentions">23.4k</span><span class="kpi-ov-arr">↗</span></div>
+              </div>
+              <div class="kpi-ov-row">
+                <div class="kpi-ov-lbl">Positive Sentiment</div>
+                <div class="kpi-ov-val g"><span id="ov-pos">68%</span><span class="kpi-ov-arr">↗</span></div>
+              </div>
+              <div class="kpi-ov-row">
+                <div class="kpi-ov-lbl">SOV Hermès</div>
+                <div class="kpi-ov-val g"><span id="ov-sov">41.2%</span><span class="kpi-ov-arr">↗</span></div>
+              </div>
+              <div class="kpi-ov-row">
+                <div class="kpi-ov-lbl">Active Alerts</div>
+                <div class="kpi-ov-val g"><span id="ov-alerts">0</span> <span
+                    style="color:#22C55E;font-size:14px">✓</span></div>
+              </div>
+              <div class="kpi-ov-row">
+                <div class="kpi-ov-lbl">Top Platform</div>
+                <div class="kpi-ov-val"><span id="ov-platform">Instagram</span></div>
+              </div>
+              <div class="kpi-ov-row">
+                <div class="kpi-ov-lbl">Avg Engagement</div>
+                <div class="kpi-ov-val"><span id="ov-eng">4.2%</span></div>
+              </div>
+            </div>
+          </div>
 
-function setDefaultDates() {
-  const now = new Date();
-  document.getElementById('cf-end').value = now.toISOString().slice(0,10);
-  document.getElementById('cf-start').value = new Date(Date.now() - periodVal * 864e5).toISOString().slice(0,10);
-}
-setDefaultDates();
+          <!-- Execution Score Detail -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom:8px">Execution Score</div>
+            <div class="gauge-wrap">
+              <div class="gauge-svg-wrap">
+                <svg viewBox="0 0 88 88" width="88" height="88">
+                  <circle cx="44" cy="44" r="34" stroke="#444" stroke-width="6" fill="none" />
+                  <circle cx="44" cy="44" r="34" stroke="#22C55E" stroke-width="6" fill="none" stroke-dasharray="213.6"
+                    id="gauge-circle" stroke-dashoffset="55.5" stroke-linecap="round" transform="rotate(-90 44 44)" />
+                </svg>
+                <div class="gauge-center">
+                  <div class="gauge-val" id="gauge-pct">74%</div>
+                  <div class="gauge-sub">recommendations<br>followed</div>
+                </div>
+              </div>
+              <div class="week-bars">
+                <div class="wb-row">
+                  <div class="wb-lbl">Week 1</div>
+                  <div class="wb-track">
+                    <div class="wb-fill" style="width:60%;background:var(--orange)"></div>
+                  </div>
+                  <div class="wb-val">60%</div>
+                </div>
+                <div class="wb-row">
+                  <div class="wb-lbl">Week 2</div>
+                  <div class="wb-track">
+                    <div class="wb-fill" style="width:65%;background:var(--orange)"></div>
+                  </div>
+                  <div class="wb-val">65%</div>
+                </div>
+                <div class="wb-row">
+                  <div class="wb-lbl">Week 3</div>
+                  <div class="wb-track">
+                    <div class="wb-fill" style="width:70%;background:var(--green)"></div>
+                  </div>
+                  <div class="wb-val">70%</div>
+                </div>
+                <div class="wb-row">
+                  <div class="wb-lbl">Week 4</div>
+                  <div class="wb-track">
+                    <div class="wb-fill" id="gauge-w4-bar" style="width:74%;background:var(--green)"></div>
+                  </div>
+                  <div class="wb-val" id="gauge-w4-val">74% week</div>
+                </div>
+              </div>
+            </div>
+            <div class="exec-comment" id="exec-comment">Good follow-through — keep the momentum</div>
+          </div>
 
-// ─── TYPE SELECTOR ────────────────────────────────────────────
-function selectType(btn) {
-  document.querySelectorAll('.cf-type-btn').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-}
+        </div><!-- /r2 -->
 
-// ─── DATA LOADING ─────────────────────────────────────────────
-async function loadData() {
-  const start = new Date(Date.now() - periodVal * 864e5).toISOString();
-  const end   = new Date().toISOString();
+        <!-- ROW 3 -->
+        <div class="r3">
 
-  const fMentions   = typeof getMentions       === 'function' ? getMentions       : async () => FALLBACK?.mentions || [];
-  const fSentH      = typeof getSentimentStats  === 'function' ? getSentimentStats  : async () => FALLBACK?.sentimentHermes || {};
-  const fSentC      = typeof getSentimentStats  === 'function' ? getSentimentStats  : async () => FALLBACK?.sentimentChanel || {};
-  const fSOV        = typeof getShareOfVoice    === 'function' ? getShareOfVoice    : async () => FALLBACK?.shareOfVoice || {};
-  const fTrends     = typeof getTrends          === 'function' ? getTrends          : async () => FALLBACK?.trends || [];
-  const fAlerts     = typeof getAlerts          === 'function' ? getAlerts          : async () => FALLBACK?.alerts || [];
-  const fEngagement = typeof getEngagementStats === 'function' ? getEngagementStats : async () => FALLBACK?.engagementStats || [];
+          <!-- Recommendations -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom:10px">Recommendations</div>
+            <div class="reco-rows" id="reco-rows">
+              <div class="reco-row">
+                <div class="reco-badge h">HIGH</div>
+                <div class="reco-txt">Activate #SlowFashion on TikTok — 2 days</div>
+                <div class="reco-chk-wrap">
+                  <input type="checkbox" checked onchange="toggleRecoFallback(this)">
+                  <label class="reco-chk-lbl done">= Done</label>
+                </div>
+              </div>
+              <div class="reco-row">
+                <div class="reco-badge h">HIGH</div>
+                <div class="reco-txt">Address negative spike on Trustpilot</div>
+                <div class="reco-chk-wrap">
+                  <input type="checkbox" onchange="toggleRecoFallback(this)">
+                  <label class="reco-chk-lbl todo">= to do</label>
+                </div>
+              </div>
+              <div class="reco-row">
+                <div class="reco-badge m">MED</div>
+                <div class="reco-txt">Reinforce SOV on Twitter — Chanel gaining</div>
+                <div class="reco-chk-wrap">
+                  <input type="checkbox" onchange="toggleRecoFallback(this)">
+                  <label class="reco-chk-lbl todo">= to do</label>
+                </div>
+              </div>
+              <div class="reco-row">
+                <div class="reco-badge m">MED</div>
+                <div class="reco-txt">Leverage #ParisianStyle — 4-day window</div>
+                <div class="reco-chk-wrap">
+                  <input type="checkbox" onchange="toggleRecoFallback(this)">
+                  <label class="reco-chk-lbl todo">= to do</label>
+                </div>
+              </div>
+              <div class="reco-row">
+                <div class="reco-badge l">LOW</div>
+                <div class="reco-txt">Update creative brief for Q2</div>
+                <div class="reco-chk-wrap">
+                  <input type="checkbox" onchange="toggleRecoFallback(this)">
+                  <label class="reco-chk-lbl todo">= to do</label>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  try {
-    const [mentions, sentH, sentC, sov, trends, alerts, engagement] = await Promise.all([
-      fMentions({startDate:start, endDate:end}),
-      fSentH({brand:'hermes', startDate:start, endDate:end}),
-      fSentC({brand:'chanel', startDate:start, endDate:end}),
-      fSOV({startDate:start, endDate:end}),
-      fTrends({startDate:start, endDate:end}),
-      fAlerts({}),
-      fEngagement({startDate:start, endDate:end})
-    ]);
-    cachedData = {mentions:mentions||[], sentH:sentH||{}, sentC:sentC||{}, sov:sov||{}, trends:trends||[], alerts:alerts||[], engagement:engagement||[]};
-  } catch(e) {
-    cachedData = {
-      mentions: FALLBACK?.mentions || [],
-      sentH:    FALLBACK?.sentimentHermes || {positive_pct:68,negative_pct:14,neutral_pct:18,avg_score:.52,total_mentions:8420},
-      sentC:    FALLBACK?.sentimentChanel || {positive_pct:58,negative_pct:18,neutral_pct:24,avg_score:.41,total_mentions:9130},
-      sov:      FALLBACK?.shareOfVoice   || {hermes:{avg_share_of_voice:41.2},chanel:{avg_share_of_voice:35.8}},
-      trends:   FALLBACK?.trends         || [],
-      alerts:   FALLBACK?.alerts         || [],
-      engagement: FALLBACK?.engagementStats || []
-    };
-  }
+          <!-- Reports Table -->
+          <div class="card">
+            <div class="card-hdr">
+              <div class="card-title" style="flex:1">Reports Generated</div>
+              <div class="rpt-counter" id="rpt-counter">12 reports</div>
+            </div>
+            <div class="rpt-table-wrap">
+              <table class="rpt-tbl">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Period</th>
+                    <th>Date</th>
+                    <th>Sections</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rpt-tbody">
+                  <tr>
+                    <td><span class="rpt-title">Weekly Hermès Report — Week 14</span></td>
+                    <td><span class="rpt-type">Weekly</span></td>
+                    <td style="color:var(--gr)">Apr 1-7</td>
+                    <td style="color:var(--gr)">2 days ago</td>
+                    <td>
+                      <div class="rpt-badges"><span class="rpt-tag">Summary</span><span class="rpt-tag">KPIs</span><span
+                          class="rpt-tag">Reco</span><span class="rpt-tag">Brief</span></div>
+                    </td>
+                    <td><button class="rpt-btn">View</button><button class="rpt-btn">Export PDF</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rpt-title">Monthly Brand Review — March</span></td>
+                    <td><span class="rpt-type">Monthly</span></td>
+                    <td style="color:var(--gr)">Mar 1-31</td>
+                    <td style="color:var(--gr)">8 days ago</td>
+                    <td>
+                      <div class="rpt-badges"><span class="rpt-tag">Summary</span><span class="rpt-tag">KPIs</span>
+                      </div>
+                    </td>
+                    <td><button class="rpt-btn">View</button><button class="rpt-btn">Export PDF</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rpt-title">Crisis Report — TikTok Spike</span></td>
+                    <td><span class="rpt-type">Ad hoc</span></td>
+                    <td style="color:var(--gr)">Mar 15</td>
+                    <td style="color:var(--gr)">22 days ago</td>
+                    <td>
+                      <div class="rpt-badges"><span class="rpt-tag">Crisis</span><span class="rpt-tag">KPIs</span><span
+                          class="rpt-tag">Reco</span><span class="rpt-tag">Brief</span><span
+                          class="rpt-tag">Buttons</span></div>
+                    </td>
+                    <td><button class="rpt-btn">View</button><button class="rpt-btn">Export PDF</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-  updateKPICards();
-  updateComex();
-  updateKPIsOverview();
-  updateExecScore();
-  updateReportsTable();
-}
+        </div><!-- /r3 -->
 
-// ─── UPDATE KPI ROW 1 ─────────────────────────────────────────
-function updateKPICards() {
-  const d = cachedData;
-  // Reports Generated
-  const count = reportsList.length || 12;
-  document.getElementById('kc-count').textContent = count;
-  document.getElementById('rpt-counter').textContent = count + ' reports';
+      </div><!-- /rows -->
 
-  // Last Report
-  if (reportsList.length > 0) {
-    const last = reportsList[0];
-    const daysAgo = Math.round((Date.now() - new Date(last.createdAt)) / 864e5);
-    const ago = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : daysAgo + ' days ago';
-    document.getElementById('kc-last').textContent = ago;
-    document.getElementById('kc-last-name').textContent = last.title || 'Weekly Hermès Report';
-  }
+      <!-- ACTION BAR -->
+      <div class="action-bar">
+        <div class="ab-msg" id="ab-msg">New weekly report ready to generate. Data updated 2 hours ago.</div>
+        <div class="ab-cta" onclick="document.getElementById('cf-title').focus()">&nbsp;→ Generate Now.</div>
+      </div>
 
-  // Execution Score
-  const allRecos = getAllRecos();
-  const donePct = allRecos.length > 0 ? Math.round(allRecos.filter(r => recoStatuses[r.id]==='done').length / allRecos.length * 100) : 74;
-  document.getElementById('kc-exec-pct').textContent = donePct + '%';
-  document.getElementById('kc-exec-bar').style.width = donePct + '%';
+    </div><!-- /ct -->
+  </div><!-- /wrap -->
 
-  // Brand Health
-  const h = d.sentH;
-  const health = Math.min(100, Math.round((h.positive_pct||68) * 0.4 + (h.avg_score||.52)*50 + 30));
-  document.getElementById('kc-health').textContent = health;
-  document.getElementById('ov-health').textContent = health + '/100';
-}
+  <script>
+    /* ================================================================
+       REPORTS — DATA & LOGIC
+       ================================================================ */
 
-// ─── UPDATE COMEX SUMMARY ─────────────────────────────────────
-function updateComex() {
-  const d = cachedData;
-  const sovH = d.sov.hermes?.avg_share_of_voice || 41.2;
-  const sovC = d.sov.chanel?.avg_share_of_voice || 35.8;
-  const activeTrends = (d.trends||[]).filter(t => t.growth_rate > 0);
-  const hermesTrends = (d.trends||[]).filter(t => t.related_brand === 'hermes');
-  const topTrend = [...(d.trends||[])].sort((a,b) => b.growth_rate - a.growth_rate)[0];
-  const unresolvedAlerts = (d.alerts||[]).filter(a => !a.is_resolved);
+    let periodVal = 7;
+    let cachedData = null;
+    let reportsList = JSON.parse(localStorage.getItem('reports_list') || '[]');
+    let recoStatuses = JSON.parse(localStorage.getItem('reco_statuses') || '{}');
 
-  document.getElementById('cx-pos').textContent = (d.sentH.positive_pct||68) + '%';
-  document.getElementById('cx-sov-h').textContent = sovH + '%';
-  document.getElementById('cx-sov-c').textContent = sovC + '%';
-  document.getElementById('cx-trends').textContent = activeTrends.length || 24;
-  document.getElementById('cx-trends-h').textContent = hermesTrends.length || 8;
-  document.getElementById('cx-top-trend').textContent = topTrend?.hashtag || '#SlowFashion';
-  document.getElementById('cx-alert').textContent = unresolvedAlerts.length === 0
-    ? 'No critical alert this week. Negative spike on TikTok monitored.'
-    : unresolvedAlerts.length + ' alert(s) active — ' + (unresolvedAlerts[0]?.description || '');
-  document.getElementById('cx-priority').textContent = topTrend
-    ? 'Activate ' + topTrend.hashtag + ' before expires in ' + (topTrend.days_remaining||2) + ' days — craftsmanship angle."'
-    : 'Maintain current strategy and capitalize on craftsmanship narrative."';
-}
+    // ─── PERIOD ───────────────────────────────────────────────────
+    function setPeriod(btn) {
+      document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      periodVal = +btn.dataset.val;
+      setDefaultDates();
+      loadData();
+    }
 
-// ─── UPDATE KPIs OVERVIEW ─────────────────────────────────────
-function updateKPIsOverview() {
-  const d = cachedData;
-  const mentions = d.mentions || [];
-  const hermMentions = mentions.filter(m => m.brand === 'hermes');
-  const total = d.sentH.total_mentions || hermMentions.length || 23400;
-  const totalStr = total >= 1000 ? (total/1000).toFixed(1) + 'k' : total;
-  const sovH = d.sov.hermes?.avg_share_of_voice || 41.2;
-  const unresolvedAlerts = (d.alerts||[]).filter(a => !a.is_resolved).length;
-  const platformCounts = {};
-  mentions.forEach(m => { platformCounts[m.platform] = (platformCounts[m.platform]||0)+1; });
-  const topPlatform = Object.entries(platformCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'Instagram';
+    function setDefaultDates() {
+      const now = new Date();
+      document.getElementById('cf-end').value = now.toISOString().slice(0, 10);
+      document.getElementById('cf-start').value = new Date(Date.now() - periodVal * 864e5).toISOString().slice(0, 10);
+    }
+    setDefaultDates();
 
-  document.getElementById('ov-mentions').textContent = totalStr;
-  document.getElementById('ov-pos').textContent = (d.sentH.positive_pct||68) + '%';
-  document.getElementById('ov-sov').textContent = sovH + '%';
-  document.getElementById('ov-alerts').textContent = unresolvedAlerts;
-  document.getElementById('ov-platform').textContent = topPlatform.charAt(0).toUpperCase() + topPlatform.slice(1);
-}
+    // ─── TYPE SELECTOR ────────────────────────────────────────────
+    function selectType(btn) {
+      document.querySelectorAll('.cf-type-btn').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+    }
 
-// ─── UPDATE EXEC SCORE ────────────────────────────────────────
-function updateExecScore() {
-  const allRecos = getAllRecos();
-  const pct = allRecos.length > 0 ? Math.round(allRecos.filter(r => recoStatuses[r.id]==='done').length / allRecos.length * 100) : 74;
-  const circ = 2 * Math.PI * 34; // 213.6
-  const offset = circ * (1 - pct/100);
-  document.getElementById('gauge-circle').setAttribute('stroke-dashoffset', offset.toFixed(1));
-  document.getElementById('gauge-pct').textContent = pct + '%';
-  document.getElementById('gauge-w4-val').textContent = pct + '% week';
-  document.getElementById('gauge-w4-bar').style.width = pct + '%';
-  document.getElementById('gauge-w4-bar').style.background = pct >= 70 ? 'var(--green)' : 'var(--orange)';
+    // ─── DATA LOADING ─────────────────────────────────────────────
+    async function loadData() {
+      const start = new Date(Date.now() - periodVal * 864e5).toISOString();
+      const end = new Date().toISOString();
 
-  const comment = document.getElementById('exec-comment');
-  if (pct >= 80) comment.textContent = 'Excellent follow-through';
-  else if (pct >= 60) comment.textContent = 'Good follow-through — keep the momentum';
-  else comment.textContent = 'Needs improvement — act on recommendations';
-}
+      const fMentions = typeof getMentions === 'function' ? getMentions : async () => FALLBACK?.mentions || [];
+      const fSentH = typeof getSentimentStats === 'function' ? getSentimentStats : async () => FALLBACK?.sentimentHermes || {};
+      const fSentC = typeof getSentimentStats === 'function' ? getSentimentStats : async () => FALLBACK?.sentimentChanel || {};
+      const fSOV = typeof getShareOfVoice === 'function' ? getShareOfVoice : async () => FALLBACK?.shareOfVoice || {};
+      const fTrends = typeof getTrends === 'function' ? getTrends : async () => FALLBACK?.trends || [];
+      const fAlerts = typeof getAlerts === 'function' ? getAlerts : async () => FALLBACK?.alerts || [];
+      const fEngagement = typeof getEngagementStats === 'function' ? getEngagementStats : async () => FALLBACK?.engagementStats || [];
 
-function getAllRecos() {
-  const all = [];
-  reportsList.forEach(r => { if(r.recos) r.recos.forEach(rc => all.push(rc)); });
-  return all;
-}
+      try {
+        const [mentions, sentH, sentC, sov, trends, alerts, engagement] = await Promise.all([
+          fMentions({ startDate: start, endDate: end }),
+          fSentH({ brand: 'hermes', startDate: start, endDate: end }),
+          fSentC({ brand: 'chanel', startDate: start, endDate: end }),
+          fSOV({ startDate: start, endDate: end }),
+          fTrends({ startDate: start, endDate: end }),
+          fAlerts({}),
+          fEngagement({ startDate: start, endDate: end })
+        ]);
+        cachedData = { mentions: mentions || [], sentH: sentH || {}, sentC: sentC || {}, sov: sov || {}, trends: trends || [], alerts: alerts || [], engagement: engagement || [] };
+      } catch (e) {
+        cachedData = {
+          mentions: FALLBACK?.mentions || [],
+          sentH: FALLBACK?.sentimentHermes || { positive_pct: 68, negative_pct: 14, neutral_pct: 18, avg_score: .52, total_mentions: 8420 },
+          sentC: FALLBACK?.sentimentChanel || { positive_pct: 58, negative_pct: 18, neutral_pct: 24, avg_score: .41, total_mentions: 9130 },
+          sov: FALLBACK?.shareOfVoice || { hermes: { avg_share_of_voice: 41.2 }, chanel: { avg_share_of_voice: 35.8 } },
+          trends: FALLBACK?.trends || [],
+          alerts: FALLBACK?.alerts || [],
+          engagement: FALLBACK?.engagementStats || []
+        };
+      }
 
-// ─── TOGGLE RECO (fallback rows) ─────────────────────────────
-function toggleRecoFallback(checkbox) {
-  const lbl = checkbox.nextElementSibling;
-  if (checkbox.checked) { lbl.className = 'reco-chk-lbl done'; lbl.textContent = '= Done'; }
-  else { lbl.className = 'reco-chk-lbl todo'; lbl.textContent = '= to do'; }
-  updateExecScore();
-}
+      updateKPICards();
+      updateComex();
+      updateKPIsOverview();
+      updateExecScore();
+      updateReportsTable();
+    }
 
-// ─── COPY SUMMARY ─────────────────────────────────────────────
-function copySummary() {
-  const lines = [
-    '1. Sentiment: ' + document.getElementById('cx-pos').textContent + ' positive, Hermès.',
-    '2. Competition: Hermès ' + document.getElementById('cx-sov-h').textContent + ' SOV vs Chanel ' + document.getElementById('cx-sov-c').textContent + '.',
-    '3. Trends: ' + document.getElementById('cx-trends').textContent + ' active, ' + document.getElementById('cx-trends-h').textContent + ' Hermès-related.',
-    '4. Alert: ' + document.getElementById('cx-alert').textContent,
-    '5. Priority: ' + document.getElementById('cx-priority').textContent
-  ];
-  navigator.clipboard.writeText(lines.join('\n')).then(() => {
-    const btn = document.getElementById('copySummaryBtn');
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy Summary', 2000);
-  });
-}
+    // ─── UPDATE KPI ROW 1 ─────────────────────────────────────────
+    function updateKPICards() {
+      const d = cachedData;
+      // Reports Generated
+      const count = reportsList.length || 12;
+      document.getElementById('kc-count').textContent = count;
+      document.getElementById('rpt-counter').textContent = count + ' reports';
 
-// ─── UPDATE REPORTS TABLE ─────────────────────────────────────
-function updateReportsTable() {
-  const tbody = document.getElementById('rpt-tbody');
-  if (reportsList.length === 0) return; // keep fallback rows
+      // Last Report
+      if (reportsList.length > 0) {
+        const last = reportsList[0];
+        const daysAgo = Math.round((Date.now() - new Date(last.createdAt)) / 864e5);
+        const ago = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : daysAgo + ' days ago';
+        document.getElementById('kc-last').textContent = ago;
+        document.getElementById('kc-last-name').textContent = last.title || 'Weekly Hermès Report';
+      }
 
-  const sLabels = { comex:'Summary', kpis:'KPIs', recos:'Reco', brief:'Brief', exec:'Exec' };
-  const rows = reportsList.slice(0, 6).map((r, i) => {
-    const daysAgo = Math.round((Date.now() - new Date(r.createdAt)) / 864e5);
-    const ago = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1 day ago' : daysAgo + ' days ago';
-    const start = r.startDate?.slice(5).replace('-','/') || '';
-    const end   = r.endDate?.slice(5).replace('-','/') || '';
-    const period = start && end ? start + '-' + end : '—';
-    const badges = (r.sections||[]).map(s => `<span class="rpt-tag">${sLabels[s]||s}</span>`).join('');
-    return `<tr>
+      // Execution Score
+      const allRecos = getAllRecos();
+      const donePct = allRecos.length > 0 ? Math.round(allRecos.filter(r => recoStatuses[r.id] === 'done').length / allRecos.length * 100) : 74;
+      document.getElementById('kc-exec-pct').textContent = donePct + '%';
+      document.getElementById('kc-exec-bar').style.width = donePct + '%';
+
+      // Brand Health
+      const h = d.sentH;
+      const health = Math.min(100, Math.round((h.positive_pct || 68) * 0.4 + (h.avg_score || .52) * 50 + 30));
+      document.getElementById('kc-health').textContent = health;
+      document.getElementById('ov-health').textContent = health + '/100';
+    }
+
+    // ─── UPDATE COMEX SUMMARY ─────────────────────────────────────
+    function updateComex() {
+      const d = cachedData;
+      const sovH = d.sov.hermes?.avg_share_of_voice || 41.2;
+      const sovC = d.sov.chanel?.avg_share_of_voice || 35.8;
+      const activeTrends = (d.trends || []).filter(t => t.growth_rate > 0);
+      const hermesTrends = (d.trends || []).filter(t => t.related_brand === 'hermes');
+      const topTrend = [...(d.trends || [])].sort((a, b) => b.growth_rate - a.growth_rate)[0];
+      const unresolvedAlerts = (d.alerts || []).filter(a => !a.is_resolved);
+
+      document.getElementById('cx-pos').textContent = (d.sentH.positive_pct || 68) + '%';
+      document.getElementById('cx-sov-h').textContent = sovH + '%';
+      document.getElementById('cx-sov-c').textContent = sovC + '%';
+      document.getElementById('cx-trends').textContent = activeTrends.length || 24;
+      document.getElementById('cx-trends-h').textContent = hermesTrends.length || 8;
+      document.getElementById('cx-top-trend').textContent = topTrend?.hashtag || '#SlowFashion';
+      document.getElementById('cx-alert').textContent = unresolvedAlerts.length === 0
+        ? 'No critical alert this week. Negative spike on TikTok monitored.'
+        : unresolvedAlerts.length + ' alert(s) active — ' + (unresolvedAlerts[0]?.description || '');
+      document.getElementById('cx-priority').textContent = topTrend
+        ? 'Activate ' + topTrend.hashtag + ' before expires in ' + (topTrend.days_remaining || 2) + ' days — craftsmanship angle."'
+        : 'Maintain current strategy and capitalize on craftsmanship narrative."';
+    }
+
+    // ─── UPDATE KPIs OVERVIEW ─────────────────────────────────────
+    function updateKPIsOverview() {
+      const d = cachedData;
+      const mentions = d.mentions || [];
+      const hermMentions = mentions.filter(m => m.brand === 'hermes');
+      const total = d.sentH.total_mentions || hermMentions.length || 23400;
+      const totalStr = total >= 1000 ? (total / 1000).toFixed(1) + 'k' : total;
+      const sovH = d.sov.hermes?.avg_share_of_voice || 41.2;
+      const unresolvedAlerts = (d.alerts || []).filter(a => !a.is_resolved).length;
+      const platformCounts = {};
+      mentions.forEach(m => { platformCounts[m.platform] = (platformCounts[m.platform] || 0) + 1; });
+      const topPlatform = Object.entries(platformCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Instagram';
+
+      document.getElementById('ov-mentions').textContent = totalStr;
+      document.getElementById('ov-pos').textContent = (d.sentH.positive_pct || 68) + '%';
+      document.getElementById('ov-sov').textContent = sovH + '%';
+      document.getElementById('ov-alerts').textContent = unresolvedAlerts;
+      document.getElementById('ov-platform').textContent = topPlatform.charAt(0).toUpperCase() + topPlatform.slice(1);
+    }
+
+    // ─── UPDATE EXEC SCORE ────────────────────────────────────────
+    function updateExecScore() {
+      const allRecos = getAllRecos();
+      const pct = allRecos.length > 0 ? Math.round(allRecos.filter(r => recoStatuses[r.id] === 'done').length / allRecos.length * 100) : 74;
+      const circ = 2 * Math.PI * 34; // 213.6
+      const offset = circ * (1 - pct / 100);
+      document.getElementById('gauge-circle').setAttribute('stroke-dashoffset', offset.toFixed(1));
+      document.getElementById('gauge-pct').textContent = pct + '%';
+      document.getElementById('gauge-w4-val').textContent = pct + '% week';
+      document.getElementById('gauge-w4-bar').style.width = pct + '%';
+      document.getElementById('gauge-w4-bar').style.background = pct >= 70 ? 'var(--green)' : 'var(--orange)';
+
+      const comment = document.getElementById('exec-comment');
+      if (pct >= 80) comment.textContent = 'Excellent follow-through';
+      else if (pct >= 60) comment.textContent = 'Good follow-through — keep the momentum';
+      else comment.textContent = 'Needs improvement — act on recommendations';
+    }
+
+    function getAllRecos() {
+      const all = [];
+      reportsList.forEach(r => { if (r.recos) r.recos.forEach(rc => all.push(rc)); });
+      return all;
+    }
+
+    // ─── TOGGLE RECO (fallback rows) ─────────────────────────────
+    function toggleRecoFallback(checkbox) {
+      const lbl = checkbox.nextElementSibling;
+      if (checkbox.checked) { lbl.className = 'reco-chk-lbl done'; lbl.textContent = '= Done'; }
+      else { lbl.className = 'reco-chk-lbl todo'; lbl.textContent = '= to do'; }
+      updateExecScore();
+    }
+
+    // ─── COPY SUMMARY ─────────────────────────────────────────────
+    function copySummary() {
+      const lines = [
+        '1. Sentiment: ' + document.getElementById('cx-pos').textContent + ' positive, Hermès.',
+        '2. Competition: Hermès ' + document.getElementById('cx-sov-h').textContent + ' SOV vs Chanel ' + document.getElementById('cx-sov-c').textContent + '.',
+        '3. Trends: ' + document.getElementById('cx-trends').textContent + ' active, ' + document.getElementById('cx-trends-h').textContent + ' Hermès-related.',
+        '4. Alert: ' + document.getElementById('cx-alert').textContent,
+        '5. Priority: ' + document.getElementById('cx-priority').textContent
+      ];
+      navigator.clipboard.writeText(lines.join('\n')).then(() => {
+        const btn = document.getElementById('copySummaryBtn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Summary', 2000);
+      });
+    }
+
+    // ─── UPDATE REPORTS TABLE ─────────────────────────────────────
+    function updateReportsTable() {
+      const tbody = document.getElementById('rpt-tbody');
+      if (reportsList.length === 0) return; // keep fallback rows
+
+      const sLabels = { comex: 'Summary', kpis: 'KPIs', recos: 'Reco', brief: 'Brief', exec: 'Exec' };
+      const rows = reportsList.slice(0, 6).map((r, i) => {
+        const daysAgo = Math.round((Date.now() - new Date(r.createdAt)) / 864e5);
+        const ago = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1 day ago' : daysAgo + ' days ago';
+        const start = r.startDate?.slice(5).replace('-', '/') || '';
+        const end = r.endDate?.slice(5).replace('-', '/') || '';
+        const period = start && end ? start + '-' + end : '—';
+        const badges = (r.sections || []).map(s => `<span class="rpt-tag">${sLabels[s] || s}</span>`).join('');
+        return `<tr>
       <td><span class="rpt-title">${r.title}</span></td>
       <td><span class="rpt-type">${r.type}</span></td>
       <td style="color:var(--gr)">${period}</td>
@@ -779,187 +1782,188 @@ function updateReportsTable() {
       <td><div class="rpt-badges">${badges}</div></td>
       <td><button class="rpt-btn" onclick="viewReport(${i})">View</button><button class="rpt-btn" onclick="exportPDF(${i})">Export PDF</button></td>
     </tr>`;
-  }).join('');
-  tbody.innerHTML = rows;
-}
+      }).join('');
+      tbody.innerHTML = rows;
+    }
 
-function viewReport(idx) {
-  const r = reportsList[idx];
-  if (!r) return;
-  let msg = r.comex ? r.comex[0] : 'No COMEX data.';
-  alert(r.title + '\n\n' + msg);
-}
+    function viewReport(idx) {
+      const r = reportsList[idx];
+      if (!r) return;
+      let msg = r.comex ? r.comex[0] : 'No COMEX data.';
+      alert(r.title + '\n\n' + msg);
+    }
 
-// ─── GENERATE REPORT ──────────────────────────────────────────
-async function generateReport() {
-  const title  = document.getElementById('cf-title').value.trim() || `Weekly Hermès Report — ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}`;
-  const type   = document.querySelector('.cf-type-btn.on')?.textContent || 'Weekly';
-  const start  = document.getElementById('cf-start').value;
-  const end    = document.getElementById('cf-end').value;
-  const sections = [...document.querySelectorAll('.cf-checks input:checked')].map(c => c.value);
+    // ─── GENERATE REPORT ──────────────────────────────────────────
+    async function generateReport() {
+      const title = document.getElementById('cf-title').value.trim() || `Weekly Hermès Report — ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}`;
+      const type = document.querySelector('.cf-type-btn.on')?.textContent || 'Weekly';
+      const start = document.getElementById('cf-start').value;
+      const end = document.getElementById('cf-end').value;
+      const sections = [...document.querySelectorAll('.cf-checks input:checked')].map(c => c.value);
 
-  const loader = document.getElementById('genLoader');
-  const btn    = document.getElementById('generateBtn');
-  loader.classList.add('active');
-  btn.disabled = true;
+      const loader = document.getElementById('genLoader');
+      const btn = document.getElementById('generateBtn');
+      loader.classList.add('active');
+      btn.disabled = true;
 
-  // Refetch if needed
-  if (!cachedData) await loadData();
-  const d = cachedData;
-  const hermMentions = (d.mentions||[]).filter(m => m.brand === 'hermes');
+      // Refetch if needed
+      if (!cachedData) await loadData();
+      const d = cachedData;
+      const hermMentions = (d.mentions || []).filter(m => m.brand === 'hermes');
 
-  const hermesSOV = d.sov.hermes?.avg_share_of_voice || 41.2;
-  const chanelSOV = d.sov.chanel?.avg_share_of_voice || 35.8;
-  const health    = Math.min(100, Math.round((d.sentH.positive_pct||68)*.4 + (d.sentH.avg_score||.52)*50 + 30));
-  const activeTrends   = (d.trends||[]).filter(t => t.growth_rate > 0);
-  const hermesTrends   = (d.trends||[]).filter(t => t.related_brand === 'hermes');
-  const unresolvedAlerts = (d.alerts||[]).filter(a => !a.is_resolved);
-  const topTrend       = [...(d.trends||[])].sort((a,b)=>b.volume-a.volume)[0];
+      const hermesSOV = d.sov.hermes?.avg_share_of_voice || 41.2;
+      const chanelSOV = d.sov.chanel?.avg_share_of_voice || 35.8;
+      const health = Math.min(100, Math.round((d.sentH.positive_pct || 68) * .4 + (d.sentH.avg_score || .52) * 50 + 30));
+      const activeTrends = (d.trends || []).filter(t => t.growth_rate > 0);
+      const hermesTrends = (d.trends || []).filter(t => t.related_brand === 'hermes');
+      const unresolvedAlerts = (d.alerts || []).filter(a => !a.is_resolved);
+      const topTrend = [...(d.trends || [])].sort((a, b) => b.volume - a.volume)[0];
 
-  const platformCounts = {};
-  (d.mentions||[]).forEach(m => { platformCounts[m.platform]=(platformCounts[m.platform]||0)+1; });
-  const topPlatform = Object.entries(platformCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'instagram';
+      const platformCounts = {};
+      (d.mentions || []).forEach(m => { platformCounts[m.platform] = (platformCounts[m.platform] || 0) + 1; });
+      const topPlatform = Object.entries(platformCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'instagram';
 
-  const negByPlat = {};
-  hermMentions.filter(m => m.sentiment==='negative').forEach(m => { negByPlat[m.platform]=(negByPlat[m.platform]||0)+1; });
-  const worstPlat = Object.entries(negByPlat).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'trustpilot';
+      const negByPlat = {};
+      hermMentions.filter(m => m.sentiment === 'negative').forEach(m => { negByPlat[m.platform] = (negByPlat[m.platform] || 0) + 1; });
+      const worstPlat = Object.entries(negByPlat).sort((a, b) => b[1] - a[1])[0]?.[0] || 'trustpilot';
 
-  const topicSent = {};
-  hermMentions.forEach(m => {
-    const t = m.topic||'general';
-    if (!topicSent[t]) topicSent[t]={pos:0,neg:0};
-    if (m.sentiment==='positive') topicSent[t].pos++;
-    if (m.sentiment==='negative') topicSent[t].neg++;
-  });
-  const posDriver = Object.entries(topicSent).sort((a,b)=>b[1].pos-a[1].pos)[0]?.[0] || 'craftsmanship';
-  const negDriver = Object.entries(topicSent).sort((a,b)=>b[1].neg-a[1].neg)[0]?.[0] || 'pricing';
+      const topicSent = {};
+      hermMentions.forEach(m => {
+        const t = m.topic || 'general';
+        if (!topicSent[t]) topicSent[t] = { pos: 0, neg: 0 };
+        if (m.sentiment === 'positive') topicSent[t].pos++;
+        if (m.sentiment === 'negative') topicSent[t].neg++;
+      });
+      const posDriver = Object.entries(topicSent).sort((a, b) => b[1].pos - a[1].pos)[0]?.[0] || 'craftsmanship';
+      const negDriver = Object.entries(topicSent).sort((a, b) => b[1].neg - a[1].neg)[0]?.[0] || 'pricing';
 
-  const comex = [
-    `Sentiment: Hermès shows ${d.sentH.positive_pct||68}% positive sentiment, up +4pts vs previous period.`,
-    `Competition: Hermès holds ${hermesSOV}% SOV vs Chanel ${chanelSOV}%. ${hermesSOV>chanelSOV?'Hermès dominates.':'Chanel gaining ground.'}`,
-    `Trends: ${activeTrends.length} active trends detected. Hermès present on ${hermesTrends.length}. Top opportunity: ${topTrend?.hashtag||'#SlowFashion'}.`,
-    unresolvedAlerts.length===0 ? 'No critical alert this week. Negative spike on TikTok monitored.' : `${unresolvedAlerts.length} alert(s) active — ${unresolvedAlerts[0]?.description}`,
-    topTrend ? `Activate ${topTrend.hashtag} before expires in ${topTrend.days_remaining||2} days — craftsmanship angle.` : `Maintain strategy and capitalize on ${posDriver}.`
-  ];
+      const comex = [
+        `Sentiment: Hermès shows ${d.sentH.positive_pct || 68}% positive sentiment, up +4pts vs previous period.`,
+        `Competition: Hermès holds ${hermesSOV}% SOV vs Chanel ${chanelSOV}%. ${hermesSOV > chanelSOV ? 'Hermès dominates.' : 'Chanel gaining ground.'}`,
+        `Trends: ${activeTrends.length} active trends detected. Hermès present on ${hermesTrends.length}. Top opportunity: ${topTrend?.hashtag || '#SlowFashion'}.`,
+        unresolvedAlerts.length === 0 ? 'No critical alert this week. Negative spike on TikTok monitored.' : `${unresolvedAlerts.length} alert(s) active — ${unresolvedAlerts[0]?.description}`,
+        topTrend ? `Activate ${topTrend.hashtag} before expires in ${topTrend.days_remaining || 2} days — craftsmanship angle.` : `Maintain strategy and capitalize on ${posDriver}.`
+      ];
 
-  // Build recos
-  const recos = [];
-  let rid = Date.now();
-  if ((d.sentH.negative_pct||14) > 18) recos.push({id:'r-'+(rid++), priority:'high', text:`Activate #SlowFashion on TikTok — window closing in 2 days`, delay:'This week'});
-  recos.push({id:'r-'+(rid++), priority:'high', text:`Address negative spike on ${worstPlat.charAt(0).toUpperCase()+worstPlat.slice(1)}`, delay:'This week'});
-  if (hermesSOV < 45) recos.push({id:'r-'+(rid++), priority:'medium', text:`Reinforce SOV on Twitter — Chanel gaining ${(chanelSOV-hermesSOV).toFixed(1)}%`, delay:'This month'});
-  const absTrend = activeTrends.find(t=>t.related_brand!=='hermes');
-  if (absTrend) recos.push({id:'r-'+(rid++), priority:'medium', text:`Leverage ${absTrend.hashtag} — ${absTrend.days_remaining||4}-day window`, delay:'This month'});
-  recos.push({id:'r-'+(rid++), priority:'low', text:'Update creative brief for Q2', delay:'This quarter'});
+      // Build recos
+      const recos = [];
+      let rid = Date.now();
+      if ((d.sentH.negative_pct || 14) > 18) recos.push({ id: 'r-' + (rid++), priority: 'high', text: `Activate #SlowFashion on TikTok — window closing in 2 days`, delay: 'This week' });
+      recos.push({ id: 'r-' + (rid++), priority: 'high', text: `Address negative spike on ${worstPlat.charAt(0).toUpperCase() + worstPlat.slice(1)}`, delay: 'This week' });
+      if (hermesSOV < 45) recos.push({ id: 'r-' + (rid++), priority: 'medium', text: `Reinforce SOV on Twitter — Chanel gaining ${(chanelSOV - hermesSOV).toFixed(1)}%`, delay: 'This month' });
+      const absTrend = activeTrends.find(t => t.related_brand !== 'hermes');
+      if (absTrend) recos.push({ id: 'r-' + (rid++), priority: 'medium', text: `Leverage ${absTrend.hashtag} — ${absTrend.days_remaining || 4}-day window`, delay: 'This month' });
+      recos.push({ id: 'r-' + (rid++), priority: 'low', text: 'Update creative brief for Q2', delay: 'This quarter' });
 
-  const report = {
-    id: 'rpt-'+Date.now(), title, type,
-    startDate:start, endDate:end, sections,
-    createdAt: new Date().toISOString(),
-    comex, recos, healthScore:health,
-    hermesSOV, chanelSOV, sentH:d.sentH, sentC:d.sentC
-  };
+      const report = {
+        id: 'rpt-' + Date.now(), title, type,
+        startDate: start, endDate: end, sections,
+        createdAt: new Date().toISOString(),
+        comex, recos, healthScore: health,
+        hermesSOV, chanelSOV, sentH: d.sentH, sentC: d.sentC
+      };
 
-  reportsList.unshift(report);
-  localStorage.setItem('reports_list', JSON.stringify(reportsList));
+      reportsList.unshift(report);
+      localStorage.setItem('reports_list', JSON.stringify(reportsList));
 
-  loader.classList.remove('active');
-  btn.disabled = false;
+      loader.classList.remove('active');
+      btn.disabled = false;
 
-  updateKPICards();
-  updateComex();
-  updateExecScore();
-  updateReportsTable();
-  renderRecoRows(recos);
-}
+      updateKPICards();
+      updateComex();
+      updateExecScore();
+      updateReportsTable();
+      renderRecoRows(recos);
+    }
 
-// ─── RENDER RECO ROWS (after generation) ─────────────────────
-function renderRecoRows(recos) {
-  const el = document.getElementById('reco-rows');
-  el.innerHTML = recos.map(r => {
-    const isDone = recoStatuses[r.id] === 'done';
-    const badgeCls = r.priority==='high'?'h':r.priority==='medium'?'m':'l';
-    const badgeTxt = r.priority==='high'?'HIGH':r.priority==='medium'?'MED':'LOW';
-    return `<div class="reco-row">
+    // ─── RENDER RECO ROWS (after generation) ─────────────────────
+    function renderRecoRows(recos) {
+      const el = document.getElementById('reco-rows');
+      el.innerHTML = recos.map(r => {
+        const isDone = recoStatuses[r.id] === 'done';
+        const badgeCls = r.priority === 'high' ? 'h' : r.priority === 'medium' ? 'm' : 'l';
+        const badgeTxt = r.priority === 'high' ? 'HIGH' : r.priority === 'medium' ? 'MED' : 'LOW';
+        return `<div class="reco-row">
       <div class="reco-badge ${badgeCls}">${badgeTxt}</div>
       <div class="reco-txt">${r.text}</div>
       <div class="reco-chk-wrap">
-        <input type="checkbox" ${isDone?'checked':''} onchange="toggleReco('${r.id}',this)">
-        <label class="reco-chk-lbl ${isDone?'done':'todo'}">${isDone?'= Done':'= to do'}</label>
+        <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleReco('${r.id}',this)">
+        <label class="reco-chk-lbl ${isDone ? 'done' : 'todo'}">${isDone ? '= Done' : '= to do'}</label>
       </div>
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-function toggleReco(id, checkbox) {
-  if (checkbox.checked) recoStatuses[id] = 'done';
-  else delete recoStatuses[id];
-  localStorage.setItem('reco_statuses', JSON.stringify(recoStatuses));
-  const lbl = checkbox.nextElementSibling;
-  if (checkbox.checked) { lbl.className='reco-chk-lbl done'; lbl.textContent='= Done'; }
-  else { lbl.className='reco-chk-lbl todo'; lbl.textContent='= to do'; }
-  updateKPICards();
-  updateExecScore();
-}
+    function toggleReco(id, checkbox) {
+      if (checkbox.checked) recoStatuses[id] = 'done';
+      else delete recoStatuses[id];
+      localStorage.setItem('reco_statuses', JSON.stringify(recoStatuses));
+      const lbl = checkbox.nextElementSibling;
+      if (checkbox.checked) { lbl.className = 'reco-chk-lbl done'; lbl.textContent = '= Done'; }
+      else { lbl.className = 'reco-chk-lbl todo'; lbl.textContent = '= to do'; }
+      updateKPICards();
+      updateExecScore();
+    }
 
-// ─── EXPORT PDF ───────────────────────────────────────────────
-function exportLastPDF() {
-  if (reportsList.length > 0) exportPDF(0);
-}
+    // ─── EXPORT PDF ───────────────────────────────────────────────
+    function exportLastPDF() {
+      if (reportsList.length > 0) exportPDF(0);
+    }
 
-function exportPDF(idx) {
-  const r = reportsList[idx];
-  if (!r) return;
-  const {jsPDF} = window.jspdf;
-  const doc = new jsPDF();
-  const pW = doc.internal.pageSize.getWidth();
-  let y = 20;
-  const m = 20, lH = 7, mW = pW - 2*m;
+    function exportPDF(idx) {
+      const r = reportsList[idx];
+      if (!r) return;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const pW = doc.internal.pageSize.getWidth();
+      let y = 20;
+      const m = 20, lH = 7, mW = pW - 2 * m;
 
-  function addText(txt, opts={}) {
-    const sz = opts.size||10;
-    doc.setFontSize(sz);
-    doc.setFont('helvetica', opts.bold?'bold':'normal');
-    doc.setTextColor(...(opts.color||[40,40,40]));
-    doc.splitTextToSize(txt, mW).forEach(l => {
-      if (y > 275) { doc.addPage(); y = 20; }
-      doc.text(l, m, y); y += lH*(sz/10);
-    });
-    y += 2;
-  }
+      function addText(txt, opts = {}) {
+        const sz = opts.size || 10;
+        doc.setFontSize(sz);
+        doc.setFont('helvetica', opts.bold ? 'bold' : 'normal');
+        doc.setTextColor(...(opts.color || [40, 40, 40]));
+        doc.splitTextToSize(txt, mW).forEach(l => {
+          if (y > 275) { doc.addPage(); y = 20; }
+          doc.text(l, m, y); y += lH * (sz / 10);
+        });
+        y += 2;
+      }
 
-  doc.setFillColor(245,240,232); doc.rect(0,0,pW,297,'F');
-  doc.setFillColor(232,56,61);   doc.rect(m,40,4,35,'F');
-  y = 50;
-  addText('HERMÈS', {size:26,bold:true,color:[30,30,30]});
-  addText('Brand Intelligence Report', {size:14,color:[100,100,100]});
-  addText(r.title, {size:13,bold:true});
-  addText(`Period: ${r.startDate||'—'} → ${r.endDate||'—'}`, {size:10,color:[120,120,120]});
-  addText(`Generated: ${new Date(r.createdAt).toLocaleDateString('en-GB')}`, {size:10,color:[120,120,120]});
+      doc.setFillColor(245, 240, 232); doc.rect(0, 0, pW, 297, 'F');
+      doc.setFillColor(232, 56, 61); doc.rect(m, 40, 4, 35, 'F');
+      y = 50;
+      addText('HERMÈS', { size: 26, bold: true, color: [30, 30, 30] });
+      addText('Brand Intelligence Report', { size: 14, color: [100, 100, 100] });
+      addText(r.title, { size: 13, bold: true });
+      addText(`Period: ${r.startDate || '—'} → ${r.endDate || '—'}`, { size: 10, color: [120, 120, 120] });
+      addText(`Generated: ${new Date(r.createdAt).toLocaleDateString('en-GB')}`, { size: 10, color: [120, 120, 120] });
 
-  if (r.comex) {
-    doc.addPage(); y=20;
-    addText('COMEX SUMMARY', {size:14,bold:true,color:[232,56,61]});
-    doc.setDrawColor(220,220,220); doc.line(m,y,pW-m,y); y+=4;
-    r.comex.forEach((l,i) => { addText(`${i+1}. ${l}`, {size:10}); y+=2; });
-  }
+      if (r.comex) {
+        doc.addPage(); y = 20;
+        addText('COMEX SUMMARY', { size: 14, bold: true, color: [232, 56, 61] });
+        doc.setDrawColor(220, 220, 220); doc.line(m, y, pW - m, y); y += 4;
+        r.comex.forEach((l, i) => { addText(`${i + 1}. ${l}`, { size: 10 }); y += 2; });
+      }
 
-  if (r.recos) {
-    doc.addPage(); y=20;
-    addText('RECOMMENDATIONS', {size:14,bold:true,color:[232,56,61]});
-    doc.setDrawColor(220,220,220); doc.line(m,y,pW-m,y); y+=4;
-    r.recos.forEach((rc,i) => {
-      const status = recoStatuses[rc.id]==='done' ? '[DONE]' : '[TO DO]';
-      addText(`${i+1}. [${rc.priority.toUpperCase()}] ${status} ${rc.text}`, {size:10});
-      y+=2;
-    });
-  }
+      if (r.recos) {
+        doc.addPage(); y = 20;
+        addText('RECOMMENDATIONS', { size: 14, bold: true, color: [232, 56, 61] });
+        doc.setDrawColor(220, 220, 220); doc.line(m, y, pW - m, y); y += 4;
+        r.recos.forEach((rc, i) => {
+          const status = recoStatuses[rc.id] === 'done' ? '[DONE]' : '[TO DO]';
+          addText(`${i + 1}. [${rc.priority.toUpperCase()}] ${status} ${rc.text}`, { size: 10 });
+          y += 2;
+        });
+      }
 
-  doc.save(`${r.title.replace(/[^a-zA-Z0-9]/g,'_')}.pdf`);
-}
+      doc.save(`${r.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+    }
 
-// ─── INIT ─────────────────────────────────────────────────────
-loadData();
-</script>
+    // ─── INIT ─────────────────────────────────────────────────────
+    loadData();
+  </script>
 </body>
+
 </html>
